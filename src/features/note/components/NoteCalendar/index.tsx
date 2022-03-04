@@ -1,0 +1,163 @@
+import {Dispatch, SetStateAction, useMemo, useState} from "react";
+import {createLayerNoteList2, getDateList, roundedDown} from "./core";
+
+import NoteCalendarHeader from "./NoteCalendarHeader";
+import NoteCalendarRow from "./NoteCalendarRow";
+
+interface NoteCalendarProp {
+	className?: string;
+
+	loading?: boolean;
+	noteList: CalendarNote[];
+
+	selectedNote?: string;
+	setSelectedNote?: Dispatch<SetStateAction<string>>;
+
+	currMonthAndYear: MonthAndYear;
+	setCurrMonthAndYear: Dispatch<SetStateAction<{year: number; month: number}>>;
+}
+export interface CalendarNote {
+	title: string;
+	from: Date;
+	to: Date;
+	layer?: number;
+	[key: string]: any;
+}
+
+export type CalendarMode = 0 | 1 | 2; // 0 default, 1: choose month and show year at header, 2: choose year and show year from to (10)
+export interface MonthAndYear {
+	year: number;
+	month: number; // month can pass 11
+}
+
+// MAIN COMPONENT
+export default function NoteCalendar({
+	className,
+	loading,
+	noteList,
+	selectedNote,
+	setSelectedNote,
+	currMonthAndYear,
+	setCurrMonthAndYear,
+}: NoteCalendarProp) {
+	const now = new Date();
+
+	const [mode, setMode] = useState<CalendarMode>(0);
+
+	const noteWithLayerList: CalendarNote[] = createLayerNoteList2(noteList);
+
+	// GET DATE LIST IN MONTH AND RENDER TO JSX ELEMENT
+	const dateRowRenderList = useMemo(() => {
+		const dateInMonth: Date = new Date(
+			currMonthAndYear.year,
+			currMonthAndYear.month,
+			1
+		);
+		const dateList = getDateList(dateInMonth);
+
+		const dateRowRenderList: JSX.Element[] = [];
+		for (let i = 0; i < 7; i++) {
+			const dateInRowList: Date[] = dateList.slice(i * 7, i * 7 + 7);
+
+			dateRowRenderList.push(
+				<NoteCalendarRow
+					key={i}
+					noteList={noteWithLayerList}
+					dateList={dateInRowList}
+					selectedNote={selectedNote}
+					setSelectedNote={setSelectedNote}
+					dateInMonth={
+						new Date(currMonthAndYear.year, currMonthAndYear.month, 1)
+					}
+				/>
+			);
+		}
+		return dateRowRenderList;
+	}, [currMonthAndYear, noteList]);
+
+	return (
+		<div className={className}>
+			<NoteCalendarHeader
+				selectedDate={now}
+				mode={mode}
+				setMode={setMode}
+				currMonthAndYear={currMonthAndYear}
+				setCurrMonthAndYear={setCurrMonthAndYear}
+			/>
+			{mode === 0 ? (
+				dateRowRenderList.map(dateRowRender => dateRowRender)
+			) : (
+				<SelectList
+					currMonthAndYear={currMonthAndYear}
+					mode={mode}
+					setCurrMonthAndYear={setCurrMonthAndYear}
+					setMode={setMode}
+				/>
+			)}
+		</div>
+	);
+}
+
+// MODE !== 0
+
+const styles = {
+	container: "grid grid-cols-3",
+	item: "flex justify-center items-center h-16 cursor-pointer",
+};
+
+interface SelectListProp {
+	currMonthAndYear: MonthAndYear;
+	setCurrMonthAndYear: Dispatch<SetStateAction<MonthAndYear>>;
+	mode: CalendarMode;
+	setMode: Dispatch<SetStateAction<CalendarMode>>;
+}
+function SelectList({
+	currMonthAndYear,
+	setCurrMonthAndYear,
+	mode,
+	setMode,
+}: SelectListProp) {
+	// Handle Function
+	const handleClick = (data: number) => {
+		const {month, year} = currMonthAndYear;
+		setCurrMonthAndYear({
+			year: mode == 2 ? data : year,
+			month: mode == 1 ? data : month,
+		});
+		setMode(0);
+	};
+
+	const dateListRender: JSX.Element[] = [];
+	if (mode === 1) {
+		for (let i = 0; i < 12; i++) {
+			dateListRender.push(
+				<li
+					className={styles.item}
+					key={i}
+					onClick={() => {
+						handleClick(i);
+					}}
+				>
+					Tháng {i + 1}
+				</li>
+			);
+		}
+	}
+	if (mode === 2) {
+		const roudedYear: number = roundedDown(currMonthAndYear.year);
+		for (let i = 0; i < 10; i++) {
+			dateListRender.push(
+				<li
+					key={i}
+					className={styles.item}
+					onClick={() => {
+						handleClick(roudedYear + i + 1);
+					}}
+				>
+					{roudedYear + i + 1}
+				</li>
+			);
+		}
+	}
+	return <ul className={styles.container}>{dateListRender}</ul>;
+}

@@ -1,0 +1,23 @@
+$bg-load: rgba(22, 22, 22, 0.623);
+$bg-load-ligth: rgba(22, 22, 22, 0.267);
+
+@keyframes load {
+	0% {
+		background-color: $bg-load;
+	}
+	50% {
+		background-color: $bg-load-ligth;
+	}
+	100% {
+		background-color: $bg-load;
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

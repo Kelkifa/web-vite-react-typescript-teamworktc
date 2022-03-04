@@ -1,0 +1,57 @@
+$pd-tb: 0.5em;
+$pd-rl: 0.7em;
+
+$bd-radius: 0.4em;
+$font-size: 14px;
+
+.my-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	border: none;
+	border-radius: 0.4em;
+	outline: none;
+
+	padding: $pd-tb $pd-rl;
+
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: $font-size;
+
+	color: white;
+	background-color: rgba(173, 17, 113, 0.548);
+	// background-color: rgba(83, 8, 54, 0.322);
+	// color: rgba(168, 165, 165, 0.685);
+
+	cursor: pointer;
+
+	&__text {
+		margin-right: 0.3em;
+	}
+	&:not(&--disable):hover {
+		background-color: rgba(194, 34, 132, 0.644);
+	}
+
+	&--disable {
+		background-color: rgba(83, 8, 54, 0.322);
+		color: rgba(168, 165, 165, 0.685);
+	}
+}
+
+.my-button-link {
+	color: unset;
+	display: flex;
+	gap: 0.2em;
+	align-items: center;
+
+	&:hover {
+		text-decoration: underline;
+	}
+
+	&--disable {
+		color: rgba(168, 165, 165, 0.685);
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}

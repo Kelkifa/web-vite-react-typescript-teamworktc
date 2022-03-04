@@ -1,0 +1,12 @@
+$w: 23px;
+
+.back-button {
+	padding: 0.5em;
+
+	&__btn {
+		width: $w;
+		height: $w;
+
+		cursor: pointer;
+	}
+}

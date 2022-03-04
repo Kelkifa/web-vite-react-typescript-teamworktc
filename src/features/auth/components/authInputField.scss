@@ -1,0 +1,37 @@
+$bg: rgba(112, 9, 73, 0.582);
+
+$color-label: rgba(255, 255, 255, 0.801);
+
+.auth-input-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+
+	label {
+		color: $color-label;
+	}
+
+	input {
+		height: 30px;
+		padding: 0 5px;
+	}
+	&__input {
+		background-color: $bg;
+
+		font-size: 16px;
+		color: white;
+
+		border-radius: 0.25em;
+		border: none;
+		outline: none;
+	}
+
+	&__error {
+		color: red;
+		font-size: 12px;
+	}
+
+	& ~ & {
+		margin-top: 2em;
+	}
+}

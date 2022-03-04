@@ -1,0 +1,16 @@
+$arrow-height: 6px;
+
+.user-button-dropdown {
+	top: calc(100% + 8px);
+	right: $arrow-height;
+	&::before {
+		position: absolute;
+		top: calc(0px - #{$arrow-height * 2});
+		right: 2px;
+		content: "";
+		border-top: $arrow-height solid transparent;
+		border-left: $arrow-height solid transparent;
+		border-right: $arrow-height solid transparent;
+		border-bottom: $arrow-height solid var(--bg);
+	}
+}

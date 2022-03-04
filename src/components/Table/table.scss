@@ -1,0 +1,53 @@
+.component-table {
+	// --rowHighlight
+	// --rowHover
+	border-collapse: collapse;
+	width: 100%;
+	tr {
+		// display: flex;
+	}
+	th,
+	td {
+		padding: 8px 0;
+		input[type="checkbox"] {
+			margin: 4px 0 0 0;
+			display: block;
+		}
+		vertical-align: top;
+		text-align: left;
+	}
+	th:first-child {
+		padding-left: 0.3em;
+	}
+	td:first-child {
+		padding-left: 0.3em;
+	}
+	td ~ td {
+		padding-left: 16px;
+	}
+	th ~ th {
+		padding-left: 16px;
+	}
+
+	th {
+		font-size: 14px;
+	}
+
+	tbody {
+		tr {
+			border-top: 1.5px solid rgba(83, 82, 82, 0.267);
+
+			&:hover {
+				// border-top: 1.5px solid rgba(100, 139, 175, 0.603);
+				background-color: var(--rowHover);
+			}
+		}
+		tr.component-table--empty {
+			background-color: white;
+			border-top: 1.5px solid rgba(83, 82, 82, 0.267);
+		}
+	}
+	tr:nth-child(even) {
+		background-color: var(--rowHighlight);
+	}
+}
