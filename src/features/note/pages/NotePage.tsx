@@ -4,7 +4,7 @@ import NoteCalendar, {
 	SelDates,
 } from "../components/NoteCalendar";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import NoteCreateForm from "../components/NoteCreateForm";
 import NoteManage from "../components/NoteManage";
@@ -21,13 +21,15 @@ export default function NotePage() {
 	const [selDates, setSelDates] = useState<SelDates>({});
 
 	// console.log(selDates);
-	const noteList: CalendarNote[] = noteInfo.data
-		? noteInfo.data.map(note => ({
-				...note,
-				from: new Date(note.from),
-				to: new Date(note.to),
-		  }))
-		: [];
+	const noteList: CalendarNote[] = useMemo(() => {
+		return noteInfo.data
+			? noteInfo.data.map(note => ({
+					...note,
+					from: new Date(note.from),
+					to: new Date(note.to),
+			  }))
+			: [];
+	}, [noteInfo.data]);
 
 	const [currMonthAndYear, setCurrMonthAndYear] = useState<MonthAndYear>({
 		year: new Date().getFullYear(),
@@ -53,10 +55,16 @@ export default function NotePage() {
 				/>
 			</div>
 			{/* Note Manage */}
-			<div className="col-span-2 md:col-span-1 bg-bgColor">
+			<div className="col-span-2 md:col-span-1">
 				{/* <NoteManage selectedNote={selectedNote} /> */}
-				<NoteCreateForm selDates={selDates} setSelDates={setSelDates} />
+				<NoteCreateForm
+					className="bg-bgColor"
+					selDates={selDates}
+					setSelDates={setSelDates}
+				/>
 			</div>
+
+			<div className="col-span-2 bg-bgColor">{/* <NoteManage /> */}</div>
 		</div>
 	);
 }

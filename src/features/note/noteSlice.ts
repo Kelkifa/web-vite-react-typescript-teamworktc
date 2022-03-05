@@ -120,12 +120,14 @@ const noteSlice = createSlice({
 		createNote(state, action: PayloadAction<Note>) {
 			if (state.data) {
 				action.payload.loading = true;
+				// action.payload._id = "sadkj";
 				state.data.push(action.payload);
 				return state;
 			}
 			state.data = [action.payload];
 		},
 		createNoteSuccess(state, action: PayloadAction<Note>) {
+			// console.log(action.payload);
 			const foundNoteIndex = state.data?.findIndex(
 				note => note.loading === true && note.title === action.payload.title
 			);

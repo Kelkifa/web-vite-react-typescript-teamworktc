@@ -85,7 +85,10 @@ export const createLayerNoteList2 = (
 		let [i, n] = [0, toList.length];
 
 		while (i < n) {
-			if (toList[i] < note.from) {
+			if (
+				toList[i].getMonth() <= note.from.getMonth() &&
+				toList[i].getDate() < note.from.getDate()
+			) {
 				toList[i] = note.to;
 				break;
 			}

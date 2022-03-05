@@ -32,6 +32,7 @@ function* handleGetNote(action: PayloadAction<GetNotePayload>) {
 }
 
 function* handleCreateNote(action: PayloadAction<Note>) {
+	console.log(1);
 	const groupId = getSelectedGroupId();
 	if (!groupId) return;
 	try {

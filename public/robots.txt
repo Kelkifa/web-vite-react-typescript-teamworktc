@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Sitemap: https://teamwordtc.web.app/sitemap.xml
-Host: https://teamwordtc.web.app
+Sitemap: https://teamword-tc.web.app/sitemap.xml
+Host: https://teamword-tc.web.app

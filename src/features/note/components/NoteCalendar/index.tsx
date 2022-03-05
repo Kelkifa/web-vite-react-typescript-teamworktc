@@ -40,7 +40,15 @@ export default function NoteCalendar({
 	const [mode, setMode] = useState<CalendarMode>(0);
 
 	const noteWithLayerList: CalendarNote[] = createLayerNoteList2(noteList);
-
+	// DEBUG
+	// console.table(
+	// 	noteWithLayerList.map(value => ({
+	// 		title: value.title,
+	// 		from: `${value.from.getDate()}/${value.from.getMonth()}`,
+	// 		to: `${value.to.getDate()}/${value.to.getMonth()}`,
+	// 		layer: value.layer,
+	// 	}))
+	// );
 	// GET DATE LIST IN MONTH AND RENDER TO JSX ELEMENT
 	const dateRowRenderList = useMemo(() => {
 		const dateInMonth: Date = new Date(

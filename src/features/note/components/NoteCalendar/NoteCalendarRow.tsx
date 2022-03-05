@@ -18,7 +18,7 @@ export interface NoteCalendarRowProp {
 }
 
 const styles = {
-	selDate: "absolute top-0 bottom-0 opacity-60 text-[0.5rem] rounded",
+	selDate: "absolute top-0 bottom-0 opacity-60 text-[0.5rem]",
 };
 export default function NoteCalendarRow({
 	noteList,
@@ -57,7 +57,18 @@ export default function NoteCalendarRow({
 
 		setSelDates(preState => {
 			if (preState.sel === 0) {
+				if (preState.date1 !== undefined) {
+					return {
+						...preState,
+						date0: date > preState.date1 ? preState.date1 : date,
+						sel: 1,
+					};
+				}
 				return {...preState, date0: date, sel: 1};
+			}
+
+			if (preState.sel === 1 && preState.date0 !== undefined) {
+				if (date < preState.date0) return {...preState, date1: preState.date0};
 			}
 
 			return {...preState, date1: date};
@@ -90,7 +101,7 @@ export default function NoteCalendarRow({
 							+selDates.date0 === +date && (
 								<div
 									className={clsx(
-										"left-0 right-[50%] bg-red-500",
+										"left-0 right-[50%] bg-red-500 rounded-l-md",
 										styles.selDate,
 										selDates.sel === 0 ? "brightness-125" : "brightness-75"
 									)}
@@ -103,7 +114,7 @@ export default function NoteCalendarRow({
 							+selDates.date1 === +date && (
 								<div
 									className={clsx(
-										"left-[50%] right-0 bg-blue-500",
+										"left-[50%] right-0 bg-blue-500 rounded-r-md",
 										styles.selDate,
 										selDates.sel === 1 ? "brightness-125" : "brightness-75"
 									)}
@@ -124,7 +135,7 @@ export default function NoteCalendarRow({
 						note.to >= dateList[dateListLength] ? 8 : note.to.getDay() + 2;
 					return (
 						<div
-							key={note._id}
+							key={index}
 							className={clsx(
 								"px-1 text-[14px] text-slate-200 cursor-pointer",
 								note._id === selectedNote

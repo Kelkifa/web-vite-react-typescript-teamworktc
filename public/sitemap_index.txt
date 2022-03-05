@@ -1,6 +1,6 @@
-https://team-word-tc.web.app/
-https://team-word-tc.web.app/home
-https://team-word-tc.web.app/auth/login
-https://team-word-tc.web.app/auth/register
-https://team-word-tc.web.app/note
-https://team-word-tc.web.app/doc
+https://teamwork-tc.web.app/
+https://teamwork-tc.web.app/home
+https://teamwork-tc.web.app/auth/login
+https://teamwork-tc.web.app/auth/register
+https://teamwork-tc.web.app/note
+https://teamwork-tc.web.app/doc

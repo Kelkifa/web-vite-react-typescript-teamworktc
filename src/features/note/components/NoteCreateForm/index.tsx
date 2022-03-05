@@ -9,6 +9,7 @@ import BaseInputField from "../../../../components/form/BaseInputField";
 import {Note} from "../../../../models/Note";
 import NoteInputField from "./NoteInputField";
 import {SelDates} from "../NoteCalendar";
+import clsx from "clsx";
 import {noteActions} from "../../noteSlice";
 
 const styles = {
@@ -36,10 +37,15 @@ const schema = yup.object().shape({
 });
 
 interface NoteCreateFormProp {
+	className?: string;
 	selDates: SelDates;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 }
-const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
+const NoteCreateForm = ({
+	className,
+	selDates,
+	setSelDates,
+}: NoteCreateFormProp) => {
 	const currColorList = useAppSelector(state =>
 		state.note.data?.map(value => value.color)
 	);
@@ -136,6 +142,8 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 	};
 
 	const handleSubmit = (values: NoteFormValue) => {
+		// console.log(values);
+		// return;
 		// Start
 		const [startDate, startMonth, startYear] = values.from
 			.split("/")
@@ -146,11 +154,11 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 			.map(value => parseInt(value));
 
 		// End
-		const [endDate, endMonth, endYear] = values.from
+		const [toDate, toMonth, toYear] = values.to
 			.split("/")
 			.map(value => parseInt(value));
 
-		const [endHour, endMinute] = values.fromTime
+		const [toHour, toMinute] = values.toTime
 			.split(":")
 			.map(value => parseInt(value));
 
@@ -161,15 +169,15 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 			startHour,
 			startMinute
 		);
-		const dateTo = new Date(endYear, endMonth - 1, endDate, endHour, endMinute);
+		const dateTo = new Date(toYear, toMonth - 1, toDate, toHour, toMinute);
 
 		if (dateFrom > dateTo) {
 			alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
 			return;
 		}
 		const data: Note = {
-			from: dateFrom,
-			to: dateTo,
+			from: dateFrom.toDateString(),
+			to: dateTo.toDateString(),
 			title: values.title,
 			color:
 				values.color === "transparent"
@@ -177,11 +185,12 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 					: values.color,
 		};
 
+		console.log(data);
 		dispatch(noteActions.createNote(data));
 	};
 
 	return (
-		<div className="p-2 text-sm">
+		<div className={clsx("p-2 text-sm", className)}>
 			<h1 className="text-center text-base text-red-500 font-semibold">
 				Tạo sự kiện
 			</h1>
@@ -200,7 +209,7 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 					};
 
 					return (
-						<form onSubmit={handleSubmit} className="flex flex-col gap-y-2">
+						<form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
 							<FastField
 								name="title"
 								component={BaseInputField}
@@ -265,14 +274,14 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 									Nhấn vào đây
 								</div>
 							</div>
-							<div className="flex justify-end mt-2">
-								<button
-									type="submit"
-									className="bg-tim px-3 text-slate-300 rounded-lg"
-								>
-									Tạo
-								</button>
-							</div>
+							{/* <div className="flex justify-end mt-2"> */}
+							{/* </div> */}
+							<button
+								type="submit"
+								className="bg-tim/80 hover:bg-tim px-3 py-1 text-slate-300 rounded-lg mt-2 w-full"
+							>
+								Tạo
+							</button>
 						</form>
 					);
 				}}
@@ -281,4 +290,4 @@ const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 	);
 };
 
-export default NoteCreateForm;
+export default memo(NoteCreateForm);
