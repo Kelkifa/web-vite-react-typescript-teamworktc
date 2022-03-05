@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import {CalendarNote} from ".";
+import {SelDates} from "./models";
 import clsx from "clsx";
 import {setSelectedNote} from "../../noteSlice";
 
@@ -9,18 +10,28 @@ export interface NoteCalendarRowProp {
 	dateList: Date[];
 	dateInMonth: Date;
 
+	selDates: SelDates;
+	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
+
 	selectedNote?: string;
 	setSelectedNote?: React.Dispatch<React.SetStateAction<string>>;
 }
 
+const styles = {
+	selDate: "absolute top-0 bottom-0 opacity-60 text-[0.5rem] rounded",
+};
 export default function NoteCalendarRow({
 	noteList,
 	dateList,
 	dateInMonth,
 
+	selDates,
+	setSelDates,
+
 	selectedNote,
 	setSelectedNote,
 }: NoteCalendarRowProp) {
+	// console.log(selDates);
 	const now = new Date();
 
 	const dateListLength = dateList.length - 1;
@@ -41,6 +52,18 @@ export default function NoteCalendarRow({
 		setSelectedNote(noteId === selectedNote ? "" : noteId);
 	};
 
+	const handleDateClick = (date: Date) => {
+		if (selDates.sel === undefined) return;
+
+		setSelDates(preState => {
+			if (preState.sel === 0) {
+				return {...preState, date0: date, sel: 1};
+			}
+
+			return {...preState, date1: date};
+		});
+	};
+
 	if (dateList.length === 0) return null;
 	return (
 		<div className="grid grid-cols-7">
@@ -48,7 +71,7 @@ export default function NoteCalendarRow({
 				{dateList.map((date, index) => (
 					<li
 						className={clsx(
-							"flex items-center justify-center h-12 row-start-1",
+							"relative flex items-center justify-center h-12 row-start-1 hover:bg-black/40",
 							{
 								"text-slate-400": dateInMonth.getMonth() !== date.getMonth(),
 								"bg-bgColor":
@@ -58,7 +81,36 @@ export default function NoteCalendarRow({
 							}
 						)}
 						key={index}
+						onClick={() => {
+							handleDateClick(date);
+						}}
 					>
+						{selDates.sel !== undefined &&
+							selDates.date0 !== undefined &&
+							+selDates.date0 === +date && (
+								<div
+									className={clsx(
+										"left-0 right-[50%] bg-red-500",
+										styles.selDate,
+										selDates.sel === 0 ? "brightness-125" : "brightness-75"
+									)}
+								>
+									Bắt đầu
+								</div>
+							)}
+						{selDates.sel !== undefined &&
+							selDates.date1 !== undefined &&
+							+selDates.date1 === +date && (
+								<div
+									className={clsx(
+										"left-[50%] right-0 bg-blue-500",
+										styles.selDate,
+										selDates.sel === 1 ? "brightness-125" : "brightness-75"
+									)}
+								>
+									Kết thúc
+								</div>
+							)}
 						{date.getDate()}
 					</li>
 				))}

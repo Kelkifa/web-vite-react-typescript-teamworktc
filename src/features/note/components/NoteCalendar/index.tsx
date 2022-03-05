@@ -1,8 +1,11 @@
+import {CalendarMode, CalendarNote, MonthAndYear, SelDates} from "./models";
 import {Dispatch, SetStateAction, useMemo, useState} from "react";
 import {createLayerNoteList2, getDateList, roundedDown} from "./core";
 
 import NoteCalendarHeader from "./NoteCalendarHeader";
 import NoteCalendarRow from "./NoteCalendarRow";
+
+export * from "./models";
 
 interface NoteCalendarProp {
 	className?: string;
@@ -10,24 +13,14 @@ interface NoteCalendarProp {
 	loading?: boolean;
 	noteList: CalendarNote[];
 
+	selDates: SelDates;
+	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
+
 	selectedNote?: string;
 	setSelectedNote?: Dispatch<SetStateAction<string>>;
 
 	currMonthAndYear: MonthAndYear;
 	setCurrMonthAndYear: Dispatch<SetStateAction<{year: number; month: number}>>;
-}
-export interface CalendarNote {
-	title: string;
-	from: Date;
-	to: Date;
-	layer?: number;
-	[key: string]: any;
-}
-
-export type CalendarMode = 0 | 1 | 2; // 0 default, 1: choose month and show year at header, 2: choose year and show year from to (10)
-export interface MonthAndYear {
-	year: number;
-	month: number; // month can pass 11
 }
 
 // MAIN COMPONENT
@@ -35,6 +28,8 @@ export default function NoteCalendar({
 	className,
 	loading,
 	noteList,
+	selDates,
+	setSelDates,
 	selectedNote,
 	setSelectedNote,
 	currMonthAndYear,
@@ -64,6 +59,8 @@ export default function NoteCalendar({
 					key={i}
 					noteList={noteWithLayerList}
 					dateList={dateInRowList}
+					selDates={selDates}
+					setSelDates={setSelDates}
 					selectedNote={selectedNote}
 					setSelectedNote={setSelectedNote}
 					dateInMonth={

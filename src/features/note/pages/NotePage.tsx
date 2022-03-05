@@ -1,6 +1,7 @@
 import NoteCalendar, {
 	CalendarNote,
 	MonthAndYear,
+	SelDates,
 } from "../components/NoteCalendar";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useEffect, useState} from "react";
@@ -17,6 +18,9 @@ export default function NotePage() {
 	const noteInfo = useAppSelector(state => state.note);
 	const groupId = useAppSelector(state => state.group.selectedGroup?._id);
 
+	const [selDates, setSelDates] = useState<SelDates>({});
+
+	// console.log(selDates);
 	const noteList: CalendarNote[] = noteInfo.data
 		? noteInfo.data.map(note => ({
 				...note,
@@ -39,6 +43,8 @@ export default function NotePage() {
 				<NoteCalendar
 					noteList={noteList}
 					loading={noteInfo.loading}
+					selDates={selDates}
+					setSelDates={setSelDates}
 					selectedNote={selectedNote}
 					setSelectedNote={setSelectedNote}
 					currMonthAndYear={currMonthAndYear}
@@ -49,7 +55,7 @@ export default function NotePage() {
 			{/* Note Manage */}
 			<div className="col-span-2 md:col-span-1 bg-bgColor">
 				{/* <NoteManage selectedNote={selectedNote} /> */}
-				<NoteCreateForm />
+				<NoteCreateForm selDates={selDates} setSelDates={setSelDates} />
 			</div>
 		</div>
 	);

@@ -1,16 +1,14 @@
 import * as yup from "yup";
 
-import {FastField, Formik} from "formik";
-import {
-	getLastDate,
-	getLastDateFormDate,
-	randomNoteColor,
-} from "../NoteCalendar/core";
+import {FastField, Field, Formik} from "formik";
+import React, {memo} from "react";
+import {getLastDateFormDate, randomNoteColor} from "../NoteCalendar/core";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
 import BaseInputField from "../../../../components/form/BaseInputField";
 import {Note} from "../../../../models/Note";
-import {getSelectedGroupId} from "../../../../app/store";
+import NoteInputField from "./NoteInputField";
+import {SelDates} from "../NoteCalendar";
 import {noteActions} from "../../noteSlice";
 
 const styles = {
@@ -36,7 +34,12 @@ const schema = yup.object().shape({
 	toTime: yup.string().required("Bạn chưa nhập trường này"),
 	color: yup.string().required("Bạn chưa nhập trường này"),
 });
-export default function NoteCreateForm() {
+
+interface NoteCreateFormProp {
+	selDates: SelDates;
+	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
+}
+const NoteCreateForm = ({selDates, setSelDates}: NoteCreateFormProp) => {
 	const currColorList = useAppSelector(state =>
 		state.note.data?.map(value => value.color)
 	);
@@ -205,10 +208,13 @@ export default function NoteCreateForm() {
 								placeHolder="Nhập tên sự kiện"
 							/>
 							<div className={styles.dateFieldContainer}>
-								<FastField
+								<Field
 									className={styles.dateField}
 									name="from"
-									component={BaseInputField}
+									component={NoteInputField}
+									selDates={selDates}
+									setSelDates={setSelDates}
+									lighterChooseBtn={selDates.sel === 0}
 									onChange={handleDateChange}
 									label="Ngày bắt đầu"
 									validate={validateDate}
@@ -226,10 +232,13 @@ export default function NoteCreateForm() {
 								/>
 							</div>
 							<div className={styles.dateFieldContainer}>
-								<FastField
+								<Field
 									name="to"
 									className={styles.dateField}
-									component={BaseInputField}
+									component={NoteInputField}
+									selDates={selDates}
+									lighterChooseBtn={selDates.sel === 1}
+									setSelDates={setSelDates}
 									onChange={handleDateChange}
 									validate={validateDate}
 									label="Ngày kết thúc"
@@ -270,4 +279,6 @@ export default function NoteCreateForm() {
 			</Formik>
 		</div>
 	);
-}
+};
+
+export default NoteCreateForm;
