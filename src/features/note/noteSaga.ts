@@ -1,10 +1,11 @@
+import {DataResponse, DefaultResponse} from "../../models";
 import {GetNotePayload, noteActions} from "./noteSlice";
 import {call, fork, put, takeLatest} from "redux-saga/effects";
-import {getSelectedGroupId, store} from "../../app/store";
 
-import {DataResponse} from "../../models";
 import {Note} from "../../models/Note";
 import {PayloadAction} from "@reduxjs/toolkit";
+import {getSelectedGroupId} from "../../app/store";
+import noteApi from "../../api/noteApi";
 import {todoApi} from "../../api/todoApi";
 
 // import todoApi from "../../api/todoApi";
@@ -32,7 +33,6 @@ function* handleGetNote(action: PayloadAction<GetNotePayload>) {
 }
 
 function* handleCreateNote(action: PayloadAction<Note>) {
-	console.log(1);
 	const groupId = getSelectedGroupId();
 	if (!groupId) return;
 	try {
@@ -53,9 +53,101 @@ function* handleCreateNote(action: PayloadAction<Note>) {
 	}
 }
 
+function* handleAddTodo(
+	action: PayloadAction<{noteId: string; todoName: string}>
+) {
+	const groupId = getSelectedGroupId();
+	if (!groupId) return;
+
+	const {noteId, todoName} = action.payload;
+
+	try {
+		const data: DataResponse<Note> = yield call(
+			noteApi.addTodo,
+			groupId,
+			noteId,
+			todoName
+		);
+
+		if (data.success === true) {
+			yield put(noteActions.addTodoSuccess(data.response));
+		} else {
+			yield put(noteActions.addTodoFailed({noteId, todoName}));
+		}
+	} catch (err) {
+		console.log(err);
+	}
+}
+function* handleChangeState(
+	action: PayloadAction<{noteId: string; todoId: string; state: boolean}>
+) {
+	const groupId = getSelectedGroupId();
+	if (!groupId) return;
+	const {todoId, noteId, state} = action.payload;
+	try {
+		const data: DataResponse<Note> = yield call(
+			noteApi.changeState,
+			groupId,
+			noteId,
+			todoId,
+			state
+		);
+
+		if (data.success === true) {
+			yield put(noteActions.todoChangeStateSuccess(data.response));
+		} else {
+			yield put(
+				noteActions.todoChangeStateFailed({
+					todoId,
+					noteId,
+					state,
+					message: data.message,
+				})
+			);
+		}
+	} catch (err) {
+		yield put(
+			noteActions.todoChangeStateFailed({
+				todoId,
+				noteId,
+				state,
+				message: "Server gặp sự cố",
+			})
+		);
+	}
+}
+
+function* handleRemoveTodo(
+	action: PayloadAction<{noteId: string; todoId: string}>
+) {
+	const groupId = getSelectedGroupId();
+
+	const {noteId, todoId} = action.payload;
+
+	if (!groupId) return;
+	try {
+		const data: DataResponse<Note> = yield call(
+			noteApi.removeTodo,
+			groupId,
+			noteId,
+			todoId
+		);
+		if (data.success === true) {
+			yield put(noteActions.removeTodoSuccess({noteId, todoId}));
+		} else {
+			yield put(noteActions.removeTodoFailed({noteId, todoId}));
+		}
+	} catch (err) {
+		console.log(err);
+	}
+}
+
 function* noteWatcher() {
 	yield takeLatest(noteActions.getNote.toString(), handleGetNote);
 	yield takeLatest(noteActions.createNote.toString(), handleCreateNote);
+	yield takeLatest(noteActions.todoChangeState.toString(), handleChangeState);
+	yield takeLatest(noteActions.removeTodo.toString(), handleRemoveTodo);
+	yield takeLatest(noteActions.addTodo.toString(), handleAddTodo);
 }
 
 export default function* noteSaga() {

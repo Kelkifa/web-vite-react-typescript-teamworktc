@@ -10,6 +10,8 @@ export interface Note {
 }
 
 export interface Todo {
+	_id?: string;
 	todo: string;
 	state: boolean;
+	loading?: boolean;
 }

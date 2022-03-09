@@ -95,10 +95,7 @@ const noteSlice = createSlice({
 	name: "note",
 	initialState,
 	reducers: {
-		addTodo: (state, action: PayloadAction<any>) => {
-			state.data?.push(action.payload);
-		},
-		setSelectedNote: (state, action: PayloadAction<any>) => {
+		setSelectedNote: (state, action: PayloadAction<Note | undefined>) => {
 			state.selectedNote = action.payload;
 		},
 
@@ -137,6 +134,171 @@ const noteSlice = createSlice({
 		},
 		createNoteFailed(state, action: PayloadAction<string>) {
 			state.data = state.data?.filter(note => note.loading !== true);
+		},
+
+		// ADD TODO
+		addTodo(state, action: PayloadAction<{noteId: string; todoName: string}>) {
+			const {payload} = action;
+			if (!state.selectedNote || state.selectedNote._id !== payload.noteId)
+				return state;
+
+			if (!state.selectedNote.todoList) {
+				state.selectedNote.todoList = [
+					{todo: payload.todoName, state: false, loading: true},
+				];
+			} else {
+				state.selectedNote.todoList.push({
+					todo: payload.todoName,
+					state: false,
+					loading: true,
+				});
+			}
+			return state;
+		},
+		addTodoSuccess(state, action: PayloadAction<Note>) {
+			const {payload} = action;
+			if (state.data) {
+				const foundNote = state.data.findIndex(
+					note => note._id === payload._id
+				);
+				if (foundNote !== -1) {
+					state.data[foundNote] = payload;
+				}
+			}
+
+			if (
+				!state.selectedNote?.todoList ||
+				state.selectedNote._id !== payload._id
+			)
+				return state;
+
+			state.selectedNote = payload;
+			return state;
+		},
+		addTodoFailed(
+			state,
+			action: PayloadAction<{noteId: string; todoName: string}>
+		) {
+			const {payload} = action;
+			if (!state.selectedNote?.todoList) return state;
+
+			state.selectedNote.todoList = state.selectedNote.todoList.filter(
+				todo => !(todo.loading === true && todo.todo === payload.todoName)
+			);
+
+			return state;
+		},
+
+		// TODO CHANGE STATE
+		todoChangeState(
+			state,
+			action: PayloadAction<{noteId: string; todoId: string; state: boolean}>
+		) {
+			const {payload} = action;
+			if (
+				state.selectedNote?._id !== payload.noteId ||
+				!state.selectedNote ||
+				!state.selectedNote.todoList
+			)
+				return state;
+
+			const foundIndex = state.selectedNote.todoList.findIndex(
+				todo => todo._id === payload.todoId
+			);
+			if (foundIndex !== -1) {
+				state.selectedNote.todoList[foundIndex].state = payload.state;
+			}
+
+			return state;
+		},
+		todoChangeStateSuccess(state, action: PayloadAction<Note>) {
+			if (state.data === undefined) return state;
+			const foundNoteIndex = state.data.findIndex(
+				note => note._id === action.payload._id
+			);
+			if (foundNoteIndex !== -1) {
+				state.data[foundNoteIndex] = action.payload;
+			}
+		},
+		todoChangeStateFailed(
+			state,
+			action: PayloadAction<{
+				noteId: string;
+				todoId: string;
+				state: boolean;
+				message: string;
+			}>
+		) {
+			const {payload} = action;
+			if (
+				state.selectedNote?._id !== payload.noteId ||
+				!state.selectedNote ||
+				!state.selectedNote.todoList
+			)
+				return state;
+
+			const foundIndex = state.selectedNote.todoList.findIndex(
+				todo => todo._id === payload.todoId
+			);
+			if (foundIndex !== -1) {
+				state.selectedNote.todoList[foundIndex].state = !payload.state;
+			}
+
+			return state;
+		},
+
+		// REMOVE
+		removeTodo(state, action: PayloadAction<{noteId: string; todoId: string}>) {
+			const {payload} = action;
+			if (
+				state.selectedNote?._id !== payload.noteId ||
+				!state.selectedNote ||
+				!state.selectedNote.todoList
+			)
+				return state;
+
+			const foundIndex = state.selectedNote.todoList.findIndex(
+				todo => todo._id === payload.todoId
+			);
+
+			if (foundIndex !== -1) {
+				state.selectedNote.todoList.splice(foundIndex, 1);
+			}
+
+			return state;
+		},
+		removeTodoSuccess(
+			state,
+			action: PayloadAction<{noteId: string; todoId: string}>
+		) {
+			const {payload} = action;
+			if (state.data === undefined) return state;
+			const foundNoteId = state.data.findIndex(
+				note => note._id === payload.noteId
+			);
+
+			if (foundNoteId !== -1) {
+				state.data[foundNoteId].todoList = state.data[
+					foundNoteId
+				].todoList?.filter(todo => todo._id !== payload.todoId);
+			}
+
+			return state;
+		},
+		removeTodoFailed(
+			state,
+			action: PayloadAction<{noteId: string; todoId: string}>
+		) {
+			const {payload} = action;
+			if (!state.data || state.selectedNote?._id !== payload.noteId)
+				return state;
+
+			const foundNote = state.data.find(note => note._id === payload.noteId);
+			if (!foundNote) return state;
+
+			state.selectedNote = foundNote;
+
+			return state;
 		},
 	},
 	extraReducers: {
@@ -294,6 +456,11 @@ const noteSlice = createSlice({
 		// [todoSearch.fulfilled]: (state:any, action:PayloadAction<any>) => {},
 	},
 });
+
+function isExistTodoList(note: Note | undefined) {
+	if (!note || !note.todoList) return false;
+	return true;
+}
 
 const {reducer: noteReducer, actions} = noteSlice;
 

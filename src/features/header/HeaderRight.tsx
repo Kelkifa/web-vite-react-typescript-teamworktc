@@ -65,15 +65,15 @@ function GroupDropdown() {
 
 	if (groupInfo.loading) {
 		return (
-			<div className="h-[32px] w-52 mr-3 flex items-center justify-center bg-black/70">
+			<div className="h-[32px] w-44 mr-3 flex items-center justify-center bg-black/70">
 				<AiOutlineLoading3Quarters className="animate-spin mr-2" /> Loading ...
 			</div>
 		);
 	}
 	return (
-		<div className="relative h-[32px] w-52 bg-black/70 mr-3 text-orange-400 font-semibold cursor-pointer">
+		<div className="relative h-[32px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold cursor-pointer">
 			<div
-				className="h-full flex items-center w-full px-2"
+				className="h-full flex items-center w-full px-2 truncate"
 				onClick={() => {
 					setIsShowDropdown(!isShowDropdown);
 				}}
@@ -131,7 +131,7 @@ function SignInUpButton() {
 					underline: location.pathname.includes("auth/login"),
 				})}
 			>
-				Sign In
+				Đăng nhập
 			</Link>
 			<span> | </span>
 			<Link
@@ -140,7 +140,7 @@ function SignInUpButton() {
 					underline: location.pathname.includes("auth/register"),
 				})}
 			>
-				Sign Up
+				Đăng ký
 			</Link>
 		</div>
 	);

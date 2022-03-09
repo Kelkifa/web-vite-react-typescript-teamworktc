@@ -5,7 +5,11 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
+		"postbuild": "react-snap",
 		"preview": "vite preview"
+	},
+	"reactSnap": {
+		"source": "dist"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.7.1",

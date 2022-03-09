@@ -6,6 +6,7 @@ import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 
 import Auth from "./features/auth";
 import Doc from "./features/doc";
+import Game from "./features/game";
 import Group from "./features/group";
 import HomePage from "./features/home/pages/HomePage";
 import MainLayout from "./components/layouts/MainLayout";
@@ -54,6 +55,7 @@ function App() {
 					/>
 					<Route path="home" element={<HomePage />} />
 					<Route path="auth/*" element={<Auth />} />
+					<Route path="game" element={<Game />} />
 					<Route path="" element={<HomePage />} />
 				</Route>
 				<Route path="*" element={<div>Not found</div>} />

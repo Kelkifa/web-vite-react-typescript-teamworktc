@@ -1,28 +1,37 @@
+import {Note, Todo} from "../../../../models/Note";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+
 import {Formik} from "formik";
-import {Todo} from "../../../../models/Note";
-import {useAppSelector} from "../../../../app/hooks";
+import TodoList from "./TodoList";
+import {noteActions} from "../../noteSlice";
 
-interface NoteManageProp {
-	selectedNote: string;
-}
+export default function NoteManage() {
+	const selectedNote: Note | undefined = useAppSelector(
+		state => state.note.selectedNote
+	);
 
-export default function NoteManage({selectedNote}: NoteManageProp) {
-	// console.log(note);
-
-	const note = useAppSelector(state => state.note.selectedNote);
-	console.log(note);
 	return (
-		<div className="h-full p-2">
+		<div className="h-full p-3 pb-9">
 			<Controlbar />
 
-			<h2 className="font-bold text-xl text-center">Danh Sách Công Việc</h2>
+			<h2 className="font-bold text-xl text-center py-5 text-red-500">
+				Danh Sách Công Việc
+			</h2>
 			{selectedNote ? (
 				<>
-					<TodoAdd />
-					<TodoList />
+					<TodoAdd noteId={selectedNote._id} />
+					<div className="py-2 text-red-500">{selectedNote.title}</div>
+
+					<TodoList
+						todoList={selectedNote.todoList}
+						noteId={selectedNote._id}
+					/>
 				</>
 			) : (
-				"null"
+				<p>
+					Nhấn vào một sự kiện trên lịch để xem danh sách công việc của sự kiện
+					đó
+				</p>
 			)}
 		</div>
 	);
@@ -37,14 +46,16 @@ function Controlbar() {
 	);
 }
 
-function TodoAdd() {
+function TodoAdd({noteId}: {noteId: string | undefined}) {
+	const dispatch = useAppDispatch();
 	const initialValues: Todo = {
 		todo: "",
 		state: false,
 	};
 
 	const handleSubmit = (values: Todo) => {
-		console.log(values);
+		if (noteId === undefined) return;
+		dispatch(noteActions.addTodo({noteId, todoName: values.todo}));
 	};
 	return (
 		<div>
@@ -58,7 +69,7 @@ function TodoAdd() {
 								type="text"
 								onChange={handleChange}
 								onBlur={handleBlur}
-								className="text-slate-300 text-lg inline-block bg-black/40 px-2"
+								className="text-slate-300 text-lg inline-block bg-black/40 px-2 flex-grow"
 								placeholder="Nhập Tên Công Việc"
 							/>
 							<button
@@ -73,8 +84,4 @@ function TodoAdd() {
 			</Formik>
 		</div>
 	);
-}
-
-function TodoList() {
-	return <div>todoList</div>;
 }

@@ -1,4 +1,5 @@
 export interface CalendarNote {
+	_id?: string;
 	title: string;
 	from: Date;
 	to: Date;

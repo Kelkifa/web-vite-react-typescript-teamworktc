@@ -17,7 +17,7 @@ interface NoteCalendarProp {
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 
 	selectedNote?: string;
-	setSelectedNote?: Dispatch<SetStateAction<string>>;
+	setSelectedNote?: (data?: CalendarNote) => void;
 
 	currMonthAndYear: MonthAndYear;
 	setCurrMonthAndYear: Dispatch<SetStateAction<{year: number; month: number}>>;
@@ -78,7 +78,7 @@ export default function NoteCalendar({
 			);
 		}
 		return dateRowRenderList;
-	}, [currMonthAndYear, noteList]);
+	}, [currMonthAndYear, noteList, selectedNote]);
 
 	return (
 		<div className={className}>

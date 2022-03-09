@@ -176,8 +176,8 @@ const NoteCreateForm = ({
 			return;
 		}
 		const data: Note = {
-			from: dateFrom.toDateString(),
-			to: dateTo.toDateString(),
+			from: dateFrom.toISOString(),
+			to: dateTo.toISOString(),
 			title: values.title,
 			color:
 				values.color === "transparent"
@@ -190,7 +190,7 @@ const NoteCreateForm = ({
 	};
 
 	return (
-		<div className={clsx("p-2 text-sm", className)}>
+		<div className={clsx("p-2 pb-3 text-sm", className)}>
 			<h1 className="text-center text-base text-red-500 font-semibold">
 				Tạo sự kiện
 			</h1>

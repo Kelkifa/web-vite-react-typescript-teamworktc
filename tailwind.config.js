@@ -18,6 +18,7 @@ module.exports = {
         "footerBg": "#171717",
         "baseRed": "#EF4444",
         "baseText": "#CBD5E1",
+        "baseOrange": "#fb923c",
         "tim": "rgba(112,9,73)"
       },
       gridTemplateColumns: {

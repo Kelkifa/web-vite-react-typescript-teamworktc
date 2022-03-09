@@ -3,7 +3,6 @@ import * as React from "react";
 import {CalendarNote} from ".";
 import {SelDates} from "./models";
 import clsx from "clsx";
-import {setSelectedNote} from "../../noteSlice";
 
 export interface NoteCalendarRowProp {
 	noteList: CalendarNote[];
@@ -14,7 +13,7 @@ export interface NoteCalendarRowProp {
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 
 	selectedNote?: string;
-	setSelectedNote?: React.Dispatch<React.SetStateAction<string>>;
+	setSelectedNote?: (data?: CalendarNote) => void;
 }
 
 const styles = {
@@ -45,12 +44,6 @@ export default function NoteCalendarRow({
 
 		return false;
 	});
-
-	const handleNoteClick = (noteId: string) => {
-		if (!setSelectedNote) return;
-
-		setSelectedNote(noteId === selectedNote ? "" : noteId);
-	};
 
 	const handleDateClick = (date: Date) => {
 		if (selDates.sel === undefined) return;
@@ -139,7 +132,7 @@ export default function NoteCalendarRow({
 							className={clsx(
 								"px-1 text-[14px] text-slate-200 cursor-pointer",
 								note._id === selectedNote
-									? "brightness-130"
+									? "brightness-150"
 									: "truncate h-[21px]",
 								note.to > dateList[dateListLength]
 									? "rounded-l-[6px]"
@@ -153,7 +146,7 @@ export default function NoteCalendarRow({
 								gridColumnEnd: endCol,
 								gridRowStart: note.layer === undefined ? 1 : note.layer + 1,
 							}}
-							onClick={() => handleNoteClick(note._id)}
+							onClick={() => setSelectedNote && setSelectedNote(note)}
 						>
 							{note.title}
 						</div>

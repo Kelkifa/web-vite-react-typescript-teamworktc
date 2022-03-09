@@ -6,12 +6,22 @@ import NoteCalendar, {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useEffect, useMemo, useState} from "react";
 
+import {Note} from "../../../models/Note";
 import NoteCreateForm from "../components/NoteCreateForm";
 import NoteManage from "../components/NoteManage";
 import {noteActions} from "../noteSlice";
 
 export default function NotePage() {
-	const [selectedNote, setSelectedNote] = useState<string>("");
+	// const [selectedNote, setSelectedNote] = useState<string>("");
+	const selectedNote: CalendarNote | undefined = useAppSelector(state => {
+		const selectedNote = state.note.selectedNote;
+		if (selectedNote === undefined) return undefined;
+		return {
+			...selectedNote,
+			from: new Date(selectedNote.from),
+			to: new Date(selectedNote.to),
+		};
+	});
 
 	const dispatch = useAppDispatch();
 
@@ -36,6 +46,26 @@ export default function NotePage() {
 		month: new Date().getMonth(),
 	});
 
+	const handleSetSelectedNote = (note?: CalendarNote) => {
+		if (note === undefined) return;
+
+		if (selectedNote?._id === note._id) {
+			return dispatch(noteActions.setSelectedNote(undefined));
+		}
+		const {_id, title, to, from, todoList, color} = note;
+
+		dispatch(
+			noteActions.setSelectedNote({
+				_id,
+				title,
+				to: to.toISOString(),
+				from: from.toISOString(),
+				todoList,
+				color,
+			})
+		);
+	};
+
 	useEffect(() => {
 		dispatch(noteActions.getNote(currMonthAndYear));
 	}, [currMonthAndYear, groupId]);
@@ -47,8 +77,8 @@ export default function NotePage() {
 					loading={noteInfo.loading}
 					selDates={selDates}
 					setSelDates={setSelDates}
-					selectedNote={selectedNote}
-					setSelectedNote={setSelectedNote}
+					selectedNote={selectedNote?._id}
+					setSelectedNote={handleSetSelectedNote}
 					currMonthAndYear={currMonthAndYear}
 					setCurrMonthAndYear={setCurrMonthAndYear}
 					className="bg-bgColor"
@@ -64,7 +94,9 @@ export default function NotePage() {
 				/>
 			</div>
 
-			<div className="col-span-2 bg-bgColor">{/* <NoteManage /> */}</div>
+			<div className="col-span-2 bg-bgColor">
+				<NoteManage />
+			</div>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
-import {DataResponse} from "../models";
+import {DataResponse, DefaultResponse} from "../models";
+
 import {Note} from "../models/Note";
 import axiosClient from "./axiosClient";
 
@@ -16,14 +17,37 @@ const noteApi = {
 		return axiosClient.post(url, {groupId, data});
 	},
 
+	addTodo(
+		groupId: string,
+		noteId: string,
+		todoName: string
+	): Promise<DataResponse<Note>> {
+		const url = "/todos/addTodo";
+		return axiosClient.post(url, {groupId, todoId: noteId, todoName});
+	},
+
 	getPassedNotes(groupId: string): Promise<DataResponse<Note[]>> {
 		const url = "/todos/getPassed";
 		return axiosClient.post(url, {groupId});
 	},
 
-	changeState(groupId: string, noteId: string, todoId: string, state: boolean) {
+	changeState(
+		groupId: string,
+		noteId: string,
+		todoId: string,
+		state: boolean
+	): Promise<DataResponse<DefaultResponse>> {
 		const url = "/todos/changeState";
-		return axiosClient.post(url, {noteId, todoId, state});
+		return axiosClient.post(url, {groupId, noteId, todoId, state});
+	},
+
+	removeTodo(
+		groupId: string,
+		noteId: string,
+		todoId: string
+	): Promise<DataResponse<Note>> {
+		const url = "/todos/deleteTodo";
+		return axiosClient.delete(url, {data: {groupId, noteId, todoId}});
 	},
 };
 
