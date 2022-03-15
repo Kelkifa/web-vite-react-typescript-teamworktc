@@ -46,9 +46,9 @@ export default function NoteCalendarRow({
 	});
 
 	const handleDateClick = (date: Date) => {
-		if (selDates.sel === undefined) return;
-
 		setSelDates(preState => {
+			if (preState.sel === undefined) return preState;
+
 			if (preState.sel === 0) {
 				if (preState.date1 !== undefined) {
 					return {
@@ -130,7 +130,7 @@ export default function NoteCalendarRow({
 						<div
 							key={index}
 							className={clsx(
-								"px-1 text-[14px] text-slate-200 cursor-pointer",
+								"px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-150",
 								note._id === selectedNote
 									? "brightness-150"
 									: "truncate h-[21px]",

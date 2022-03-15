@@ -41,7 +41,7 @@ const authSlice = createSlice({
 		},
 
 		// LOGIN
-		login(state, action: PayloadAction<AuthLogin>) {
+		login(state, action: PayloadAction<{username: string; password: string}>) {
 			state.loading = true;
 		},
 		loginSuccess(state, action: PayloadAction<User>) {

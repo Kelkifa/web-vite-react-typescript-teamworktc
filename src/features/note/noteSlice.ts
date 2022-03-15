@@ -128,12 +128,68 @@ const noteSlice = createSlice({
 			const foundNoteIndex = state.data?.findIndex(
 				note => note.loading === true && note.title === action.payload.title
 			);
-			if (foundNoteIndex === undefined || foundNoteIndex !== -1) return;
+			if (foundNoteIndex === undefined || foundNoteIndex === -1) return state;
 
 			state.data && (state.data[foundNoteIndex] = action.payload);
 		},
 		createNoteFailed(state, action: PayloadAction<string>) {
 			state.data = state.data?.filter(note => note.loading !== true);
+		},
+		// DELETE NOTE
+		deleteNote(state, action: PayloadAction<(string | undefined)[]>) {
+			if (!state.data) return state;
+
+			const {payload} = action;
+			if (payload.length === 1) {
+				const foundNoteIndex = state.data.findIndex(
+					note => note._id === payload[0]
+				);
+				if (foundNoteIndex !== -1) state.data[foundNoteIndex].loading = true;
+			} else {
+				state.data = state.data.map((note, index) =>
+					note._id === action.payload[index] ? {...note, loading: true} : note
+				);
+			}
+
+			if (state.selectedNote) {
+				state.selectedNote = undefined;
+			}
+
+			return state;
+		},
+		deleteNoteSuccess(state, action: PayloadAction<(string | undefined)[]>) {
+			if (!state.data) return state;
+			const {payload} = action;
+			if (payload.length === 1) {
+				const foundNoteIndex = state.data.findIndex(
+					note => note._id === payload[0]
+				);
+				if (foundNoteIndex !== -1) state.data.splice(foundNoteIndex, 1);
+				return state;
+			}
+
+			state.data = state.data.filter(
+				(note, index) => note._id !== payload[index]
+			);
+			return state;
+		},
+		deleteNoteFailed(state, action: PayloadAction<(string | undefined)[]>) {
+			if (!state.data) return state;
+			const {payload} = action;
+			if (payload.length === 1) {
+				const foundNoteIndex = state.data.findIndex(
+					note => note._id === payload[0]
+				);
+				if (foundNoteIndex !== -1)
+					state.data[foundNoteIndex].loading = undefined;
+
+				return state;
+			}
+
+			state.data = state.data.map((note, index) =>
+				note._id === payload[index] ? {...note, loading: undefined} : note
+			);
+			return state;
 		},
 
 		// ADD TODO
@@ -212,13 +268,18 @@ const noteSlice = createSlice({
 			return state;
 		},
 		todoChangeStateSuccess(state, action: PayloadAction<Note>) {
+			const {payload} = action;
+			if (state.selectedNote?._id === payload._id) {
+				state.selectedNote = payload;
+			}
 			if (state.data === undefined) return state;
 			const foundNoteIndex = state.data.findIndex(
-				note => note._id === action.payload._id
+				note => note._id === payload._id
 			);
 			if (foundNoteIndex !== -1) {
-				state.data[foundNoteIndex] = action.payload;
+				state.data[foundNoteIndex] = payload;
 			}
+			return state;
 		},
 		todoChangeStateFailed(
 			state,
@@ -300,6 +361,10 @@ const noteSlice = createSlice({
 
 			return state;
 		},
+		// SEARCH EVENT
+		search(state, action: PayloadAction<string>) {},
+		searchSuccess() {},
+		searchFailed() {},
 	},
 	extraReducers: {
 		// GET

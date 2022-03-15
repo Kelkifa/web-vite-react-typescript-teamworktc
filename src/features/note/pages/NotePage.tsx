@@ -6,9 +6,8 @@ import NoteCalendar, {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useEffect, useMemo, useState} from "react";
 
-import {Note} from "../../../models/Note";
 import NoteCreateForm from "../components/NoteCreateForm";
-import NoteManage from "../components/NoteManage";
+import NoteView from "../components/NoteView";
 import {noteActions} from "../noteSlice";
 
 export default function NotePage() {
@@ -30,7 +29,6 @@ export default function NotePage() {
 
 	const [selDates, setSelDates] = useState<SelDates>({});
 
-	// console.log(selDates);
 	const noteList: CalendarNote[] = useMemo(() => {
 		return noteInfo.data
 			? noteInfo.data.map(note => ({
@@ -95,7 +93,7 @@ export default function NotePage() {
 			</div>
 
 			<div className="col-span-2 bg-bgColor">
-				<NoteManage />
+				<NoteView />
 			</div>
 		</div>
 	);

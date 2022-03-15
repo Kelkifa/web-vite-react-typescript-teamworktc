@@ -1,6 +1,6 @@
 import {DataResponse, DefaultResponse} from "../../models";
 import {GetNotePayload, noteActions} from "./noteSlice";
-import {call, fork, put, takeLatest} from "redux-saga/effects";
+import {call, fork, put, takeLatest, throttle} from "redux-saga/effects";
 
 import {Note} from "../../models/Note";
 import {PayloadAction} from "@reduxjs/toolkit";
@@ -53,6 +53,29 @@ function* handleCreateNote(action: PayloadAction<Note>) {
 	}
 }
 
+function* handleDeleteNote(action: PayloadAction<string[]>) {
+	const groupId = getSelectedGroupId();
+	if (!groupId) return;
+
+	const noteList = action.payload;
+
+	try {
+		const data: DefaultResponse = yield call(
+			noteApi.deleteMulti,
+			groupId,
+			noteList
+		);
+		if (data.success === true) {
+			yield put(noteActions.deleteNoteSuccess(noteList));
+		} else {
+			yield put(noteActions.deleteNoteFailed(noteList));
+		}
+	} catch (err) {
+		console.log(err);
+		yield put(noteActions.deleteNoteFailed(noteList));
+	}
+}
+
 function* handleAddTodo(
 	action: PayloadAction<{noteId: string; todoName: string}>
 ) {
@@ -93,9 +116,19 @@ function* handleChangeState(
 			state
 		);
 
-		if (data.success === true) {
-			yield put(noteActions.todoChangeStateSuccess(data.response));
-		} else {
+		// if (data.success !== true) {
+		// 	yield put(noteActions.todoChangeStateSuccess(data.response));
+		// } else {
+		// 	yield put(
+		// 		noteActions.todoChangeStateFailed({
+		// 			todoId,
+		// 			noteId,
+		// 			state,
+		// 			message: data.message,
+		// 		})
+		// 	);
+		// }
+		if (data.success !== true) {
 			yield put(
 				noteActions.todoChangeStateFailed({
 					todoId,
@@ -142,12 +175,36 @@ function* handleRemoveTodo(
 	}
 }
 
+function* handleSearch(action: PayloadAction<string>) {
+	const groupId = getSelectedGroupId();
+	if (!groupId) return;
+	const search = action.payload;
+	if (search === "") return;
+	try {
+		const data: DataResponse<Note[]> = yield call(
+			noteApi.search,
+			groupId,
+			search
+		);
+
+		console.log(data);
+	} catch (err) {
+		console.log(err);
+	}
+}
+
 function* noteWatcher() {
 	yield takeLatest(noteActions.getNote.toString(), handleGetNote);
 	yield takeLatest(noteActions.createNote.toString(), handleCreateNote);
-	yield takeLatest(noteActions.todoChangeState.toString(), handleChangeState);
+	yield throttle(
+		3000,
+		noteActions.todoChangeState.toString(),
+		handleChangeState
+	);
+	yield throttle(3000, noteActions.search.toString(), handleSearch);
 	yield takeLatest(noteActions.removeTodo.toString(), handleRemoveTodo);
 	yield takeLatest(noteActions.addTodo.toString(), handleAddTodo);
+	yield takeLatest(noteActions.deleteNote.toString(), handleDeleteNote);
 }
 
 export default function* noteSaga() {

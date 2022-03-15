@@ -38,7 +38,7 @@ export default function UserButton({userInfo}: UserButtonProp) {
 					setIsShowDropdown(!isShowDropdown);
 				}}
 			>
-				{userInfo.user && userInfo.user.username[0]}
+				{userInfo.user && userInfo.user.username && userInfo.user.username[0]}
 			</div>
 
 			{isShowDropdown && (

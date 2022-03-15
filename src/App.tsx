@@ -22,7 +22,11 @@ import {useEffect} from "react";
 function App() {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
-		dispatch(authActions.firstAccess());
+		try {
+			dispatch(authActions.firstAccess());
+		} catch (err) {
+			console.log(err);
+		}
 		dispatch(groupActions.getGroup());
 	}, []);
 	return (

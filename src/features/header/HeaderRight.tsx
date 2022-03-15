@@ -66,7 +66,10 @@ function GroupDropdown() {
 	if (groupInfo.loading) {
 		return (
 			<div className="h-[32px] w-44 mr-3 flex items-center justify-center bg-black/70">
-				<AiOutlineLoading3Quarters className="animate-spin mr-2" /> Loading ...
+				<div>
+					<AiOutlineLoading3Quarters className="animate-spin mr-2" />
+				</div>
+				<div>Loading ...</div>
 			</div>
 		);
 	}

@@ -1,0 +1,11 @@
+.mytable {
+	width: 100%;
+	.mytable__head {
+		text-align: left;
+	}
+	th,
+	td {
+		padding: 0.2rem;
+		vertical-align: top;
+	}
+}

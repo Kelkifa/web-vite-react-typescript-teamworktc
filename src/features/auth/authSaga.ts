@@ -1,6 +1,6 @@
-import {Auth, AuthLogin, DataResponse} from "../../models";
+import {Auth, DataResponse} from "../../models";
 import {LOCALSTORAGE_TOKEN_NAME, authActions} from "./authSlice";
-import {call, fork, put, take, takeEvery} from "redux-saga/effects";
+import {call, fork, put, takeEvery} from "redux-saga/effects";
 
 import {PayloadAction} from "@reduxjs/toolkit";
 import {User} from "../../models/user";
@@ -23,13 +23,17 @@ function* handleFirstAccess() {
 	}
 }
 
-function* handleLogin(action: PayloadAction<AuthLogin>) {
-	// console.log(payload);
+function* handleLogin(
+	action: PayloadAction<{username: string; password: string}>
+) {
+	const {username, password} = action.payload;
 	try {
-		const data: DataResponse<User> = yield call(authApi.login, {
-			data: action.payload,
-		});
-		console.log(data);
+		const data: DataResponse<User> = yield call(
+			authApi.login,
+			username,
+			password
+		);
+
 		if (data.success) {
 			data.token && localStorage.setItem(LOCALSTORAGE_TOKEN_NAME, data.token);
 			// window.location.href = "/";

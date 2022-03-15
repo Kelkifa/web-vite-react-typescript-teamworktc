@@ -37,6 +37,31 @@ const groupSlice = createSlice({
 			localStorage.setItem(LOCALSTORAGE_GROUP_NAME, action.payload._id);
 			state.selectedGroup = action.payload;
 		},
+
+		// ADD MEMBERS
+		addMembers(
+			state,
+			action: PayloadAction<{groupId: string; userList: string[]}>
+		) {
+			const {payload} = action;
+			if (state.selectedGroup?._id !== payload.groupId) return state;
+
+			state.selectedGroup.users = state.selectedGroup.users.concat(
+				payload.userList.map(user => ({loading: true, _id: user}))
+			);
+			return state;
+		},
+		addMembersSuccess(state, action: PayloadAction<Group>) {
+			const {payload} = action;
+
+			console.log(payload);
+
+			if (state.selectedGroup?._id !== payload._id) return state;
+
+			state.selectedGroup = payload;
+			return state;
+		},
+		addMembersFailed() {},
 	},
 });
 

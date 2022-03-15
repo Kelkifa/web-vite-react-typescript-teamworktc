@@ -2,7 +2,7 @@ import "./table.scss";
 
 import PropTypes from "prop-types";
 
-Table.propTypes = {
+MyTable.propTypes = {
 	headerList: PropTypes.array,
 	// children: PropTypes.element,
 	rowHighlight: PropTypes.string,
@@ -10,7 +10,7 @@ Table.propTypes = {
 	maxHeight: PropTypes.string,
 };
 
-Table.defaultProps = {
+MyTable.defaultProps = {
 	headerList: [],
 	children: null,
 	rowHighlight: "#f2f2f2",
@@ -18,7 +18,7 @@ Table.defaultProps = {
 	maxHeight: undefined,
 };
 
-export default function Table(props) {
+export default function MyTable(props) {
 	// PROPS
 	const {headerList, children, rowHighlight, rowHover, maxHeight} = props;
 

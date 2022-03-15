@@ -41,3 +41,12 @@ button {
 	font-size: inherit;
 	font-weight: 400;
 }
+
+// tbody {
+tr:nth-child(even) {
+	background-color: #0000006b;
+}
+tr:hover {
+	background-color: #5f5c5c6b;
+}
+// }

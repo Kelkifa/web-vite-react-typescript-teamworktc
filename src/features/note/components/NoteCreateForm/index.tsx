@@ -185,7 +185,6 @@ const NoteCreateForm = ({
 					: values.color,
 		};
 
-		console.log(data);
 		dispatch(noteActions.createNote(data));
 	};
 

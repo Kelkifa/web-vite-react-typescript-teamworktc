@@ -27,7 +27,6 @@ export default function MainLayout() {
 						{path: "home", text: "Trang Chủ"},
 						{path: "/group", text: "Nhóm"},
 						{path: "/note", text: "Sự kiện của bạn"},
-						{path: "/game", text: "Trò chơi"},
 					]}
 				/>
 				<div className="container mx-auto mt-10 mb-10">

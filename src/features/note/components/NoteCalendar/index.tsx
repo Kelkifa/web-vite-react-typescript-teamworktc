@@ -78,7 +78,7 @@ export default function NoteCalendar({
 			);
 		}
 		return dateRowRenderList;
-	}, [currMonthAndYear, noteList, selectedNote]);
+	}, [currMonthAndYear, noteList, selectedNote, selDates]);
 
 	return (
 		<div className={className}>

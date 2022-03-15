@@ -6,10 +6,14 @@ export default function NeedGroupContainer({
 }: {
 	children: JSX.Element;
 }) {
-	const groupState = useAppSelector(getGroupStatus);
+	const loading = useAppSelector(state => state.group.loading);
+	const error = useAppSelector(state => state.group.error);
 
+	// const {loading, error} = {loading: false, error: false};
+
+	console.log("rerender");
 	// RENDER
-	if (groupState.error) return <div>{groupState.error}</div>;
-	if (groupState.loading) return <div>Loading ...</div>;
+	if (error) return <div>{error}</div>;
+	if (loading) return <div>Loading ...</div>;
 	return children;
 }

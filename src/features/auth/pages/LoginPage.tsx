@@ -14,12 +14,12 @@ export const styles = {
 };
 export default function LoginPage() {
 	const dispatch = useAppDispatch();
-	const initialValues: AuthLogin = {
+	const initialValues: {username: string; password: string} = {
 		username: "",
 		password: "",
 	};
 
-	const handleSubmit = (values: AuthLogin) => {
+	const handleSubmit = (values: {username: string; password: string}) => {
 		dispatch(authActions.login(values));
 	};
 

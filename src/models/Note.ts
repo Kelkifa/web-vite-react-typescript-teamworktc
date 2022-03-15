@@ -7,6 +7,8 @@ export interface Note {
 	color: string;
 
 	loading?: boolean;
+
+	isSocket?: boolean;
 }
 
 export interface Todo {

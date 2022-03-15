@@ -6,13 +6,15 @@ const baseUrlList = [
 	"https://thuongvachon.herokuapp.com/api",
 	"http://localhost:8080/api",
 ];
-
 enum ProjectStatus {
 	Product = 0,
 	Dev = 1,
 }
+
+export const SERVER_URL = baseUrlList[ProjectStatus.Product];
+
 const axiosClient = axios.create({
-	baseURL: baseUrlList[ProjectStatus.Product],
+	baseURL: SERVER_URL,
 	headers: {
 		"Content-Type": "application/json",
 	},

@@ -16,7 +16,15 @@ const noteApi = {
 		const url = "/todos/add";
 		return axiosClient.post(url, {groupId, data});
 	},
-
+	deleteNote: (groupId: string, noteId: string): Promise<DefaultResponse> => {
+		// console.log(`[api data]`, data);
+		const url = "/todos/delete";
+		return axiosClient.delete(url, {data: {groupId, noteId}});
+	},
+	deleteMulti: (groupId: string, noteList: string[]) => {
+		const url = "/todos/deleteMulti";
+		return axiosClient.delete(url, {data: {groupId, noteList}});
+	},
 	addTodo(
 		groupId: string,
 		noteId: string,
@@ -48,6 +56,11 @@ const noteApi = {
 	): Promise<DataResponse<Note>> {
 		const url = "/todos/deleteTodo";
 		return axiosClient.delete(url, {data: {groupId, noteId, todoId}});
+	},
+
+	search: (groupId: string, search: string): Promise<DataResponse<Note[]>> => {
+		const url = "/todos/search";
+		return axiosClient.post(url, {groupId, search});
 	},
 };
 
