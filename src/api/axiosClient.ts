@@ -11,7 +11,7 @@ enum ProjectStatus {
 	Dev = 1,
 }
 
-export const SERVER_URL = baseUrlList[ProjectStatus.Dev];
+export const SERVER_URL = baseUrlList[ProjectStatus.Product];
 
 const axiosClient = axios.create({
 	baseURL: SERVER_URL,
