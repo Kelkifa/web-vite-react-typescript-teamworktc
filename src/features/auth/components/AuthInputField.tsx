@@ -26,6 +26,7 @@ export default function AuthInputField({
 				value={field.value}
 				onChange={field.onChange}
 				onBlur={field.onBlur}
+				placeholder={placeHolder}
 			/>
 			{form.errors[field.name] && form.touched[field.name] && (
 				<div className="text-red-500">{form.errors[field.name]}</div>

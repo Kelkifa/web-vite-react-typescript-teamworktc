@@ -10,7 +10,7 @@ export function useDataStatus<T>(
 	{loading: boolean; error?: string},
 	(data: Promise<DataResponse<T>>) => Promise<void>
 ] {
-	const [dataInfo, setDataInfo] = useState<T>(defaultValue);
+	const [data, setDataInfo] = useState<T>(defaultValue);
 	const [status, setStatus] = useState<{loading: boolean; error?: string}>(
 		defaultStatus ? defaultStatus : {loading: true}
 	);
@@ -31,5 +31,5 @@ export function useDataStatus<T>(
 		}
 	};
 
-	return [dataInfo, status, getData];
+	return [data, status, getData];
 }

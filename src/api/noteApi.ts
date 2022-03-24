@@ -9,57 +9,34 @@ const noteApi = {
 		year: number,
 		month: number
 	): Promise<DataResponse<Note[]>> {
-		const url = "/todos/get";
+		const url = "/note/get";
 		return axiosClient.post(url, {groupId, year, month});
 	},
+	create(groupId: string, newNote: Note): Promise<Note> {
+		const url = "/note/create";
+		return axiosClient.post(url, {groupId, data: newNote});
+	},
 	add(groupId: string, data: Note): Promise<DataResponse<Note>> {
-		const url = "/todos/add";
+		const url = "/note/add";
 		return axiosClient.post(url, {groupId, data});
 	},
-	deleteNote: (groupId: string, noteId: string): Promise<DefaultResponse> => {
+	delete: (groupId: string, noteId: string): Promise<DefaultResponse> => {
 		// console.log(`[api data]`, data);
-		const url = "/todos/delete";
+		const url = "/note/delete";
 		return axiosClient.delete(url, {data: {groupId, noteId}});
 	},
 	deleteMulti: (groupId: string, noteList: string[]) => {
-		const url = "/todos/deleteMulti";
+		const url = "/note/delete-multi";
 		return axiosClient.delete(url, {data: {groupId, noteList}});
-	},
-	addTodo(
-		groupId: string,
-		noteId: string,
-		todoName: string
-	): Promise<DataResponse<Note>> {
-		const url = "/todos/addTodo";
-		return axiosClient.post(url, {groupId, todoId: noteId, todoName});
 	},
 
 	getPassedNotes(groupId: string): Promise<DataResponse<Note[]>> {
-		const url = "/todos/getPassed";
+		const url = "/note/get-passed";
 		return axiosClient.post(url, {groupId});
 	},
 
-	changeState(
-		groupId: string,
-		noteId: string,
-		todoId: string,
-		state: boolean
-	): Promise<DataResponse<DefaultResponse>> {
-		const url = "/todos/changeState";
-		return axiosClient.post(url, {groupId, noteId, todoId, state});
-	},
-
-	removeTodo(
-		groupId: string,
-		noteId: string,
-		todoId: string
-	): Promise<DataResponse<Note>> {
-		const url = "/todos/deleteTodo";
-		return axiosClient.delete(url, {data: {groupId, noteId, todoId}});
-	},
-
 	search: (groupId: string, search: string): Promise<DataResponse<Note[]>> => {
-		const url = "/todos/search";
+		const url = "/note/search";
 		return axiosClient.post(url, {groupId, search});
 	},
 };

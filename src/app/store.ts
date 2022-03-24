@@ -7,6 +7,7 @@ import docReducer from "../features/doc/docSlice";
 import groupReducer from "../features/group/groupSlice";
 import noteReducer from "../features/note/noteSlice";
 import rootSaga from "./rootSaga";
+import todoReducer from "../features/todo/todoSlice";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -17,6 +18,7 @@ export const store = configureStore({
 		group: groupReducer,
 		doc: docReducer,
 		note: noteReducer,
+		todo: todoReducer,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware().concat(sagaMiddleware),

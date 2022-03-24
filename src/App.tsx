@@ -8,12 +8,16 @@ import Auth from "./features/auth";
 import Doc from "./features/doc";
 import Game from "./features/game";
 import Group from "./features/group";
+import {unstable_HistoryRouter as HistoryRouter} from "react-router-dom";
 import HomePage from "./features/home/pages/HomePage";
+import InvitePage from "./features/auth/pages/InvitePage";
 import MainLayout from "./components/layouts/MainLayout";
 import NeedGroupContainer from "./components/common/NeedGroupContainer";
+import NeedLogin from "./components/common/NeedLogin";
 import Note from "./features/note";
 import {authActions} from "./features/auth/authSlice";
 import {groupActions} from "./features/group/groupSlice";
+import history from "./app/history";
 import {useAppDispatch} from "./app/hooks";
 import {useEffect} from "react";
 
@@ -22,15 +26,11 @@ import {useEffect} from "react";
 function App() {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
-		try {
-			dispatch(authActions.firstAccess());
-		} catch (err) {
-			console.log(err);
-		}
+		dispatch(authActions.firstAccess());
 		dispatch(groupActions.getGroup());
 	}, []);
 	return (
-		<Router>
+		<HistoryRouter history={history}>
 			<Routes>
 				<Route path="/" element={<MainLayout />}>
 					<Route
@@ -57,6 +57,14 @@ function App() {
 							</NeedGroupContainer>
 						}
 					/>
+					<Route
+						path="invite"
+						element={
+							<NeedLogin>
+								<InvitePage />
+							</NeedLogin>
+						}
+					/>
 					<Route path="home" element={<HomePage />} />
 					<Route path="auth/*" element={<Auth />} />
 					<Route path="game" element={<Game />} />
@@ -64,7 +72,7 @@ function App() {
 				</Route>
 				<Route path="*" element={<div>Not found</div>} />
 			</Routes>
-		</Router>
+		</HistoryRouter>
 	);
 }
 

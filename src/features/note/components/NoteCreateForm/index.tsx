@@ -3,14 +3,15 @@ import * as yup from "yup";
 import {FastField, Field, Formik} from "formik";
 import React, {memo} from "react";
 import {getLastDateFormDate, randomNoteColor} from "../NoteCalendar/core";
+import {getNoteCreateStatusLoading, noteActions} from "../../noteSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
+import BaseButton from "../../../../components/form/BaseButton";
 import BaseInputField from "../../../../components/form/BaseInputField";
 import {Note} from "../../../../models/Note";
 import NoteInputField from "./NoteInputField";
 import {SelDates} from "../NoteCalendar";
 import clsx from "clsx";
-import {noteActions} from "../../noteSlice";
 
 const styles = {
 	dateFieldContainer: "flex gap-x-2",
@@ -19,7 +20,7 @@ const styles = {
 };
 
 interface NoteFormValue {
-	title: string;
+	name: string;
 	from: string;
 	fromTime: string;
 	to: string;
@@ -28,7 +29,7 @@ interface NoteFormValue {
 }
 
 const schema = yup.object().shape({
-	title: yup.string().required("Bạn chưa nhập trường này"),
+	name: yup.string().required("Bạn chưa nhập trường này"),
 	from: yup.string().required("Bạn chưa nhập trường này"),
 	fromTime: yup.string().required("Bạn chưa nhập trường này"),
 	to: yup.string().required("Bạn chưa nhập trường này"),
@@ -52,8 +53,10 @@ const NoteCreateForm = ({
 
 	const dispatch = useAppDispatch();
 
+	const loading = useAppSelector(getNoteCreateStatusLoading);
+
 	const initialValues: NoteFormValue = {
-		title: "",
+		name: "",
 		from: "",
 		fromTime: "",
 		to: "",
@@ -141,7 +144,10 @@ const NoteCreateForm = ({
 		}`;
 	};
 
-	const handleSubmit = (values: NoteFormValue) => {
+	const handleSubmit = (
+		values: NoteFormValue,
+		{resetForm}: {resetForm: () => void}
+	) => {
 		// console.log(values);
 		// return;
 		// Start
@@ -178,7 +184,7 @@ const NoteCreateForm = ({
 		const data: Note = {
 			from: dateFrom.toISOString(),
 			to: dateTo.toISOString(),
-			title: values.title,
+			name: values.name,
 			color:
 				values.color === "transparent"
 					? randomNoteColor(currColorList)
@@ -186,6 +192,7 @@ const NoteCreateForm = ({
 		};
 
 		dispatch(noteActions.createNote(data));
+		resetForm();
 	};
 
 	return (
@@ -210,7 +217,7 @@ const NoteCreateForm = ({
 					return (
 						<form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
 							<FastField
-								name="title"
+								name="name"
 								component={BaseInputField}
 								label="Tên sự kiện "
 								placeHolder="Nhập tên sự kiện"
@@ -275,12 +282,13 @@ const NoteCreateForm = ({
 							</div>
 							{/* <div className="flex justify-end mt-2"> */}
 							{/* </div> */}
-							<button
+							<BaseButton
 								type="submit"
+								loading={loading}
 								className="bg-tim/80 hover:bg-tim px-3 py-1 text-slate-300 rounded-lg mt-2 w-full"
 							>
 								Tạo
-							</button>
+							</BaseButton>
 						</form>
 					);
 				}}

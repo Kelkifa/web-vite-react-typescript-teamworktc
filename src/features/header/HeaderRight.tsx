@@ -1,19 +1,59 @@
 import {Link, useLocation} from "react-router-dom";
+import {
+	authActions,
+	getAuthInviteData,
+	getAuthIsAuth,
+	getAuthLoading,
+	getAuthUser,
+} from "../auth/authSlice";
+import {
+	getGroupData,
+	getGroupLoading,
+	getGroupSelected,
+	groupActions,
+} from "../group/groupSlice";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {useEffect, useRef, useState} from "react";
 
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
 import {Group} from "../../models/group";
+import {InvitesResponse} from "../../models";
+import LoadIcon from "../../components/LoadIcon";
 import UserButton from "./UserButton";
 import clsx from "clsx";
-import {groupActions} from "../group/groupSlice";
+import socket from "../../app/socketIO";
 
 const styles = {
-	signInOutBtn: "hover:underline cursor-pointer",
+	signInOutBtn:
+		"hover:underline cursor-pointer text-[0.8rem] whitespace-nowrap",
 };
 
 export default function HeaderRight() {
-	const userInfo = useAppSelector(state => state.auth);
+	const dispatch = useAppDispatch();
+
+	const loading = useAppSelector(getAuthLoading);
+	const isAuth = useAppSelector(getAuthIsAuth);
+	const user = useAppSelector(getAuthUser);
+	const inviteData = useAppSelector(getAuthInviteData);
+
+	useEffect(() => {
+		if (!user) return;
+		const listenCallback = (data: InvitesResponse) => {
+			if (typeof data !== "object") return;
+			if (
+				!data._id ||
+				data.groupName === undefined ||
+				data.userInvite === undefined
+			)
+				return;
+			dispatch(authActions.addInvite({invite: data}));
+		};
+		socket.on(`invite:${user._id}`, listenCallback);
+
+		return () => {
+			socket.off(`noteId:${user._id}`), listenCallback;
+		};
+	}, [user?._id]);
 
 	return (
 		<div className="flex items-center">
@@ -21,8 +61,13 @@ export default function HeaderRight() {
 			<GroupDropdown />
 
 			{/* Auth Buttons */}
-			{!userInfo.isAuth && !userInfo.loading && <SignInUpButton />}
-			<UserButton userInfo={userInfo} />
+			{!isAuth && <SignInUpButton />}
+			<UserButton
+				loading={loading}
+				isAuth={isAuth}
+				user={user}
+				inviteNumber={inviteData.length}
+			/>
 		</div>
 	);
 }
@@ -30,7 +75,9 @@ export default function HeaderRight() {
 // GROUP DROP DOWN
 function GroupDropdown() {
 	const dispatch = useAppDispatch();
-	const groupInfo = useAppSelector(state => state.group);
+	const groupLoading = useAppSelector(getGroupLoading);
+	const groupData = useAppSelector(getGroupData);
+	const selectedGroup = useAppSelector(getGroupSelected);
 
 	const dropdownRef = useRef<HTMLUListElement>(null);
 	const [isDropdownOverflow, setIsDropdownOverflow] = useState<boolean>(false);
@@ -63,7 +110,7 @@ function GroupDropdown() {
 		handleDropdowOverFolow(dropdownElement);
 	}, [dropdownRef.current, isShowDropdown]);
 
-	if (groupInfo.loading) {
+	if (groupLoading) {
 		return (
 			<div className="h-[32px] w-44 mr-3 flex items-center justify-center bg-black/70">
 				<div>
@@ -74,14 +121,14 @@ function GroupDropdown() {
 		);
 	}
 	return (
-		<div className="relative h-[32px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold cursor-pointer">
+		<div className="relative h-[32px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold">
 			<div
-				className="h-full flex items-center w-full px-2 truncate"
+				className="h-full flex items-center w-full px-2 truncate cursor-pointer"
 				onClick={() => {
 					setIsShowDropdown(!isShowDropdown);
 				}}
 			>
-				{groupInfo.selectedGroup?.name}
+				{selectedGroup?.name}
 			</div>
 
 			<ul
@@ -94,17 +141,28 @@ function GroupDropdown() {
 				ref={dropdownRef}
 				onScroll={handleScroll}
 			>
-				{groupInfo.groupList?.map(group => {
-					if (group._id === groupInfo.selectedGroup?._id) return null;
+				{groupData.map((group, index) => {
+					if (group._id === selectedGroup?._id) return null;
 					return (
 						<li
-							key={group._id}
-							className="h-7 px-2 w-full bg-red hover:bg-black/30 truncate"
+							key={group._id ? group._id : index}
+							className={clsx(
+								"h-7 px-2 w-full bg-red  truncate",
+								group.loading === true
+									? "opacity-60"
+									: "hover:bg-black/30 cursor-pointer"
+							)}
 							onClick={() => {
+								if (group.loading === true) return;
 								handleItemClick(group);
 							}}
 						>
-							{group.name}
+							<span>{group.name}</span>{" "}
+							{group.loading && (
+								<span>
+									<LoadIcon />
+								</span>
+							)}
 						</li>
 					);
 				})}

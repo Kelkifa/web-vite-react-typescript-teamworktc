@@ -1,6 +1,6 @@
 export interface CalendarNote {
 	_id?: string;
-	title: string;
+	name: string;
 	from: Date;
 	to: Date;
 	layer?: number;

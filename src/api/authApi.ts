@@ -1,4 +1,4 @@
-import {Auth, AuthLogin} from "../models";
+import {Auth, AuthLogin, InvitesResponse} from "../models";
 import {DataResponse, DefaultResponse} from "../models/commons";
 
 import {User} from "../models/user";
@@ -12,6 +12,14 @@ const authApi = {
 	register(data: {data: Auth}): Promise<DefaultResponse> {
 		const url = "/auth/register";
 		return axiosClient.post(url, data);
+	},
+	getInvites(): Promise<DataResponse<InvitesResponse[]>> {
+		const url = "/auth/get-invites";
+		return axiosClient.get(url);
+	},
+	acceptInvite(inviteId: string): Promise<DataResponse<DefaultResponse>> {
+		const url = "/auth/accept-invite";
+		return axiosClient.post(url, {inviteId});
 	},
 	firstAccess(): Promise<DataResponse<User>> {
 		const url = "/auth/firstAccess";

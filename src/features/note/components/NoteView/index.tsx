@@ -1,9 +1,13 @@
-import {Note, Todo} from "../../../../models/Note";
+import {FastField, Formik} from "formik";
+import {getTodoStatusCreateLoading, todoActions} from "../../../todo/todoSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
-import {Formik} from "formik";
+import BaseButton from "../../../../components/form/BaseButton";
+import BaseInputField from "../../../../components/form/BaseInputField";
 import {MdOutlineArrowBackIosNew} from "react-icons/md";
+import {Note} from "../../../../models/Note";
 import NoteManage from "./NoteManage";
+import {Todo} from "../../../../models/Todo";
 import TodoList from "./TodoList";
 import {noteActions} from "../../noteSlice";
 import {useState} from "react";
@@ -14,8 +18,6 @@ export default function NoteView() {
 	const selectedNote: Note | undefined = useAppSelector(
 		state => state.note.selectedNote
 	);
-
-	// console.log(selectedNote);
 
 	return (
 		<div className="h-full p-3 pb-9 min-h-[20rem]">
@@ -34,13 +36,10 @@ export default function NoteView() {
 						<>
 							<TodoAdd noteId={selectedNote._id} />
 							<div className="py-4 pt-5 text-red-400/80">
-								{selectedNote.title}
+								{selectedNote.name}
 							</div>
 
-							<TodoList
-								todoList={selectedNote.todoList}
-								noteId={selectedNote._id}
-							/>
+							<TodoList noteId={selectedNote._id} />
 						</>
 					) : (
 						<p>
@@ -85,36 +84,40 @@ function Controlbar({
 
 function TodoAdd({noteId}: {noteId: string | undefined}) {
 	const dispatch = useAppDispatch();
+
+	const loading = useAppSelector(getTodoStatusCreateLoading);
+
 	const initialValues: Todo = {
-		todo: "",
+		name: "",
 		state: false,
 	};
 
-	const handleSubmit = (values: Todo) => {
+	const handleSubmit = (values: Todo, {resetForm}: {resetForm: () => void}) => {
 		if (noteId === undefined) return;
-		dispatch(noteActions.addTodo({noteId, todoName: values.todo}));
+		dispatch(todoActions.create({noteId, todoName: values.name}));
+		resetForm();
 	};
 	return (
 		<div>
 			<Formik initialValues={initialValues} onSubmit={handleSubmit}>
 				{formikProps => {
-					const {handleChange, handleSubmit, handleBlur} = formikProps;
+					const {handleSubmit} = formikProps;
 					return (
 						<form onSubmit={handleSubmit} className="flex">
-							<input
-								name="todo"
-								type="text"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								className="text-slate-300 text-lg inline-block bg-black/40 px-2 flex-grow"
-								placeholder="Nhập Tên Công Việc"
+							<FastField
+								name="name"
+								placeHolder="Nhập Tên Công Việc"
+								className="flex-grow"
+								component={BaseInputField}
 							/>
-							<button
+
+							<BaseButton
 								type="submit"
 								className="bg-rose-700/80 rounded-r-xl px-2 w-16"
+								loading={loading}
 							>
 								Thêm
-							</button>
+							</BaseButton>
 						</form>
 					);
 				}}

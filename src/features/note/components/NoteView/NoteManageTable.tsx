@@ -35,16 +35,6 @@ function NoteManageTable({dataInfo}: NoteManageTableProp) {
 	const handleSearch = async (data: string) => {
 		if (!groupId) return;
 		getData(noteApi.search(groupId, data));
-		// if (!groupId) return;
-		// try {
-		// 	setSearchedData({loading: true});
-		// 	const response = await noteApi.search(groupId, data);
-		// 	if (response.success === true) {
-		// 		setSearchedData({loading: false, data: response.response});
-		// 	}
-		// } catch (error) {
-		// 	console.error(error);
-		// }
 	};
 
 	let renderData = dataInfo ? dataInfo : {...status, data: searchedData};
@@ -141,7 +131,7 @@ function NoteManageTable({dataInfo}: NoteManageTableProp) {
 															}}
 														/>
 													</td>
-													<td>{note.title}</td>
+													<td>{note.name}</td>
 													<td>{tranformDate(note.from)}</td>
 													<td>{tranformDate(note.to)}</td>
 													<td

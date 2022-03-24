@@ -1,50 +1,39 @@
-import {DataResponse} from "../models";
+import {DataResponse, DefaultResponse} from "../models";
+
 import {Note} from "../models/Note";
+import {Todo} from "../models/Todo";
 import axiosClient from "./axiosClient";
 
-export const todoApi = {
-	get(
+const todoApi = {
+	get(groupId: string, noteId: string): Promise<DataResponse<Todo[]>> {
+		const url = "/todo/get";
+		return axiosClient.post(url, {groupId, noteId});
+	},
+	create(
 		groupId: string,
-		year: number,
-		month: number
-	): Promise<DataResponse<Note[]>> {
-		const url = "/todos/get";
-		return axiosClient.post(url, {groupId, year, month});
+		noteId: string,
+		todoName: string
+	): Promise<DataResponse<Note>> {
+		const url = "/todo/create";
+		return axiosClient.post(url, {groupId, noteId, todoName});
 	},
-	createNote(groupId: string, newNote: Note): Promise<Note> {
-		const url = "/todos/add";
-		return axiosClient.post(url, {groupId, data: newNote});
+	changeState(
+		groupId: string,
+		noteId: string,
+		todoId: string,
+		state: boolean
+	): Promise<DataResponse<DefaultResponse>> {
+		const url = "/todo/change-state";
+		return axiosClient.post(url, {groupId, noteId, todoId, state});
 	},
-
-	getPassedNotes: (data: object) => {
-		const url = "/todos/getPassed";
-		return axiosClient.post(url, data);
-	},
-	changeState: (data: object) => {
-		const url = "/todos/changeState";
-		return axiosClient.post(url, data);
-	},
-	addTodo: (data: object) => {
-		const url = "/todos/addTodo";
-		return axiosClient.post(url, data);
-	},
-	delete: (data: object) => {
-		// console.log(`[api data]`, data);
-		const url = "/todos/delete";
-		return axiosClient.delete(url, {data});
-	},
-	deleteMulti: (data: object) => {
-		const url = "/todos/deleteMulti";
-		return axiosClient.delete(url, {data});
-	},
-	deleteTodo: (data: object) => {
-		const url = "/todos/deleteTodo";
-		return axiosClient.delete(url, {data});
-	},
-
-	// data: {groupId, search}
-	search: (data: object) => {
-		const url = "/todos/search";
-		return axiosClient.post(url, data);
+	delete(
+		groupId: string,
+		noteId: string,
+		todoId: string
+	): Promise<DataResponse<Note>> {
+		const url = "/todo/delete";
+		return axiosClient.delete(url, {data: {groupId, noteId, todoId}});
 	},
 };
+
+export default todoApi;

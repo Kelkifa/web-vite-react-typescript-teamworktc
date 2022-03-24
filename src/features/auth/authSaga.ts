@@ -1,24 +1,36 @@
-import {Auth, DataResponse} from "../../models";
+import {
+	Auth,
+	DataResponse,
+	DefaultResponse,
+	InvitesResponse,
+} from "../../models";
+import {LOCALSTORAGE_GROUP_NAME, groupActions} from "../group/groupSlice";
 import {LOCALSTORAGE_TOKEN_NAME, authActions} from "./authSlice";
-import {call, fork, put, takeEvery} from "redux-saga/effects";
+import {call, fork, put, takeEvery, throttle} from "redux-saga/effects";
 
 import {PayloadAction} from "@reduxjs/toolkit";
+import {SERVER_ERR_STR} from "../../app/variablies";
 import {User} from "../../models/user";
 import authApi from "../../api/authApi";
-import {groupActions} from "../group/groupSlice";
+import {noteActions} from "../note/noteSlice";
+import {store} from "../../app/store";
+import {todoActions} from "../todo/todoSlice";
 
 function* handleFirstAccess() {
 	try {
 		if (!Boolean(localStorage.getItem(LOCALSTORAGE_TOKEN_NAME))) {
 			return;
 		}
-		const response: DataResponse<User> = yield call(authApi.firstAccess);
-		if (response.success) {
-			yield put(authActions.firstAccessSuccess(response.response));
+		const data: DataResponse<User> = yield call(authApi.firstAccess);
+
+		if (data.success === true) {
+			yield put(authActions.firstAccessSuccess(data.response));
+			yield put(authActions.getInvites());
 		} else {
-			yield put(authActions.firstAccessFailed(response.message));
+			yield put(authActions.firstAccessFailed(data.message));
 		}
 	} catch (error) {
+		console.log(error);
 		yield put(authActions.firstAccessFailed("Server gặp sự cố"));
 	}
 }
@@ -38,17 +50,67 @@ function* handleLogin(
 			data.token && localStorage.setItem(LOCALSTORAGE_TOKEN_NAME, data.token);
 			// window.location.href = "/";
 			yield put(authActions.loginSuccess(data.response));
+			yield put(authActions.getInvites());
+			yield put(groupActions.getGroup());
 		} else {
 			yield put(authActions.loginFailed(data.message));
 		}
-		yield put(groupActions.getGroup());
 	} catch (error) {
 		yield put(authActions.loginFailed("Server gặp sự cố"));
 	}
 }
 
+function* getInvites() {
+	const state = store.getState();
+	const isAuth = state.auth.isAuth;
+	if (!isAuth)
+		yield put(authActions.getInvitesFailed({message: "Bạn chưa đăng nhập"}));
+
+	try {
+		const data: DataResponse<InvitesResponse[]> = yield call(
+			authApi.getInvites
+		);
+		if (data.success === true) {
+			yield put(authActions.getInvitesSuccess(data.response));
+		} else {
+			yield put(authActions.getInvitesFailed({message: data.message}));
+		}
+	} catch (err) {
+		console.log(err);
+		yield put(authActions.getInvitesFailed({message: "Bạn chưa đăng nhập"}));
+	}
+}
+function* acceptInvite(action: PayloadAction<{inviteId: string}>) {
+	const {inviteId} = action.payload;
+
+	try {
+		const data: DataResponse<DefaultResponse> = yield call(
+			authApi.acceptInvite,
+			inviteId
+		);
+
+		if (data.success === true) {
+			yield put(authActions.acceptInviteSuccess({inviteId}));
+			yield put(groupActions.getGroup());
+		} else {
+			yield put(
+				authActions.acceptInviteFailed({inviteId, message: data.message})
+			);
+		}
+	} catch (err) {
+		console.log(err);
+		yield put(
+			authActions.acceptInviteFailed({inviteId, message: SERVER_ERR_STR})
+		);
+	}
+}
+
 function* handleLogout() {
 	localStorage.removeItem(LOCALSTORAGE_TOKEN_NAME);
+	localStorage.removeItem(LOCALSTORAGE_GROUP_NAME);
+	yield put(todoActions.clearState());
+	yield put(noteActions.clearState());
+	yield put(groupActions.getGroup());
 }
 
 function* handleRegister(action: PayloadAction<Auth>) {
@@ -57,10 +119,10 @@ function* handleRegister(action: PayloadAction<Auth>) {
 			data: action.payload,
 		});
 		if (data.success) {
-			data.token && localStorage.setItem(LOCALSTORAGE_TOKEN_NAME, data.token);
-			window.location.href = "/";
+			// data.token && localStorage.setItem(LOCALSTORAGE_TOKEN_NAME, data.token);
 
 			yield put(authActions.registerSuccess(data.response));
+			yield put(authActions.getInvites());
 		} else {
 			yield put(authActions.registerFailed(data.message));
 		}
@@ -70,12 +132,14 @@ function* handleRegister(action: PayloadAction<Auth>) {
 }
 
 function* watchLoginFlow() {
-	yield takeEvery(authActions.firstAccess.toString(), handleFirstAccess);
+	yield throttle(2000, authActions.firstAccess.toString(), handleFirstAccess);
 
-	yield takeEvery(authActions.login.toString(), handleLogin);
-	yield takeEvery(authActions.register.toString(), handleRegister);
+	yield throttle(2000, authActions.getInvites.toString(), getInvites);
+	yield throttle(2000, authActions.acceptInvite.toString(), acceptInvite);
+	yield throttle(2000, authActions.login.toString(), handleLogin);
+	yield throttle(2000, authActions.register.toString(), handleRegister);
 
-	yield takeEvery(authActions.logout.toString(), handleLogout);
+	yield throttle(2000, authActions.logout.toString(), handleLogout);
 }
 
 export function* authSaga() {

@@ -14,11 +14,13 @@ export default function AddMemberForm() {
 		data: "",
 	};
 
-	const handleSubmit = (values: FormValue) => {
+	const handleSubmit = (
+		values: FormValue,
+		{resetForm}: {resetForm: () => void}
+	) => {
 		if (!groupId) return;
-		const processValue = values.data.replaceAll(" ", "").split(",");
-		console.log(processValue);
-		dispatch(groupActions.addMembers({groupId, userList: processValue}));
+		dispatch(groupActions.invite({groupId, username: values.data}));
+		resetForm();
 	};
 	return (
 		<div>
@@ -30,13 +32,13 @@ export default function AddMemberForm() {
 						<form className="flex gap-2" onSubmit={handleSubmit}>
 							<FastField
 								name="data"
-								placeHolder="username1, username2,..."
+								placeHolder="username"
 								component={BaseInputField}
 								className="flex-grow"
 							/>
 
 							<button className="bg-tim rounded-r-xl px-8" type="submit">
-								Thêm
+								Mời
 							</button>
 						</form>
 					);

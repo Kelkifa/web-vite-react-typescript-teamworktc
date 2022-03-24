@@ -14,7 +14,10 @@ export default function NoteManage() {
 
 	const [tabNumber, setTabNumber] = useState<number>(0);
 
-	const [noteInfo2, setNoteInfo2] = useState<NoteState>({loading: true});
+	const [noteInfo2, setNoteInfo2] = useState<NoteState>({
+		loading: true,
+		status: {},
+	});
 
 	useEffect(() => {
 		if (groupId === undefined || tabNumber === 0) return;
@@ -24,13 +27,13 @@ export default function NoteManage() {
 				try {
 					const response = await noteApi.getPassedNotes(groupId);
 					if (response.success === true) {
-						setNoteInfo2({loading: false, data: response.response});
+						setNoteInfo2({loading: false, data: response.response, status: {}});
 					} else {
-						setNoteInfo2({loading: false, error: response.message});
+						setNoteInfo2({loading: false, error: response.message, status: {}});
 					}
 				} catch (err) {
 					console.error(err);
-					setNoteInfo2({loading: false, error: "Server gặp sự cố"});
+					setNoteInfo2({loading: false, error: "Server gặp sự cố", status: {}});
 				}
 			};
 

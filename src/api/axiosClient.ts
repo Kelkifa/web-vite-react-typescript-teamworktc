@@ -3,7 +3,7 @@ import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import queryString from "query-string";
 
 const baseUrlList = [
-	"https://thuongvachon.herokuapp.com/api",
+	"https://teamwork-tc.herokuapp.com/api",
 	"http://localhost:8080/api",
 ];
 enum ProjectStatus {
@@ -11,7 +11,7 @@ enum ProjectStatus {
 	Dev = 1,
 }
 
-export const SERVER_URL = baseUrlList[ProjectStatus.Product];
+export const SERVER_URL = baseUrlList[ProjectStatus.Dev];
 
 const axiosClient = axios.create({
 	baseURL: SERVER_URL,

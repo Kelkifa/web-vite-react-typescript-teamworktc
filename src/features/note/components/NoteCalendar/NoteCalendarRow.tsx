@@ -148,7 +148,7 @@ export default function NoteCalendarRow({
 							}}
 							onClick={() => setSelectedNote && setSelectedNote(note)}
 						>
-							{note.title}
+							{note.name}
 						</div>
 					);
 				})}
