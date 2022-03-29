@@ -7,6 +7,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {SERVER_ERR_STR} from "../../app/variablies";
 import {User} from "../../models/user";
 import groupApi from "../../api/groupApi";
+import {store} from "../../app/store";
 
 function* handleGetGroupList() {
 	try {
@@ -158,6 +159,22 @@ function* deleteGroup(action: PayloadAction<{groupId: string}>) {
 	}
 }
 
+function* fastSearch(action: PayloadAction<{searchStr: string}>) {
+	const {searchStr} = action.payload;
+	const groupList = store.getState().group.data;
+
+	if (searchStr === "")
+		yield put(groupActions.fastSearchSuccess({data: groupList}));
+	else {
+		const foundData = groupList.filter(group => {
+			if (!group.name) return false;
+			return new RegExp(searchStr, "i").test(group.name);
+		});
+
+		yield put(groupActions.fastSearchSuccess({data: foundData}));
+	}
+}
+
 function* groupWatcher() {
 	yield throttle(3000, groupActions.getMembers.toString(), getMembers);
 	yield throttle(3000, groupActions.deleteMember.toString(), deleteMember);
@@ -165,6 +182,7 @@ function* groupWatcher() {
 	yield throttle(3000, groupActions.invite.toString(), invite);
 	yield throttle(3000, groupActions.create.toString(), handleCreate);
 	yield throttle(3000, groupActions.delete.toString(), deleteGroup);
+	yield throttle(500, groupActions.fastSearch.toString(), fastSearch);
 }
 
 export function* groupSaga() {

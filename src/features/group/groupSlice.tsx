@@ -6,6 +6,7 @@ import {Group} from "../../models/group";
 import {LOCALSTORAGE_TOKEN_NAME} from "../auth/authSlice";
 import {RootState} from "../../app/store";
 import {User} from "../../models/user";
+import {stat} from "fs";
 import {toast} from "react-toastify";
 
 export const LOCALSTORAGE_GROUP_NAME = "groupId";
@@ -22,6 +23,7 @@ export interface GroupState {
 	status: {
 		create?: ErrorStatus;
 	};
+	search: Group[];
 }
 
 const initialState: GroupState = {
@@ -29,6 +31,7 @@ const initialState: GroupState = {
 	member: {loading: true, data: []},
 	data: [],
 	status: {},
+	search: [],
 };
 const groupSlice = createSlice({
 	name: "group",
@@ -253,6 +256,16 @@ const groupSlice = createSlice({
 			return state;
 		},
 
+		fastSearch(state, action: PayloadAction<{searchStr: string}>) {},
+		fastSearchSuccess(state, action: PayloadAction<{data: Group[]}>) {
+			state.search = action.payload.data;
+			return state;
+		},
+
+		clearSearch(state) {
+			state.search = [];
+			return state;
+		},
 		clearMember(state) {
 			state.member = {loading: true, data: []};
 			return state;
@@ -278,6 +291,8 @@ export const getSelectedGroupId = (state: RootState) =>
 	state.group.selectedGroup?._id;
 
 export const getGroupSelected = (state: RootState) => state.group.selectedGroup;
+
+export const getGroupFastSearch = (state: RootState) => state.group.search;
 
 export const groupActions = groupSlice.actions;
 

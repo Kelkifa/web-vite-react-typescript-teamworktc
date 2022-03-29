@@ -3,25 +3,30 @@ import NoteCalendar, {
 	MonthAndYear,
 	SelDates,
 } from "../components/NoteCalendar";
+import {
+	getNoteData,
+	getNoteLoading,
+	getNoteSelectedNoteId,
+	noteActions,
+} from "../noteSlice";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useEffect, useMemo, useState} from "react";
 
-import {Note} from "../../../models/Note";
 import NoteCreateForm from "../components/NoteCreateForm";
 import NoteView from "../components/NoteView";
-import {noteActions} from "../noteSlice";
+import {getSelectedGroupId} from "../../group/groupSlice";
 
 export default function NotePage() {
 	// const [selectedNote, setSelectedNote] = useState<string>("");
 	const selectedNoteId: string | undefined = useAppSelector(
-		state => state.note.selectedNote?._id
+		getNoteSelectedNoteId
 	);
 
 	const dispatch = useAppDispatch();
 
-	const noteData = useAppSelector(state => state.note.data);
-	const noteLoading = useAppSelector(state => state.note.loading);
-	const groupId = useAppSelector(state => state.group.selectedGroup?._id);
+	const noteData = useAppSelector(getNoteData);
+	const noteLoading = useAppSelector(getNoteLoading);
+	const groupId = useAppSelector(getSelectedGroupId);
 
 	const [selDates, setSelDates] = useState<SelDates>({});
 

@@ -24,8 +24,6 @@ export default function TodoList({noteId}: TodoListProp) {
 
 	const todoList = useAppSelector(getTodoData);
 
-	const navigate = useNavigate();
-
 	const loading = useAppSelector(state => state.todo.loading);
 
 	// console.log(loading);

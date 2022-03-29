@@ -9,9 +9,6 @@ export default function Searchbar({
 	placeholder = "",
 }: SearchbarProp) {
 	const [search, setSearch] = useState<string>("");
-	// useEffect(() => {
-	// 	setSearch("");
-	// }, []);
 	const handleSearchClick = () => {
 		onSearchClick(search);
 	};

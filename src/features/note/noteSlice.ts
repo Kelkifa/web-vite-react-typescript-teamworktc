@@ -142,8 +142,14 @@ const noteSlice = createSlice({
 	extraReducers: {},
 });
 
+export const getNoteLoading = (state: RootState) => state.note.loading;
+export const getNoteData = (state: RootState) => state.note.data;
+export const getNoteError = (state: RootState) => state.note.error;
 export const getNoteCreateStatusLoading = (state: RootState) =>
 	state.note.status.createNote?.loading;
+
+export const getNoteSelectedNoteId = (state: RootState) =>
+	state.note.selectedNote?._id;
 
 const {reducer: noteReducer, actions} = noteSlice;
 

@@ -71,7 +71,7 @@ export default function NoteCalendarRow({
 	if (dateList.length === 0) return null;
 	return (
 		<div className="grid grid-cols-7">
-			<ul className="grid grid-cols-7 col-span-7">
+			<ul className="grid grid-cols-7 col-span-7 text-slate-200">
 				{dateList.map((date, index) => (
 					<li
 						className={clsx(

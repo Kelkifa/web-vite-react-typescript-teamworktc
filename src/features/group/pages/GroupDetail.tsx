@@ -1,6 +1,4 @@
 import {
-	getGroupError,
-	getGroupLoading,
 	getGroupMember,
 	getGroupMemberError,
 	getGroupMemberLoading,
@@ -16,8 +14,6 @@ import {getAuthUserId} from "../../auth/authSlice";
 import {useCallConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-
-const CONFIRM_DELETE_MEMBER_ACTION = "delete/member";
 
 export default function GroupDetail() {
 	const {id} = useParams();
@@ -35,6 +31,8 @@ export default function GroupDetail() {
 	const group = useAppSelector(state =>
 		state.group.data.find(value => value._id === id)
 	);
+
+	useEffect(() => {}, []);
 
 	useEffect(() => {
 		if (!group || !group._id) return;
@@ -63,12 +61,14 @@ export default function GroupDetail() {
 
 	return (
 		<div className="container bg-bgColor px-3 pb-10 text-baseText">
-			<div
-				className="text-right text-sm hover:underline cursor-pointer py-1"
-				onClick={handleDeleteGroup}
-			>
-				Xóa
-			</div>
+			{userId === group.adminId && (
+				<div
+					className="text-right text-sm hover:underline cursor-pointer py-1"
+					onClick={handleDeleteGroup}
+				>
+					Xóa
+				</div>
+			)}
 			<h1 className="text-bold text-xl text-center py-3 font-bold text-baseRed">
 				{group.name}
 			</h1>

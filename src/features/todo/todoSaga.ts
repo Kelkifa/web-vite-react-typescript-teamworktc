@@ -39,15 +39,14 @@ function* handleCreate(
 			action.payload.noteId,
 			action.payload.todoName
 		);
-		if (data.success === true) {
-			// yield put(todoActions.createSuccess({todo: data.response}));
-		} else {
+		if (data.success !== true) {
 			yield put(
 				todoActions.createFailed({
 					todoName: action.payload.todoName,
 					message: data.message,
 				})
 			);
+		} else {
 		}
 	} catch (err) {
 		console.log(err);

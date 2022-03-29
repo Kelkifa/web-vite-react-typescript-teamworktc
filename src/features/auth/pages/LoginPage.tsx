@@ -10,7 +10,6 @@ import {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import AuthInputField from "../components/AuthInputField";
-import {AuthLogin} from "../../../models";
 import BaseButton from "../../../components/form/BaseButton";
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
@@ -34,14 +33,14 @@ export default function LoginPage() {
 		password: "",
 	};
 
-	useEffect(() => {
-		if (loginStatus?.error === false) {
-			navigate(navigateURL);
-		}
-		return () => {
-			dispatch(authActions.clearLoginStatus());
-		};
-	}, [loginStatus]);
+	// useEffect(() => {
+	// 	if (loginStatus?.error === false) {
+	// 		navigate(navigateURL);
+	// 	}
+	// 	return () => {
+	// 		dispatch(authActions.clearLoginStatus());
+	// 	};
+	// }, [loginStatus]);
 
 	const handleSubmit = (values: {username: string; password: string}) => {
 		dispatch(authActions.login({...values}));
@@ -52,7 +51,7 @@ export default function LoginPage() {
 			<h1 className={styles.title}>Đăng Nhập</h1>
 			<Formik initialValues={initialValues} onSubmit={handleSubmit}>
 				{formikProps => {
-					const {handleChange, handleSubmit, handleBlur} = formikProps;
+					const {handleSubmit} = formikProps;
 
 					return (
 						<form onSubmit={handleSubmit} className={styles.form}>
@@ -75,7 +74,6 @@ export default function LoginPage() {
 							<BaseButton
 								className="bg-fuchsia-800/60 h-[36px] rounded-2xl mt-2"
 								type="submit"
-								text="Đăng Nhập"
 								loading={loginStatus?.loading}
 							>
 								Đăng Nhập

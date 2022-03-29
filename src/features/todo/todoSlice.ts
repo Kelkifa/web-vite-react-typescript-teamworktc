@@ -3,7 +3,6 @@ import {PayloadAction, createSlice} from "@reduxjs/toolkit";
 import {ErrorStatus} from "../../models";
 import {RootState} from "../../app/store";
 import {Todo} from "../../models/Todo";
-import history from "../../app/history";
 import {toast} from "react-toastify";
 
 export interface TodoState {
@@ -75,13 +74,13 @@ const todoSlice = createSlice({
 
 			if (state.loading || state.error) return state;
 
-			if (state.data) {
-				const foundTodoIndex = state.data.findIndex(
-					todo => todo.loading === true && todo.name === payload.todo.name
-				);
-				if (foundTodoIndex !== -1) {
-					state.data[foundTodoIndex] = payload.todo;
-				}
+			const foundTodoIndex = state.data.findIndex(
+				todo => todo.loading === true && todo.name === payload.todo.name
+			);
+			if (foundTodoIndex !== -1) {
+				state.data[foundTodoIndex] = payload.todo;
+			} else {
+				state.data.push(payload.todo);
 			}
 			return state;
 		},

@@ -7,6 +7,7 @@ import {
 	FiChevronsRight,
 } from "react-icons/fi";
 
+import LoadIcon from "../../../../components/LoadIcon";
 import {roundedDown} from "./core";
 
 const styles = {
@@ -14,6 +15,7 @@ const styles = {
 };
 
 export interface NoteCalendarHeaderProp {
+	loading?: boolean;
 	selectedDate: Date;
 	mode: CalendarMode;
 	currMonthAndYear: MonthAndYear;
@@ -24,6 +26,7 @@ export interface NoteCalendarHeaderProp {
 }
 
 export default function NoteCalendarHeader({
+	loading,
 	selectedDate,
 	mode,
 	currMonthAndYear,
@@ -116,12 +119,13 @@ export default function NoteCalendarHeader({
 				<FiChevronLeft />
 			</div>
 			<div
-				className="col-span-6 w-full flex items-center justify-center text-red-500 cursor-pointer"
+				className="col-span-6 w-full flex items-center justify-center gap-1 text-red-500 cursor-pointer"
 				onClick={() => {
 					handleChangeMode();
 				}}
 			>
-				{renderHeader}
+				<span>{renderHeader}</span>
+				{loading && <LoadIcon />}
 			</div>
 			<div className={styles.btnItem} onClick={handleArrowRightClick}>
 				<FiChevronRight />

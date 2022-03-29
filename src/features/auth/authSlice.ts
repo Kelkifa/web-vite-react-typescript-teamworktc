@@ -9,6 +9,7 @@ import {PayloadAction, createSlice} from "@reduxjs/toolkit";
 
 import {RootState} from "../../app/store";
 import {User} from "../../models/user";
+import history from "../../app/history";
 import {toast} from "react-toastify";
 
 export const LOCALSTORAGE_TOKEN_NAME = "token";
@@ -76,7 +77,7 @@ const authSlice = createSlice({
 			state.isAuth = true;
 			state.status.login = {error: false};
 			state.user = action.payload;
-
+			history.push("/");
 			toast.success("Đăng nhập thành công");
 			return state;
 		},

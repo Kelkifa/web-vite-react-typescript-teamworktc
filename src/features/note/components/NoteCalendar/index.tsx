@@ -7,6 +7,8 @@ import NoteCalendarRow from "./NoteCalendarRow";
 
 export * from "./models";
 
+const dayList = ["SUN", "MON", "TUE", "WEN", "THU", "FRI", "SAT"];
+
 interface NoteCalendarProp {
 	className?: string;
 
@@ -40,16 +42,7 @@ export default function NoteCalendar({
 	const [mode, setMode] = useState<CalendarMode>(0);
 
 	const noteWithLayerList: CalendarNote[] = createLayerNoteList2(noteList);
-	// DEBUG
-	// console.table(
-	// 	noteWithLayerList.map(value => ({
-	// 		title: value.title,
-	// 		from: `${value.from.getDate()}/${value.from.getMonth()}`,
-	// 		to: `${value.to.getDate()}/${value.to.getMonth()}`,
-	// 		layer: value.layer,
-	// 	}))
-	// );
-	// GET DATE LIST IN MONTH AND RENDER TO JSX ELEMENT
+
 	const dateRowRenderList = useMemo(() => {
 		const dateInMonth: Date = new Date(
 			currMonthAndYear.year,
@@ -83,6 +76,7 @@ export default function NoteCalendar({
 	return (
 		<div className={className}>
 			<NoteCalendarHeader
+				loading={loading}
 				selectedDate={now}
 				mode={mode}
 				setMode={setMode}
@@ -90,7 +84,16 @@ export default function NoteCalendar({
 				setCurrMonthAndYear={setCurrMonthAndYear}
 			/>
 			{mode === 0 ? (
-				dateRowRenderList.map(dateRowRender => dateRowRender)
+				<>
+					<ul className="grid grid-cols-7 justify-self-center">
+						{dayList.map((day, index) => (
+							<li className="flex justify-center py-2 text-sm" key={index}>
+								{day}
+							</li>
+						))}
+					</ul>
+					{dateRowRenderList.map(dateRowRender => dateRowRender)}
+				</>
 			) : (
 				<SelectList
 					currMonthAndYear={currMonthAndYear}
