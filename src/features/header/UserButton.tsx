@@ -42,10 +42,10 @@ export default function UserButton({
 	if (!isAuth && !loading) return null;
 	if (loading) return <UserButtonLoading />;
 	return (
-		<div className="relative">
+		<div className="relative z-10">
 			{/* Badge */}
 			{inviteNumber > 0 && (
-				<div className="absolute top-[-0.3rem] right-0 text-white text-[0.8rem]">
+				<div className="absolute top-[-0.3rem] right-0 text-[0.8rem] text-red-500">
 					{inviteNumber}
 				</div>
 			)}

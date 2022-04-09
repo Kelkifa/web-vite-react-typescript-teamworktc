@@ -76,3 +76,7 @@ export const useCallConfirmAlert = () => {
 
 	return {callConfirmAlert};
 };
+
+export const callConfirmAlert = (message: string, callback?: () => void) => {
+	Emitter.emit("confirm", {message, callback});
+};

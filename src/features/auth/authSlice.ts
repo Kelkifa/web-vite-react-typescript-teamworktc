@@ -20,6 +20,7 @@ export interface AuthState {
 		login?: ErrorStatus;
 		register?: ErrorStatus;
 		acceptInvite?: ErrorStatus;
+		disagreeInvite?: ErrorStatus;
 	};
 	isAuth: boolean;
 	user?: User;
@@ -154,6 +155,69 @@ const authSlice = createSlice({
 				error: true,
 				message: action.payload.message,
 			};
+			const foundInvite = state.invite.data.findIndex(
+				invite => invite._id === action.payload.inviteId
+			);
+			if (foundInvite !== -1)
+				state.invite.data[foundInvite].loading = undefined;
+			return state;
+		},
+		disagreeInvite(state, action: PayloadAction<{inviteId: string}>) {
+			state.status.disagreeInvite = {
+				loading: true,
+				error: undefined,
+				message: undefined,
+			};
+			const foundInviteIndex = state.invite.data.findIndex(
+				invite => invite._id === action.payload.inviteId
+			);
+			if (foundInviteIndex !== -1)
+				state.invite.data[foundInviteIndex].loading = true;
+			return state;
+		},
+		disagreeInviteSuccess(state, action: PayloadAction<{inviteId: string}>) {
+			state.invite.data = state.invite.data.filter(
+				invite => invite._id !== action.payload.inviteId
+			);
+			state.status.disagreeInvite = {
+				loading: false,
+				error: false,
+			};
+			return state;
+		},
+		disagreeInviteFailed(
+			state,
+			action: PayloadAction<{inviteId: string; message: string}>
+		) {
+			state.status.disagreeInvite = {
+				loading: false,
+				error: undefined,
+			};
+			toast.error(`Xóa lời mời thất bài ${action.payload.message}`);
+			const foundInviteIndex = state.invite.data.findIndex(
+				invite => invite._id === action.payload.inviteId
+			);
+			if (foundInviteIndex !== -1)
+				state.invite.data[foundInviteIndex].loading = undefined;
+			return state;
+		},
+		disagreeAllInvite(state) {
+			state.invite.data = state.invite.data.map(invite => ({
+				...invite,
+				loading: true,
+			}));
+			return state;
+		},
+		disagreeAllInviteSuccess(state) {
+			state.invite.data = [];
+			return state;
+		},
+		disagreeAllInviteFailed(state, action: PayloadAction<{message: string}>) {
+			toast.error(`Không thể từ chói tất cả (${action.payload.message})`);
+			state.invite.data = state.invite.data.map(invite => ({
+				...invite,
+				loading: undefined,
+			}));
 			return state;
 		},
 		// ADD INVITE (USE IN HEAERRIGHT COMPONENT)

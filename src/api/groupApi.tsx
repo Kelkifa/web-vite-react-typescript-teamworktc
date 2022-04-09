@@ -27,6 +27,10 @@ const groupApi = {
 		const url = "/group/invite";
 		return axiosClient.post(url, {groupId, username});
 	},
+	outGroup(groupId: string) {
+		const url = "/group/out";
+		return axiosClient.post(url, {groupId});
+	},
 	deleteMemeber(groupId: string, memberId: string) {
 		const url = "/group/delete-member";
 		return axiosClient.delete(url, {data: {groupId, memberId}});

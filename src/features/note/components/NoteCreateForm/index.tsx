@@ -22,18 +22,18 @@ const styles = {
 interface NoteFormValue {
 	name: string;
 	from: string;
-	fromTime: string;
+	// fromTime: string;
 	to: string;
-	toTime: string;
+	// toTime: string;
 	color: string;
 }
 
 const schema = yup.object().shape({
 	name: yup.string().required("Bạn chưa nhập trường này"),
 	from: yup.string().required("Bạn chưa nhập trường này"),
-	fromTime: yup.string().required("Bạn chưa nhập trường này"),
+	// fromTime: yup.string().required("Bạn chưa nhập trường này"),
 	to: yup.string().required("Bạn chưa nhập trường này"),
-	toTime: yup.string().required("Bạn chưa nhập trường này"),
+	// toTime: yup.string().required("Bạn chưa nhập trường này"),
 	color: yup.string().required("Bạn chưa nhập trường này"),
 });
 
@@ -58,9 +58,9 @@ const NoteCreateForm = ({
 	const initialValues: NoteFormValue = {
 		name: "",
 		from: "",
-		fromTime: "",
+		// fromTime: "",
 		to: "",
-		toTime: "",
+		// toTime: "",
 		color: "transparent",
 	};
 
@@ -77,7 +77,7 @@ const NoteCreateForm = ({
 			isNaN(dateInt) ||
 			isNaN(monthInt) ||
 			isNaN(yearInt) ||
-			dateInt > getLastDateFormDate(new Date(yearInt, monthInt, 1)) ||
+			dateInt > getLastDateFormDate(new Date(yearInt, monthInt, 0)) ||
 			monthInt > 12 ||
 			monthInt < 1 ||
 			dateInt < 1
@@ -87,36 +87,36 @@ const NoteCreateForm = ({
 
 		return null;
 	};
-	const validateTime = (value: string) => {
-		const errStr = "Thời gian không hợp lệ";
+	// const validateTime = (value: string) => {
+	// 	const errStr = "Thời gian không hợp lệ";
 
-		const [hour, minute] = value.split(":");
+	// 	const [hour, minute] = value.split(":");
 
-		const [hourInt, minuteInt] = [parseInt(hour), parseInt(minute)];
+	// 	const [hourInt, minuteInt] = [parseInt(hour), parseInt(minute)];
 
-		if (isNaN(hourInt) || isNaN(minuteInt) || hourInt > 23 || minuteInt > 59) {
-			return errStr;
-		}
+	// 	if (isNaN(hourInt) || isNaN(minuteInt) || hourInt > 23 || minuteInt > 59) {
+	// 		return errStr;
+	// 	}
 
-		return null;
-	};
-	const handleTimeChange = (value: string): string => {
-		let arr = value.split(":");
-		if (arr[0].length > 2) {
-			arr[1] = `${arr[0].substring(2, arr[0].length)}${
-				arr[1] !== undefined ? arr[1] : ""
-			}`;
-			arr[0] = arr[0].substring(0, 2);
-		}
+	// 	return null;
+	// };
+	// const handleTimeChange = (value: string): string => {
+	// 	let arr = value.split(":");
+	// 	if (arr[0].length > 2) {
+	// 		arr[1] = `${arr[0].substring(2, arr[0].length)}${
+	// 			arr[1] !== undefined ? arr[1] : ""
+	// 		}`;
+	// 		arr[0] = arr[0].substring(0, 2);
+	// 	}
 
-		if (parseInt(arr[0]) > 23) {
-			arr[0] = "23";
-		}
-		if (parseInt(arr[1]) > 59) {
-			arr[1] = "59";
-		}
-		return `${arr[0]}${arr[1] !== undefined ? ":" + arr[1] : ""}`;
-	};
+	// 	if (parseInt(arr[0]) > 23) {
+	// 		arr[0] = "23";
+	// 	}
+	// 	if (parseInt(arr[1]) > 59) {
+	// 		arr[1] = "59";
+	// 	}
+	// 	return `${arr[0]}${arr[1] !== undefined ? ":" + arr[1] : ""}`;
+	// };
 
 	const handleDateChange = (value: string): string => {
 		let arr = value.split("/");
@@ -155,27 +155,27 @@ const NoteCreateForm = ({
 			.split("/")
 			.map(value => parseInt(value));
 
-		const [startHour, startMinute] = values.fromTime
-			.split(":")
-			.map(value => parseInt(value));
+		// const [startHour, startMinute] = values.fromTime
+		// 	.split(":")
+		// 	.map(value => parseInt(value));
 
 		// End
 		const [toDate, toMonth, toYear] = values.to
 			.split("/")
 			.map(value => parseInt(value));
 
-		const [toHour, toMinute] = values.toTime
-			.split(":")
-			.map(value => parseInt(value));
+		// const [toHour, toMinute] = values.toTime
+		// 	.split(":")
+		// 	.map(value => parseInt(value));
 
 		const dateFrom = new Date(
 			startYear,
 			startMonth - 1,
-			startDate,
-			startHour,
-			startMinute
+			startDate
+			// startHour,
+			// startMinute
 		);
-		const dateTo = new Date(toYear, toMonth - 1, toDate, toHour, toMinute);
+		const dateTo = new Date(toYear, toMonth - 1, toDate); //toHour, toMinute);
 
 		if (dateFrom > dateTo) {
 			alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
@@ -235,18 +235,6 @@ const NoteCreateForm = ({
 									validate={validateDate}
 									placeHolder="dd/mm/yy"
 								/>
-								<FastField
-									className={styles.timeField}
-									name="fromTime"
-									component={BaseInputField}
-									onChange={handleTimeChange}
-									label="Thời gian"
-									validate={validateTime}
-									// isShowError={false}
-									placeHolder="hh:mm"
-								/>
-							</div>
-							<div className={styles.dateFieldContainer}>
 								<Field
 									name="to"
 									className={styles.dateField}
@@ -259,7 +247,19 @@ const NoteCreateForm = ({
 									label="Ngày kết thúc"
 									placeHolder="dd/mm/yy"
 								/>
-								<FastField
+								{/* <FastField
+									className={styles.timeField}
+									name="fromTime"
+									component={BaseInputField}
+									onChange={handleTimeChange}
+									label="Thời gian"
+									validate={validateTime}
+									// isShowError={false}
+									placeHolder="hh:mm"
+								/> */}
+							</div>
+							<div className={styles.dateFieldContainer}>
+								{/* <FastField
 									className={styles.timeField}
 									name="toTime"
 									component={BaseInputField}
@@ -267,7 +267,7 @@ const NoteCreateForm = ({
 									onChange={handleTimeChange}
 									label="Thời gian"
 									placeHolder="hh:mm"
-								/>
+								/> */}
 							</div>
 							<div className="flex gap-x-3 text-sm">
 								<label htmlFor="color">Màu sự kiện</label>

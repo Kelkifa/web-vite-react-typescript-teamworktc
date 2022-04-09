@@ -198,7 +198,58 @@ const groupSlice = createSlice({
 		) {
 			toast.error(`Mời thành viên thất bại (${action.payload.message})`);
 		},
+		outGroup(state, action: PayloadAction<{groupId: string}>) {
+			const {groupId} = action.payload;
+			if (state.loading || state.error) return state;
 
+			const foundGroupIndex = state.data.findIndex(
+				group => group._id === groupId
+			);
+			if (foundGroupIndex !== -1) state.data[foundGroupIndex].loading = true;
+			return state;
+		},
+		outGroupSuccess(state, action: PayloadAction<{groupId: string}>) {
+			const {groupId} = action.payload;
+
+			if (state.loading || state.error) return state;
+			const foundGroupIndex = state.data.findIndex(
+				group => group._id === groupId
+			);
+			if (foundGroupIndex !== -1) {
+				toast.success(`Bạn đã rời nhóm ${state.data[foundGroupIndex].name}`);
+				state.data.splice(foundGroupIndex, 1);
+			} else {
+				toast.success(`Bạn đã rời nhóm`);
+			}
+			const foundGroupDemo = state.data.find(
+				group => group.type === DEMO_GROUP_TYPE
+			);
+
+			if (foundGroupDemo) state.selectedGroup = foundGroupDemo;
+			else {
+				state.selectedGroup = undefined;
+			}
+
+			return state;
+		},
+		outGroupFailed(
+			state,
+			action: PayloadAction<{groupId: string; message: string}>
+		) {
+			const {groupId, message} = action.payload;
+
+			toast.error(`Rời nhóm không thành công (${message})`);
+
+			if (state.loading || state.error) return state;
+
+			const foundGroupIndex = state.data.findIndex(
+				group => group._id === groupId
+			);
+			if (foundGroupIndex !== -1)
+				state.data[foundGroupIndex].loading = undefined;
+
+			return state;
+		},
 		// DELETE
 		delete(state, action: PayloadAction<{groupId: string}>) {
 			const {groupId} = action.payload;
@@ -243,7 +294,7 @@ const groupSlice = createSlice({
 		) {
 			const {groupId, message} = action.payload;
 
-			toast.error(`Xóa nhóm thất bại (${message})`);
+			toast.error(`Xóa nhóm không thành công (${message})`);
 
 			if (state.loading || state.error) return state;
 

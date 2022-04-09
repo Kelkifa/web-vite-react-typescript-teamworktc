@@ -1,6 +1,7 @@
 import {FastField, Formik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
+import BaseButton from "../../../components/form/BaseButton";
 import BaseInputField from "../../../components/form/BaseInputField";
 import {groupActions} from "../groupSlice";
 
@@ -37,9 +38,9 @@ export default function AddMemberForm() {
 								className="flex-grow"
 							/>
 
-							<button className="bg-tim rounded-r-xl px-8" type="submit">
+							<BaseButton className="bg-tim rounded-r-xl px-8" type="submit">
 								Mời
-							</button>
+							</BaseButton>
 						</form>
 					);
 				}}

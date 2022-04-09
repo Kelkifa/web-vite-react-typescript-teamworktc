@@ -9,6 +9,8 @@ export interface NoteCalendarRowProp {
 	dateList: Date[];
 	dateInMonth: Date;
 
+	isFirstRow?: boolean;
+
 	selDates: SelDates;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 
@@ -24,6 +26,7 @@ export default function NoteCalendarRow({
 	dateList,
 	dateInMonth,
 
+	isFirstRow,
 	selDates,
 	setSelDates,
 
@@ -44,7 +47,6 @@ export default function NoteCalendarRow({
 
 		return false;
 	});
-
 	const handleDateClick = (date: Date) => {
 		setSelDates(preState => {
 			if (preState.sel === undefined) return preState;
@@ -70,7 +72,7 @@ export default function NoteCalendarRow({
 
 	if (dateList.length === 0) return null;
 	return (
-		<div className="grid grid-cols-7">
+		<div className="grid grid-cols-7 border-t-[0.0525rem] border-bgColor/30">
 			<ul className="grid grid-cols-7 col-span-7 text-slate-200">
 				{dateList.map((date, index) => (
 					<li
@@ -126,19 +128,19 @@ export default function NoteCalendarRow({
 						note.from <= dateList[0] ? 1 : note.from.getDay() + 1;
 					const endCol =
 						note.to >= dateList[dateListLength] ? 8 : note.to.getDay() + 2;
+
 					return (
 						<div
 							key={index}
 							className={clsx(
-								"px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-150",
-								note._id === selectedNote
-									? "brightness-150"
-									: "truncate h-[21px]",
-								note.to > dateList[dateListLength]
-									? "rounded-l-[6px]"
-									: note.from < dateList[0]
-									? "rounded-r-[6px]"
-									: "rounded-[6px]"
+								"px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-150 min-h-[1.3125rem]",
+								note._id === selectedNote ? "brightness-150" : "truncate",
+								note.from >= dateList[0] &&
+									note.from <= dateList[dateListLength] &&
+									"rounded-l-[6px]",
+								note.to >= dateList[0] &&
+									note.to <= dateList[dateListLength] &&
+									"rounded-r-[6px]"
 							)}
 							style={{
 								backgroundColor: note.color,
@@ -148,7 +150,7 @@ export default function NoteCalendarRow({
 							}}
 							onClick={() => setSelectedNote && setSelectedNote(note)}
 						>
-							{note.name}
+							{(dateList[0] <= note.from || isFirstRow) && note.name}
 						</div>
 					);
 				})}

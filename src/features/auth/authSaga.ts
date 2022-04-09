@@ -105,6 +105,36 @@ function* acceptInvite(action: PayloadAction<{inviteId: string}>) {
 	}
 }
 
+function* disagreeInvite(action: PayloadAction<{inviteId: string}>) {
+	const {inviteId} = action.payload;
+	try {
+		const data: DefaultResponse = yield call(authApi.disagreeInvite, inviteId);
+
+		if (data.success === true)
+			yield put(authActions.disagreeInviteSuccess({inviteId}));
+		else
+			yield authActions.acceptInviteFailed({inviteId, message: data.message});
+	} catch (err) {
+		console.log(err);
+		yield put(
+			authActions.disagreeInviteFailed({inviteId, message: SERVER_ERR_STR})
+		);
+	}
+}
+
+function* disagreeAllInvite() {
+	try {
+		const data: DefaultResponse = yield call(authApi.disagreeAllInvite);
+		if (data.success === true)
+			yield put(authActions.disagreeAllInviteSuccess());
+		else
+			yield put(authActions.disagreeAllInviteFailed({message: data.message}));
+	} catch (err) {
+		console.log(err);
+		yield put(authActions.disagreeAllInviteFailed({message: SERVER_ERR_STR}));
+	}
+}
+
 function* handleLogout() {
 	localStorage.removeItem(LOCALSTORAGE_TOKEN_NAME);
 	localStorage.removeItem(LOCALSTORAGE_GROUP_NAME);
@@ -134,12 +164,18 @@ function* handleRegister(action: PayloadAction<Auth>) {
 function* watchLoginFlow() {
 	yield throttle(2000, authActions.firstAccess.toString(), handleFirstAccess);
 
-	yield throttle(2000, authActions.getInvites.toString(), getInvites);
-	yield throttle(2000, authActions.acceptInvite.toString(), acceptInvite);
 	yield throttle(2000, authActions.login.toString(), handleLogin);
 	yield throttle(2000, authActions.register.toString(), handleRegister);
-
 	yield throttle(2000, authActions.logout.toString(), handleLogout);
+	yield throttle(
+		3000,
+		authActions.disagreeAllInvite.toString(),
+		disagreeAllInvite
+	);
+
+	yield throttle(2000, authActions.getInvites.toString(), getInvites);
+	yield throttle(2000, authActions.acceptInvite.toString(), acceptInvite);
+	yield throttle(2000, authActions.disagreeInvite.toString(), disagreeInvite);
 }
 
 export function* authSaga() {

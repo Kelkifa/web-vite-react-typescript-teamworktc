@@ -51,7 +51,7 @@ export function MainHeader({navList}: MainHeaderProp) {
 
 			{/* Mobile Navbar */}
 			{isShowMobileNavbar && (
-				<ul className="fixed inset-0 bg-slate-700/60 h-full z-10 md:hidden">
+				<ul className="fixed inset-0 bg-slate-800/90 h-full z-10 md:hidden">
 					{navList.map((nav, index) => {
 						return (
 							<Link

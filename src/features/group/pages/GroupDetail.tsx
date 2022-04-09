@@ -57,16 +57,31 @@ export default function GroupDetail() {
 		}
 	};
 
+	const handleOutGroup = () => {
+		if (!group?._id) return;
+		callConfirmAlert("Bạn có chắn muốn rời  nhóm này không ?", () => {
+			if (group._id) dispatch(groupActions.outGroup({groupId: group._id}));
+		});
+	};
+
 	if (group === undefined) return <div>Không tìm thấy nhóm này</div>;
+	if (group.loading) return <div>Loading ...</div>;
 
 	return (
 		<div className="container bg-bgColor px-3 pb-10 text-baseText">
-			{userId === group.adminId && (
+			{userId === group.adminId ? (
 				<div
-					className="text-right text-sm hover:underline cursor-pointer py-1"
+					className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
 					onClick={handleDeleteGroup}
 				>
-					Xóa
+					Xóa Nhóm
+				</div>
+			) : (
+				<div
+					className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
+					onClick={handleOutGroup}
+				>
+					Rời nhóm
 				</div>
 			)}
 			<h1 className="text-bold text-xl text-center py-3 font-bold text-baseRed">

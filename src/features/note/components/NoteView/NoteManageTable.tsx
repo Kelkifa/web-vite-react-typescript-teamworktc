@@ -113,6 +113,7 @@ function NoteManageTable({dataInfo}: NoteManageTableProp) {
 										</tr>
 									)}
 									{!renderData.error &&
+										!renderData.loading &&
 										renderData.data?.map((note, index) => {
 											return (
 												<tr

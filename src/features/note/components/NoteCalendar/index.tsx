@@ -60,6 +60,7 @@ export default function NoteCalendar({
 					key={i}
 					noteList={noteWithLayerList}
 					dateList={dateInRowList}
+					isFirstRow={i === 0}
 					selDates={selDates}
 					setSelDates={setSelDates}
 					selectedNote={selectedNote}

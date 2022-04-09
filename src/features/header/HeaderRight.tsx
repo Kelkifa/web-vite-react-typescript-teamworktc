@@ -73,6 +73,11 @@ export default function HeaderRight() {
 }
 
 // GROUP DROP DOWN
+const groupDropDownStyles = {
+	container:
+		"relative h-[35px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold",
+};
+
 function GroupDropdown() {
 	const dispatch = useAppDispatch();
 	const groupLoading = useAppSelector(getGroupLoading);
@@ -112,14 +117,15 @@ function GroupDropdown() {
 
 	if (groupLoading) {
 		return (
-			<div className="h-[32px] w-44 mr-3 flex items-center justify-center bg-black/70">
-				<AiOutlineLoading3Quarters className="animate-spin mr-2 text-orange-400" />
-				{/* <div>Loading ...</div> */}
+			<div className={groupDropDownStyles.container}>
+				<div className="w-full h-full flex justify-center items-center">
+					<LoadIcon className="text-lg" />
+				</div>
 			</div>
 		);
 	}
 	return (
-		<div className="relative h-[32px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold">
+		<div className={groupDropDownStyles.container}>
 			<div
 				className="h-full flex items-center w-full px-2 truncate cursor-pointer"
 				onClick={() => {
@@ -131,7 +137,7 @@ function GroupDropdown() {
 
 			<ul
 				className={clsx(
-					"absolute top-full w-full bg-bgColor max-h-[128px] overflow-auto scrollbar-hide",
+					"absolute top-full w-full bg-bgColor max-h-[128px] overflow-auto scrollbar-hide rounded-b-md",
 					{
 						hidden: !isShowDropdown,
 					}
@@ -155,7 +161,7 @@ function GroupDropdown() {
 								handleItemClick(group);
 							}}
 						>
-							<span>{group.name}</span>{" "}
+							<span>{group.name}</span>
 							{group.loading && (
 								<span>
 									<LoadIcon />

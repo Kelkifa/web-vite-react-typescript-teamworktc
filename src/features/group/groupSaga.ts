@@ -1,6 +1,6 @@
 import {DataResponse, DefaultResponse} from "../../models";
 import {LOCALSTORAGE_GROUP_NAME, groupActions} from "./groupSlice";
-import {call, fork, put, takeEvery, throttle} from "redux-saga/effects";
+import {call, fork, put, throttle} from "redux-saga/effects";
 
 import {Group} from "../../models/group";
 import {PayloadAction} from "@reduxjs/toolkit";
@@ -21,6 +21,11 @@ function* handleGetGroupList() {
 				demoGroupIndex = data.response.findIndex(group => {
 					return group._id === groupId;
 				});
+				if (demoGroupIndex === -1) {
+					demoGroupIndex = data.response.findIndex(group => {
+						return group.type === "demo";
+					});
+				}
 			} else {
 				demoGroupIndex = data.response.findIndex(group => {
 					return group.type === "demo";
@@ -141,6 +146,19 @@ function* deleteMember(
 		);
 	}
 }
+function* outGroup(action: PayloadAction<{groupId: string}>) {
+	const {groupId} = action.payload;
+	try {
+		const data: DefaultResponse = yield call(groupApi.outGroup, groupId);
+		if (data.success === true)
+			yield put(groupActions.outGroupSuccess({groupId}));
+		else
+			yield put(groupActions.outGroupFailed({groupId, message: data.message}));
+	} catch (err) {
+		console.log(err);
+		yield put(groupActions.outGroupFailed({groupId, message: SERVER_ERR_STR}));
+	}
+}
 
 function* deleteGroup(action: PayloadAction<{groupId: string}>) {
 	const {groupId} = action.payload;
@@ -181,6 +199,7 @@ function* groupWatcher() {
 	yield throttle(3000, groupActions.getGroup.toString(), handleGetGroupList);
 	yield throttle(3000, groupActions.invite.toString(), invite);
 	yield throttle(3000, groupActions.create.toString(), handleCreate);
+	yield throttle(3000, groupActions.outGroup.toString(), outGroup);
 	yield throttle(3000, groupActions.delete.toString(), deleteGroup);
 	yield throttle(500, groupActions.fastSearch.toString(), fastSearch);
 }

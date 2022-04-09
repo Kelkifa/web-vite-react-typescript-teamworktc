@@ -21,6 +21,14 @@ const authApi = {
 		const url = "/auth/accept-invite";
 		return axiosClient.post(url, {inviteId});
 	},
+	disagreeInvite(inviteId: string): Promise<DefaultResponse> {
+		const url = "/auth/disagree-invite";
+		return axiosClient.delete(url, {data: {inviteId}});
+	},
+	disagreeAllInvite(): Promise<DefaultResponse> {
+		const url = "/auth/disagree-all-invite";
+		return axiosClient.delete(url);
+	},
 	firstAccess(): Promise<DataResponse<User>> {
 		const url = "/auth/firstAccess";
 		return axiosClient.get(url);
