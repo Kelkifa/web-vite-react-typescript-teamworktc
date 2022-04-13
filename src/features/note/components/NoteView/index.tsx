@@ -71,7 +71,7 @@ function Controlbar({
 				{isManageScreen ? <MdOutlineArrowBackIosNew /> : ""}
 			</div>
 			<div
-				className="cursor-pointer"
+				className="cursor-pointer hover:underline"
 				onClick={() => {
 					onManageClick(true);
 				}}

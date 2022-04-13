@@ -36,9 +36,9 @@ function App() {
 					<Route
 						path="note/*"
 						element={
-							<NeedGroupContainer>
-								<Note />
-							</NeedGroupContainer>
+							// <NeedGroupContainer>
+							<Note />
+							// </NeedGroupContainer>
 						}
 					/>
 					<Route

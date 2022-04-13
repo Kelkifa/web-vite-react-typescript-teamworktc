@@ -1,4 +1,4 @@
-import {Outlet, useLocation} from "react-router";
+import {Outlet, useLocation} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useEffect, useMemo} from "react";
 

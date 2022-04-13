@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router";
+import {Route, Routes} from "react-router-dom";
 
 import DocContentPage from "./pages/DocContentPage";
 import DocLayout from "./components/DocLayout";

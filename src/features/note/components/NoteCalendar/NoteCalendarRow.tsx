@@ -72,8 +72,13 @@ export default function NoteCalendarRow({
 
 	if (dateList.length === 0) return null;
 	return (
-		<div className="grid grid-cols-7 border-t-[0.0525rem] border-bgColor/30">
-			<ul className="grid grid-cols-7 col-span-7 text-slate-200">
+		<div
+			className={clsx(
+				"grid grid-cols-7",
+				!isFirstRow && "border-t-[0.0525rem] border-bgColor/20"
+			)}
+		>
+			<ul className="grid grid-cols-7 col-span-7 text-slate-200 divide-x-[0.0525rem] divide-bgColor/20">
 				{dateList.map((date, index) => (
 					<li
 						className={clsx(
@@ -134,7 +139,9 @@ export default function NoteCalendarRow({
 							key={index}
 							className={clsx(
 								"px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-150 min-h-[1.3125rem]",
-								note._id === selectedNote ? "brightness-150" : "truncate",
+								note._id === selectedNote
+									? "brightness-150"
+									: "truncate h-[1.3125rem]",
 								note.from >= dateList[0] &&
 									note.from <= dateList[dateListLength] &&
 									"rounded-l-[6px]",

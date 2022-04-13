@@ -22,30 +22,28 @@ const styles = {
 interface NoteFormValue {
 	name: string;
 	from: string;
-	// fromTime: string;
 	to: string;
-	// toTime: string;
 	color: string;
 }
 
 const schema = yup.object().shape({
 	name: yup.string().required("Bạn chưa nhập trường này"),
 	from: yup.string().required("Bạn chưa nhập trường này"),
-	// fromTime: yup.string().required("Bạn chưa nhập trường này"),
 	to: yup.string().required("Bạn chưa nhập trường này"),
-	// toTime: yup.string().required("Bạn chưa nhập trường này"),
 	color: yup.string().required("Bạn chưa nhập trường này"),
 });
 
 interface NoteCreateFormProp {
 	className?: string;
 	selDates: SelDates;
+	initialData?: NoteFormValue;
 	isLoading: boolean;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 }
 const NoteCreateForm = ({
 	className,
 	selDates,
+	initialData,
 	isLoading,
 	setSelDates,
 }: NoteCreateFormProp) => {
@@ -57,14 +55,14 @@ const NoteCreateForm = ({
 
 	const loading = useAppSelector(getNoteCreateStatusLoading);
 
-	const initialValues: NoteFormValue = {
-		name: "",
-		from: "",
-		// fromTime: "",
-		to: "",
-		// toTime: "",
-		color: "transparent",
-	};
+	const initialValues: NoteFormValue = initialData
+		? initialData
+		: {
+				name: "",
+				from: "",
+				to: "",
+				color: "transparent",
+		  };
 
 	// Validate Functions
 	const validateDate = (value: string) => {
@@ -89,36 +87,6 @@ const NoteCreateForm = ({
 
 		return null;
 	};
-	// const validateTime = (value: string) => {
-	// 	const errStr = "Thời gian không hợp lệ";
-
-	// 	const [hour, minute] = value.split(":");
-
-	// 	const [hourInt, minuteInt] = [parseInt(hour), parseInt(minute)];
-
-	// 	if (isNaN(hourInt) || isNaN(minuteInt) || hourInt > 23 || minuteInt > 59) {
-	// 		return errStr;
-	// 	}
-
-	// 	return null;
-	// };
-	// const handleTimeChange = (value: string): string => {
-	// 	let arr = value.split(":");
-	// 	if (arr[0].length > 2) {
-	// 		arr[1] = `${arr[0].substring(2, arr[0].length)}${
-	// 			arr[1] !== undefined ? arr[1] : ""
-	// 		}`;
-	// 		arr[0] = arr[0].substring(0, 2);
-	// 	}
-
-	// 	if (parseInt(arr[0]) > 23) {
-	// 		arr[0] = "23";
-	// 	}
-	// 	if (parseInt(arr[1]) > 59) {
-	// 		arr[1] = "59";
-	// 	}
-	// 	return `${arr[0]}${arr[1] !== undefined ? ":" + arr[1] : ""}`;
-	// };
 
 	const handleDateChange = (value: string): string => {
 		let arr = value.split("/");
@@ -150,33 +118,17 @@ const NoteCreateForm = ({
 		values: NoteFormValue,
 		{resetForm}: {resetForm: () => void}
 	) => {
-		// console.log(values);
-		// return;
 		// Start
 		const [startDate, startMonth, startYear] = values.from
 			.split("/")
 			.map(value => parseInt(value));
-
-		// const [startHour, startMinute] = values.fromTime
-		// 	.split(":")
-		// 	.map(value => parseInt(value));
 
 		// End
 		const [toDate, toMonth, toYear] = values.to
 			.split("/")
 			.map(value => parseInt(value));
 
-		// const [toHour, toMinute] = values.toTime
-		// 	.split(":")
-		// 	.map(value => parseInt(value));
-
-		const dateFrom = new Date(
-			startYear,
-			startMonth - 1,
-			startDate
-			// startHour,
-			// startMinute
-		);
+		const dateFrom = new Date(startYear, startMonth - 1, startDate);
 		const dateTo = new Date(toYear, toMonth - 1, toDate); //toHour, toMinute);
 
 		if (dateFrom > dateTo) {

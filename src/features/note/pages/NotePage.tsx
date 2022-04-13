@@ -3,6 +3,7 @@ import NoteCalendar, {
 	MonthAndYear,
 	SelDates,
 } from "../components/NoteCalendar";
+import {getGroupLoading, getSelectedGroupId} from "../../group/groupSlice";
 import {
 	getNoteData,
 	getNoteLoading,
@@ -14,7 +15,6 @@ import {useEffect, useMemo, useState} from "react";
 
 import NoteCreateForm from "../components/NoteCreateForm";
 import NoteView from "../components/NoteView";
-import {getSelectedGroupId} from "../../group/groupSlice";
 
 export default function NotePage() {
 	// const [selectedNote, setSelectedNote] = useState<string>("");
@@ -26,6 +26,7 @@ export default function NotePage() {
 
 	const noteData = useAppSelector(getNoteData);
 	const noteLoading = useAppSelector(getNoteLoading);
+	const groupLoading = useAppSelector(getGroupLoading);
 	const groupId = useAppSelector(getSelectedGroupId);
 
 	const [selDates, setSelDates] = useState<SelDates>({});
@@ -78,7 +79,7 @@ export default function NotePage() {
 			<div className="col-span-2 md:col-span-1">
 				<NoteCalendar
 					noteList={noteList}
-					loading={noteLoading}
+					loading={noteLoading || groupLoading}
 					selDates={selDates}
 					setSelDates={setSelDates}
 					selectedNote={selectedNoteId}
@@ -91,6 +92,7 @@ export default function NotePage() {
 			{/* Note Manage */}
 			<div className="col-span-2 md:col-span-1">
 				<NoteCreateForm
+					isLoading={groupLoading}
 					className="bg-bgColor"
 					selDates={selDates}
 					setSelDates={setSelDates}

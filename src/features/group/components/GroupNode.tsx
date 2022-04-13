@@ -5,7 +5,7 @@ import {MdAdd} from "react-icons/md";
 import clsx from "clsx";
 import {groupActions} from "../groupSlice";
 import {useAppDispatch} from "../../../app/hooks";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 interface GroupNodeProp {
 	data?: Group;

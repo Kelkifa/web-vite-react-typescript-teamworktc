@@ -125,7 +125,7 @@ export default function NoteCalendarHeader({
 				}}
 			>
 				<span>{renderHeader}</span>
-				{loading && <LoadIcon />}
+				{loading && <LoadIcon className="text-orange-400" />}
 			</div>
 			<div className={styles.btnItem} onClick={handleArrowRightClick}>
 				<FiChevronRight />
