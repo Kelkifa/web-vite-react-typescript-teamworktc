@@ -10,8 +10,6 @@ interface NoteInputFieldProp {
 	isShowError?: boolean;
 
 	lighterChooseBtn?: boolean;
-
-	selDates: SelDates;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 	type?: string;
 
@@ -24,7 +22,6 @@ export default function NoteInputField({
 	form,
 	field,
 	label,
-	selDates,
 	lighterChooseBtn,
 	setSelDates,
 	isShowError = true,
@@ -33,32 +30,6 @@ export default function NoteInputField({
 	type = "text",
 	onChange,
 }: NoteInputFieldProp) {
-	// console.log(selDates);
-	useEffect(() => {
-		if (selDates.date0 !== undefined) {
-			const date = selDates.date0;
-			field.onChange({
-				target: {
-					name: "from",
-					value: `${date.getDate()}/${
-						date.getMonth() + 1
-					}/${date.getFullYear()}`,
-				},
-			});
-		}
-		if (selDates.date1 !== undefined) {
-			const date = selDates.date1;
-			field.onChange({
-				target: {
-					name: "to",
-					value: `${date.getDate()}/${
-						date.getMonth() + 1
-					}/${date.getFullYear()}`,
-				},
-			});
-		}
-	}, [selDates.date0, selDates.date1]);
-
 	const handleChange = (e: any) => {
 		if (!onChange) {
 			field.onChange(e);

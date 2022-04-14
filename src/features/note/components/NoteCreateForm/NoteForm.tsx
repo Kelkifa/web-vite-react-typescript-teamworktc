@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 import {FastField, Field, Formik} from "formik";
 import {Note, NoteFormValue} from "../../../../models/Note";
-import React, {memo, useEffect} from "react";
+import React, {memo, useEffect, useRef} from "react";
 import {getLastDateFormDate, randomNoteColor} from "../NoteCalendar/core";
 import {
 	getNoteCreateStatusLoading,
@@ -48,6 +48,8 @@ const NoteCreateForm = ({
 	const currColorList = useAppSelector(state =>
 		state.note.data?.map(value => value.color)
 	);
+
+	// console.log(selDates);
 
 	const dispatch = useAppDispatch();
 
@@ -168,6 +170,7 @@ const NoteCreateForm = ({
 				validationSchema={schema}
 			>
 				{formikProps => {
+					const isFirstRender = useRef<boolean>(true);
 					const {handleSubmit, values, handleChange, setFieldValue} =
 						formikProps;
 
@@ -178,6 +181,12 @@ const NoteCreateForm = ({
 					};
 
 					useEffect(() => {
+						return () => {
+							setSelDates({});
+						};
+					}, []);
+
+					useEffect(() => {
 						if (initialData) {
 							setFieldValue("name", initialData.name);
 							setFieldValue("to", initialData.to);
@@ -185,6 +194,31 @@ const NoteCreateForm = ({
 							setFieldValue("color", initialData.color);
 						}
 					}, [initialData]);
+
+					useEffect(() => {
+						if (isFirstRender.current) {
+							isFirstRender.current = false;
+							return;
+						}
+						if (selDates.date0) {
+							const date0 = selDates.date0;
+							setFieldValue(
+								"from",
+								`${date0.getDate()}/${
+									date0.getMonth() + 1
+								}/${date0.getFullYear()}`
+							);
+						}
+						if (selDates.date1) {
+							const date1 = selDates.date1;
+							setFieldValue(
+								"to",
+								`${date1.getDate()}/${
+									date1.getMonth() + 1
+								}/${date1.getFullYear()}`
+							);
+						}
+					}, [selDates.date0, selDates.date1]);
 					return (
 						<form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
 							<FastField
@@ -198,7 +232,6 @@ const NoteCreateForm = ({
 									className={styles.dateField}
 									name="from"
 									component={NoteInputField}
-									selDates={selDates}
 									setSelDates={setSelDates}
 									lighterChooseBtn={selDates.sel === 0}
 									onChange={handleDateChange}
@@ -210,7 +243,6 @@ const NoteCreateForm = ({
 									name="to"
 									className={styles.dateField}
 									component={NoteInputField}
-									selDates={selDates}
 									lighterChooseBtn={selDates.sel === 1}
 									setSelDates={setSelDates}
 									onChange={handleDateChange}
