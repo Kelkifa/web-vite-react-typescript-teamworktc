@@ -9,3 +9,11 @@ export interface Note {
 
 	isSocket?: boolean;
 }
+
+export interface NoteFormValue {
+	_id?: string;
+	name: string;
+	from: string;
+	to: string;
+	color: string;
+}

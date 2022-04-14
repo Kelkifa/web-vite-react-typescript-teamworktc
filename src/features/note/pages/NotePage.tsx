@@ -92,8 +92,7 @@ export default function NotePage() {
 			{/* Note Manage */}
 			<div className="col-span-2 md:col-span-1">
 				<NoteCreateForm
-					isLoading={groupLoading}
-					className="bg-bgColor"
+					loading={groupLoading}
 					selDates={selDates}
 					setSelDates={setSelDates}
 				/>

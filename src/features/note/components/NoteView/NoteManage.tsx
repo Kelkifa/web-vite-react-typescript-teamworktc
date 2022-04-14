@@ -17,6 +17,7 @@ export default function NoteManage() {
 	const [noteInfo2, setNoteInfo2] = useState<NoteState>({
 		loading: true,
 		status: {},
+		data: [],
 	});
 
 	useEffect(() => {
@@ -27,13 +28,28 @@ export default function NoteManage() {
 				try {
 					const response = await noteApi.getPassedNotes(groupId);
 					if (response.success === true) {
-						setNoteInfo2({loading: false, data: response.response, status: {}});
+						setNoteInfo2({
+							...noteInfo2,
+							loading: false,
+							data: response.response,
+							status: {},
+						});
 					} else {
-						setNoteInfo2({loading: false, error: response.message, status: {}});
+						setNoteInfo2({
+							...noteInfo2,
+							loading: false,
+							error: response.message,
+							status: {},
+						});
 					}
 				} catch (err) {
 					console.error(err);
-					setNoteInfo2({loading: false, error: "Server gặp sự cố", status: {}});
+					setNoteInfo2({
+						loading: false,
+						error: "Server gặp sự cố",
+						status: {},
+						data: [],
+					});
 				}
 			};
 

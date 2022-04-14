@@ -1,14 +1,18 @@
 import * as yup from "yup";
 
 import {FastField, Field, Formik} from "formik";
-import React, {memo} from "react";
+import {Note, NoteFormValue} from "../../../../models/Note";
+import React, {memo, useEffect} from "react";
 import {getLastDateFormDate, randomNoteColor} from "../NoteCalendar/core";
-import {getNoteCreateStatusLoading, noteActions} from "../../noteSlice";
+import {
+	getNoteCreateStatusLoading,
+	getNoteUpdateStatusLoading,
+	noteActions,
+} from "../../noteSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
 import BaseButton from "../../../../components/form/BaseButton";
 import BaseInputField from "../../../../components/form/BaseInputField";
-import {Note} from "../../../../models/Note";
 import NoteInputField from "./NoteInputField";
 import {SelDates} from "../NoteCalendar";
 import clsx from "clsx";
@@ -19,13 +23,6 @@ const styles = {
 	timeField: "max-w-[6.5rem]",
 };
 
-interface NoteFormValue {
-	name: string;
-	from: string;
-	to: string;
-	color: string;
-}
-
 const schema = yup.object().shape({
 	name: yup.string().required("Bạn chưa nhập trường này"),
 	from: yup.string().required("Bạn chưa nhập trường này"),
@@ -33,10 +30,11 @@ const schema = yup.object().shape({
 	color: yup.string().required("Bạn chưa nhập trường này"),
 });
 
-interface NoteCreateFormProp {
+export interface NoteFormProp {
 	className?: string;
+
 	selDates: SelDates;
-	initialData?: NoteFormValue;
+	initialData?: NoteFormValue; // Nếu có thì form này dùng để cập nhật
 	isLoading: boolean;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 }
@@ -46,16 +44,17 @@ const NoteCreateForm = ({
 	initialData,
 	isLoading,
 	setSelDates,
-}: NoteCreateFormProp) => {
+}: NoteFormProp) => {
 	const currColorList = useAppSelector(state =>
 		state.note.data?.map(value => value.color)
 	);
 
 	const dispatch = useAppDispatch();
 
-	const loading = useAppSelector(getNoteCreateStatusLoading);
+	const createLoading = useAppSelector(getNoteCreateStatusLoading);
+	const updateLoading = useAppSelector(getNoteUpdateStatusLoading);
 
-	const initialValues: NoteFormValue = initialData
+	let initialValues: NoteFormValue = initialData
 		? initialData
 		: {
 				name: "",
@@ -144,15 +143,24 @@ const NoteCreateForm = ({
 					? randomNoteColor(currColorList)
 					: values.color,
 		};
-
-		dispatch(noteActions.createNote(data));
 		resetForm();
+
+		if (initialData?._id) {
+			dispatch(
+				noteActions.update({
+					noteId: initialData._id,
+					data,
+				})
+			);
+			return;
+		}
+		dispatch(noteActions.createNote(data));
 	};
 
 	return (
-		<div className={clsx("p-2 pb-3 text-sm", className)}>
+		<div className={clsx("text-sm", className)}>
 			<h1 className="text-center text-base text-red-500 font-semibold">
-				Tạo sự kiện
+				{initialData ? "Cập nhật sự kiện" : "Tạo sự kiện"}
 			</h1>
 			<Formik
 				initialValues={initialValues}
@@ -160,7 +168,8 @@ const NoteCreateForm = ({
 				validationSchema={schema}
 			>
 				{formikProps => {
-					const {handleSubmit, values, handleChange} = formikProps;
+					const {handleSubmit, values, handleChange, setFieldValue} =
+						formikProps;
 
 					const handleChangeColor = () => {
 						handleChange({
@@ -168,6 +177,14 @@ const NoteCreateForm = ({
 						});
 					};
 
+					useEffect(() => {
+						if (initialData) {
+							setFieldValue("name", initialData.name);
+							setFieldValue("to", initialData.to);
+							setFieldValue("from", initialData.from);
+							setFieldValue("color", initialData.color);
+						}
+					}, [initialData]);
 					return (
 						<form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
 							<FastField
@@ -201,27 +218,6 @@ const NoteCreateForm = ({
 									label="Ngày kết thúc"
 									placeHolder="dd/mm/yy"
 								/>
-								{/* <FastField
-									className={styles.timeField}
-									name="fromTime"
-									component={BaseInputField}
-									onChange={handleTimeChange}
-									label="Thời gian"
-									validate={validateTime}
-									// isShowError={false}
-									placeHolder="hh:mm"
-								/> */}
-							</div>
-							<div className={styles.dateFieldContainer}>
-								{/* <FastField
-									className={styles.timeField}
-									name="toTime"
-									component={BaseInputField}
-									validate={validateTime}
-									onChange={handleTimeChange}
-									label="Thời gian"
-									placeHolder="hh:mm"
-								/> */}
 							</div>
 							<div className="flex gap-x-3 text-sm">
 								<label htmlFor="color">Màu sự kiện</label>
@@ -238,10 +234,14 @@ const NoteCreateForm = ({
 							{/* </div> */}
 							<BaseButton
 								type="submit"
-								loading={loading || isLoading}
+								loading={
+									createLoading ||
+									(updateLoading && Boolean(initialData)) ||
+									isLoading
+								}
 								className="bg-tim/80 hover:bg-tim px-3 py-1 text-slate-300 rounded-lg mt-2 w-full"
 							>
-								Tạo
+								{initialData ? "Cập nhật" : "Tạo"}
 							</BaseButton>
 						</form>
 					);

@@ -12,9 +12,13 @@ const noteApi = {
 		const url = "/note/get";
 		return axiosClient.post(url, {groupId, year, month});
 	},
-	create(groupId: string, newNote: Note): Promise<Note> {
+	create(groupId: string, newNote: Note): Promise<DataResponse<Note>> {
 		const url = "/note/create";
 		return axiosClient.post(url, {groupId, data: newNote});
+	},
+	update(noteId: string, data: Note): Promise<DataResponse<Note>> {
+		const url = "/note/update";
+		return axiosClient.patch(url, {noteId, data});
 	},
 	add(groupId: string, data: Note): Promise<DataResponse<Note>> {
 		const url = "/note/add";

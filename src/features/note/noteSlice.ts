@@ -1,7 +1,7 @@
+import {Note, NoteFormValue} from "../../models/Note";
 import {PayloadAction, createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {ErrorStatus} from "../../models";
-import {Note} from "../../models/Note";
 import {RootState} from "../../app/store";
 import {toast} from "react-toastify";
 
@@ -13,15 +13,17 @@ export interface GetNotePayload {
 export interface NoteState {
 	loading: boolean;
 	error?: string;
-	data?: Note[];
+	data: Note[];
 	selectedNote?: Note;
 	status: {
 		createNote?: ErrorStatus;
+		update?: ErrorStatus;
 	};
 }
 
 const initialState: NoteState = {
 	loading: true,
+	data: [],
 	error: undefined,
 	status: {},
 };
@@ -73,9 +75,34 @@ const noteSlice = createSlice({
 			state.data && (state.data[foundNoteIndex] = action.payload);
 		},
 		createNoteFailed(state, action: PayloadAction<string>) {
-			state.data = state.data?.filter(note => note.loading !== true);
+			state.data = state.data.filter(note => note.loading !== true);
 			toast.error(`Tạo sự kiện thất bại ${action.payload}`);
 			state.status.createNote = {loading: false, error: undefined};
+			return state;
+		},
+		// UPDATE
+		update(state, action: PayloadAction<{noteId: string; data: Note}>) {
+			state.status.update = {loading: true};
+			return state;
+		},
+		updateSuccess(
+			state,
+			action: PayloadAction<{noteId: string; updatedNote: Note}>
+		) {
+			const {noteId, updatedNote} = action.payload;
+			state.status.update = undefined;
+
+			const foundNoteIndex = state.data.findIndex(note => note._id === noteId);
+			if (foundNoteIndex !== -1) state.data[foundNoteIndex] = updatedNote;
+
+			if (state.selectedNote?._id === noteId) state.selectedNote = updatedNote;
+
+			return state;
+		},
+		updateFailed(state, action: PayloadAction<{message: string}>) {
+			state.status.update = undefined;
+			toast.error(`Cập nhật không thành công ${action.payload.message}`);
+
 			return state;
 		},
 		// DELETE NOTE
@@ -145,11 +172,19 @@ const noteSlice = createSlice({
 export const getNoteLoading = (state: RootState) => state.note.loading;
 export const getNoteData = (state: RootState) => state.note.data;
 export const getNoteError = (state: RootState) => state.note.error;
+
 export const getNoteCreateStatusLoading = (state: RootState) =>
 	state.note.status.createNote?.loading;
+export const getNoteUpdateStatusLoading = (state: RootState) =>
+	state.note.status.update?.loading;
 
 export const getNoteSelectedNoteId = (state: RootState) =>
 	state.note.selectedNote?._id;
+export const getNoteSelectedNote = (state: RootState) =>
+	state.note.selectedNote;
+
+export const isSelectNote = (state: RootState): boolean =>
+	state.note.selectedNote ? true : false;
 
 const {reducer: noteReducer, actions} = noteSlice;
 

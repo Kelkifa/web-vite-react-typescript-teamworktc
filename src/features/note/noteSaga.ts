@@ -1,9 +1,10 @@
 import {DataResponse, DefaultResponse} from "../../models";
 import {GetNotePayload, noteActions} from "./noteSlice";
+import {Note, NoteFormValue} from "../../models/Note";
 import {call, fork, put, takeLatest, throttle} from "redux-saga/effects";
 
-import {Note} from "../../models/Note";
 import {PayloadAction} from "@reduxjs/toolkit";
+import {SERVER_ERR_STR} from "../../app/variablies";
 import {getSelectedGroupId} from "../../app/store";
 import noteApi from "../../api/noteApi";
 
@@ -52,6 +53,28 @@ function* handleCreateNote(action: PayloadAction<Note>) {
 	}
 }
 
+function* handleUpdate(action: PayloadAction<{noteId: string; data: Note}>) {
+	const {noteId, data} = action.payload;
+	try {
+		const dataResponse: DataResponse<Note> = yield call(
+			noteApi.update,
+			noteId,
+			data
+		);
+
+		if (dataResponse.success === true) {
+			yield put(
+				noteActions.updateSuccess({noteId, updatedNote: dataResponse.response})
+			);
+		} else {
+			yield put(noteActions.updateFailed({message: dataResponse.message}));
+		}
+	} catch (err) {
+		console.log(err);
+		yield put(noteActions.updateFailed({message: SERVER_ERR_STR}));
+	}
+}
+
 function* handleDeleteNote(action: PayloadAction<string[]>) {
 	const groupId = getSelectedGroupId();
 	if (!groupId) return;
@@ -74,9 +97,11 @@ function* handleDeleteNote(action: PayloadAction<string[]>) {
 		yield put(noteActions.deleteNoteFailed(noteList));
 	}
 }
+
 function* noteWatcher() {
 	yield throttle(2000, noteActions.getNote.toString(), handleGetNote);
 	yield throttle(2000, noteActions.createNote.toString(), handleCreateNote);
+	yield throttle(2000, noteActions.update.toString(), handleUpdate);
 
 	yield throttle(2000, noteActions.deleteNote.toString(), handleDeleteNote);
 }

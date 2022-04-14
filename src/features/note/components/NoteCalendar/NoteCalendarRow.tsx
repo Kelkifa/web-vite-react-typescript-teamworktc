@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import {CalendarNote} from ".";
+import LoadIcon from "../../../../components/LoadIcon";
 import {SelDates} from "./models";
 import clsx from "clsx";
 
@@ -65,7 +66,6 @@ export default function NoteCalendarRow({
 			if (preState.sel === 1 && preState.date0 !== undefined) {
 				if (date < preState.date0) return {...preState, date1: preState.date0};
 			}
-
 			return {...preState, date1: date};
 		});
 	};
@@ -116,7 +116,7 @@ export default function NoteCalendarRow({
 									className={clsx(
 										"left-[50%] right-0 bg-blue-500 rounded-r-md",
 										styles.selDate,
-										selDates.sel === 1 ? "brightness-125" : "brightness-75"
+										selDates.sel === 1 ? "brightness-150" : "brightness-75"
 									)}
 								>
 									Kết thúc
@@ -138,9 +138,9 @@ export default function NoteCalendarRow({
 						<div
 							key={index}
 							className={clsx(
-								"px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-150 min-h-[1.3125rem]",
+								"relative px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-125 min-h-[1.3125rem]",
 								note._id === selectedNote
-									? "brightness-150"
+									? "brightness-125"
 									: "truncate h-[1.3125rem]",
 								note.from >= dateList[0] &&
 									note.from <= dateList[dateListLength] &&
@@ -157,7 +157,15 @@ export default function NoteCalendarRow({
 							}}
 							onClick={() => setSelectedNote && setSelectedNote(note)}
 						>
-							{(dateList[0] <= note.from || isFirstRow) && note.name}
+							<span className={clsx(note.loading && "opacity-40")}>
+								{(dateList[0] <= note.from || isFirstRow) && note.name}
+							</span>
+
+							{note.loading && (
+								<div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center items-center text-orange-500">
+									<LoadIcon />
+								</div>
+							)}
 						</div>
 					);
 				})}
