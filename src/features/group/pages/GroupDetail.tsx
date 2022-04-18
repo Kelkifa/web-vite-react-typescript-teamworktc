@@ -9,9 +9,9 @@ import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import AddMemberForm from "../components/AddMemberForm";
 import LoadIcon from "../../../components/LoadIcon";
 import {TiDelete} from "react-icons/ti";
+import {callConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import clsx from "clsx";
 import {getAuthUserId} from "../../auth/authSlice";
-import {useCallConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
 
@@ -20,7 +20,7 @@ export default function GroupDetail() {
 
 	const dispatch = useAppDispatch();
 
-	const {callConfirmAlert} = useCallConfirmAlert();
+	// const {callConfirmAlert} = useCallConfirmAlert();
 
 	const userId = useAppSelector(getAuthUserId);
 

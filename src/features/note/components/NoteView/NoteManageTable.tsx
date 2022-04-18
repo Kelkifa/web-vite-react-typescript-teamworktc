@@ -1,3 +1,6 @@
+import ConfirmAlert, {
+	callConfirmAlert,
+} from "../../../../components/notifices/ConfirmAlert";
 import {NoteState, noteActions} from "../../noteSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
@@ -29,7 +32,9 @@ function NoteManageTable({dataInfo}: NoteManageTableProp) {
 	});
 
 	const handleDelete = (data: (string | undefined)[]) => {
-		dispatch(noteActions.deleteNote(data));
+		callConfirmAlert("Bạn có chắc muốn xóa không ?", () => {
+			dispatch(noteActions.deleteNote(data));
+		});
 	};
 
 	const handleSearch = async (data: string) => {

@@ -69,13 +69,13 @@ export default function ConfirmAlert() {
 	);
 }
 
-export const useCallConfirmAlert = () => {
-	const callConfirmAlert = (message: string, callback?: () => void) => {
-		Emitter.emit("confirm", {message, callback});
-	};
+// export const useCallConfirmAlert = () => {
+// 	const callConfirmAlert = (message: string, callback?: () => void) => {
+// 		Emitter.emit("confirm", {message, callback});
+// 	};
 
-	return {callConfirmAlert};
-};
+// 	return {callConfirmAlert};
+// };
 
 export const callConfirmAlert = (message: string, callback?: () => void) => {
 	Emitter.emit("confirm", {message, callback});
