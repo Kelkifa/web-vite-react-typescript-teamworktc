@@ -11,15 +11,17 @@
 ## Ngôn ngữ sử dụng
 Typescript
 
-## Các Công nghệ sử dụng
-- <a href="">React</a>
-- <a href="">Redux</a>
-- <a href="">Redux Saga</a>
-- <a href="">TailwindCss</a>
-- <a href="">Clsx</a>
-- <a href="">Formik</a>
-- <a href="">Yup</a>
-- <a href="">Axios</a>
-- <a href="">Socket.io-client</a>
+## Các Thư viện sử dụng trong dự án
+- <a href="https://reactjs.org/">React</a>
+- <a href="https://redux-toolkit.js.org/">Redux</a>
+- <a href="https://redux-saga.js.org/">Redux Saga</a>
+- <a href="https://tailwindcss.com/">TailwindCss</a>
+- <a href="https://www.npmjs.com/package/clsx">Clsx</a>
+- <a href="https://formik.org/">Formik</a>
+- <a href="https://www.google.com/search?q=yup+npm&oq=yup&aqs=chrome.1.69i59j35i39j0i67l5j69i60.3025j0j4&sourceid=chrome&ie=UTF-8">Yup</a>
+- <a href="https://www.npmjs.com/package/axios">Axios</a>
+- <a href="https://www.npmjs.com/package/socket.io-react">Socket.io-client</a>
+
+- ...
 
 
