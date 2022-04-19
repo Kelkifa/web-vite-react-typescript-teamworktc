@@ -8,7 +8,7 @@
 
 Ứng dụng giúp bạn quản lý các sự kiện của bản thân tốt hơn cũng như dễ dàng tìm lại chúng
 
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/73534639/164025318-e44ef219-4ef6-4255-abc0-825d9e7bab36.png">
+<img width="800" alt="project2" src="https://user-images.githubusercontent.com/73534639/164042786-9288062d-b313-45b0-9d4f-39a75cec598d.png">
 
 ## Ngôn ngữ sử dụng
 Typescript
