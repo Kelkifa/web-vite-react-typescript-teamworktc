@@ -30,7 +30,7 @@ Typescript
 <a href="https://github.com/Kelkifa/web-server-teamworktc"> Link github to Server</a>
 
 ## Install and Run this Project
-Clone this project to your device and:
+Clone this project to your local and:
 - install packages
 ```npm install```
 - run project
