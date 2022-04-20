@@ -1,16 +1,16 @@
 # Teamwork
 <a href="https://teamwork-tc.web.app/" target="_blank">https://teamwork-tc.web.app/</a>
 
-## Mô tả ứng dụng dự án
-Ứng dụng web giúp bạn tạo và thao tác với các sự kiện được hiển thị trên lịch với nhiều màu sắc khác nhau mà bạn có thể mời những người khác cùng xem và thao tác với chúng. 
+## Project Description
+A web application that helps you create and manipulate events that are displayed on the calendar in a variety of colors that you can invite others to view and manipulate.
 
-Ứng với mỗi sự kiện trên lịch sẽ có danh sách các công việc của sự kiện đó. Bạn có thể thay đổi trạng thay công việc để đánh dấu là đã thực hiện hoặc ngược lại.
+For each event on the calendar, there will be a list of tasks for that event. You can change the status of tasks to mark it done or vice versa.
 
-Ứng dụng giúp bạn quản lý các sự kiện của bản thân tốt hơn cũng như dễ dàng tìm lại chúng
+The app helps you better manage your events and easily find them again
 
 <img width="800" alt="project2" src="https://user-images.githubusercontent.com/73534639/164042786-9288062d-b313-45b0-9d4f-39a75cec598d.png">
 
-## Ngôn ngữ sử dụng
+## Language
 Typescript
 
 ## Các Thư viện sử dụng trong dự án
