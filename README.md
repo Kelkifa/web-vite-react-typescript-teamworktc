@@ -13,7 +13,7 @@ The app helps you better manage your events and easily find them again
 ## Language
 Typescript
 
-## Libraries are used in this project
+## Libraries
 - <a href="https://reactjs.org/" target="_blank">React</a>
 - <a href="https://redux-toolkit.js.org/" target="_blank">Redux</a>
 - <a href="https://redux-saga.js.org/" target="_blank">Redux Saga</a>
