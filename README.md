@@ -27,7 +27,7 @@ Typescript
 - ...
 
 ## Server
-<a href="https://github.com/Kelkifa/web-server-teamworktc"> Link github to Server</a>
+<a href="https://github.com/Kelkifa/web-server-teamworktc"> Github link to Server</a>
 
 ## Install and Run this Project
 Clone this project to your local and:
