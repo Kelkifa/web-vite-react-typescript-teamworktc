@@ -141,7 +141,7 @@ export default function NoteCalendarRow({
 								"relative px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-125 min-h-[1.3125rem]",
 								note._id === selectedNote
 									? "brightness-125"
-									: "truncate h-[1.3125rem]",
+									: "truncate h-[1.3125rem] opacity-90",
 								note.from >= dateList[0] &&
 									note.from <= dateList[dateListLength] &&
 									"rounded-l-[6px]",

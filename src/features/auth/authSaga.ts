@@ -30,7 +30,7 @@ function* handleFirstAccess() {
 			yield put(authActions.firstAccessFailed(data.message));
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		yield put(authActions.firstAccessFailed("Server gặp sự cố"));
 	}
 }
@@ -55,8 +55,14 @@ function* handleLogin(
 		} else {
 			yield put(authActions.loginFailed(data.message));
 		}
-	} catch (error) {
-		yield put(authActions.loginFailed("Server gặp sự cố"));
+	} catch (error: any) {
+		yield put(
+			authActions.loginFailed(
+				error.response?.status === 429
+					? "Hãy thử lại trong vòng vài phút"
+					: "Server gặp sự cố"
+			)
+		);
 	}
 }
 
