@@ -41,7 +41,7 @@ export default function GroupPage() {
 			{/* <Searchbar onSearchClick={() => {}} placeholder="Tìm nhóm" /> */}
 			<div className="flex justify-center mt-3">
 				<input
-					className="bg-tim w-full md:w-[80%] lg:w-[40rem] rounded-md px-3"
+					className="bg-tim w-full md:w-[80%] lg:w-[40rem] rounded-md px-3 py-1"
 					type="search"
 					name="search"
 					value={searchInput}

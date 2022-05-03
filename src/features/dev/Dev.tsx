@@ -1,7 +1,18 @@
-import * as React from "react";
+import "./dev.scss";
 
-export interface IAppProps {}
+import {useEffect, useRef} from "react";
 
-export default function App(props: IAppProps) {
-	return <div className="container bg-red-500 text-gray-500 p-1">dev</div>;
+import BlockPuzzule from "../game/blockPuzzle";
+import BlockPuzzuleV2 from "../game/blockPuzzle/blockPuzzleV2";
+import Foo from "./Foo";
+import clsx from "clsx";
+
+const testArr = [1, 2, 3, 4, 5];
+export default function Dev() {
+	return (
+		<div className="bg-bgColor flex justify-center">
+			{/* <BlockPuzzuleV2 /> */}
+			<Foo />
+		</div>
+	);
 }

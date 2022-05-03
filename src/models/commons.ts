@@ -3,6 +3,7 @@ export interface DataResponse<T> {
 	message: string;
 	response: T;
 	token?: string;
+	refreshToken?: string;
 }
 
 export interface DataResponseToken<T> {

@@ -5,8 +5,13 @@ import {
 	InvitesResponse,
 } from "../../models";
 import {LOCALSTORAGE_GROUP_NAME, groupActions} from "../group/groupSlice";
-import {LOCALSTORAGE_TOKEN_NAME, authActions} from "./authSlice";
+import {
+	LOCALSTORAGE_REFRESH_TOKEN_NAME,
+	LOCALSTORAGE_TOKEN_NAME,
+	authActions,
+} from "./authSlice";
 import {call, fork, put, takeEvery, throttle} from "redux-saga/effects";
+import {clearAllStateSaga, handleErrorSaga} from "../../app/rootSaga";
 
 import {PayloadAction} from "@reduxjs/toolkit";
 import {SERVER_ERR_STR} from "../../app/variablies";
@@ -26,12 +31,16 @@ function* handleFirstAccess() {
 		if (data.success === true) {
 			yield put(authActions.firstAccessSuccess(data.response));
 			yield put(authActions.getInvites());
-		} else {
-			yield put(authActions.firstAccessFailed(data.message));
 		}
+		// else {
+		// 	yield put(authActions.firstAccessFailed(data.message));
+		// }
 	} catch (error) {
-		console.error(error);
-		yield put(authActions.firstAccessFailed("Server gặp sự cố"));
+		yield call(
+			handleErrorSaga,
+			error,
+			authActions.firstAccessFailed({message: SERVER_ERR_STR})
+		);
 	}
 }
 
@@ -48,20 +57,24 @@ function* handleLogin(
 
 		if (data.success) {
 			data.token && localStorage.setItem(LOCALSTORAGE_TOKEN_NAME, data.token);
+			data.refreshToken &&
+				localStorage.setItem(
+					LOCALSTORAGE_REFRESH_TOKEN_NAME,
+					data.refreshToken
+				);
 			// window.location.href = "/";
 			yield put(authActions.loginSuccess(data.response));
 			yield put(authActions.getInvites());
 			yield put(groupActions.getGroup());
-		} else {
-			yield put(authActions.loginFailed(data.message));
 		}
+		//  else {
+		// 	yield put(authActions.loginFailed(data.message));
+		// }
 	} catch (error: any) {
-		yield put(
-			authActions.loginFailed(
-				error.response?.status === 429
-					? "Hãy thử lại trong vòng vài phút"
-					: "Server gặp sự cố"
-			)
+		yield call(
+			handleErrorSaga,
+			error,
+			authActions.firstAccessFailed({message: SERVER_ERR_STR})
 		);
 	}
 }
@@ -78,12 +91,18 @@ function* getInvites() {
 		);
 		if (data.success === true) {
 			yield put(authActions.getInvitesSuccess(data.response));
-		} else {
-			yield put(authActions.getInvitesFailed({message: data.message}));
 		}
+		// else {
+		// 	yield put(authActions.getInvitesFailed({message: data.message}));
+		// }
 	} catch (err) {
-		console.log(err);
-		yield put(authActions.getInvitesFailed({message: "Bạn chưa đăng nhập"}));
+		// console.log(err);
+		// yield put(authActions.getInvitesFailed({message: "Bạn chưa đăng nhập"}));
+		yield call(
+			handleErrorSaga,
+			err,
+			authActions.firstAccessFailed({message: SERVER_ERR_STR})
+		);
 	}
 }
 function* acceptInvite(action: PayloadAction<{inviteId: string}>) {
@@ -143,10 +162,12 @@ function* disagreeAllInvite() {
 
 function* handleLogout() {
 	localStorage.removeItem(LOCALSTORAGE_TOKEN_NAME);
+	localStorage.removeItem(LOCALSTORAGE_REFRESH_TOKEN_NAME);
 	localStorage.removeItem(LOCALSTORAGE_GROUP_NAME);
-	yield put(todoActions.clearState());
-	yield put(noteActions.clearState());
-	yield put(groupActions.getGroup());
+	// yield put(todoActions.clearState());
+	// yield put(noteActions.clearState());
+	// yield put(groupActions.getGroup());
+	yield call(clearAllStateSaga);
 }
 
 function* handleRegister(action: PayloadAction<Auth>) {

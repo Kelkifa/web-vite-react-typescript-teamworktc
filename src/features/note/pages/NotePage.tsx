@@ -3,7 +3,11 @@ import NoteCalendar, {
 	MonthAndYear,
 	SelDates,
 } from "../components/NoteCalendar";
-import {getGroupLoading, getSelectedGroupId} from "../../group/groupSlice";
+import {
+	getGroupError,
+	getGroupLoading,
+	getSelectedGroupId,
+} from "../../group/groupSlice";
 import {
 	getNoteData,
 	getNoteLoading,
@@ -27,6 +31,7 @@ export default function NotePage() {
 	const noteData = useAppSelector(getNoteData);
 	const noteLoading = useAppSelector(getNoteLoading);
 	const groupLoading = useAppSelector(getGroupLoading);
+	const groupError = useAppSelector(getGroupError);
 	const groupId = useAppSelector(getSelectedGroupId);
 
 	const [selDates, setSelDates] = useState<SelDates>({});
@@ -79,7 +84,7 @@ export default function NotePage() {
 			<div className="col-span-2 md:col-span-1">
 				<NoteCalendar
 					noteList={noteList}
-					loading={noteLoading || groupLoading}
+					loading={(noteLoading || groupLoading) && !Boolean(groupError)}
 					selDates={selDates}
 					setSelDates={setSelDates}
 					selectedNote={selectedNoteId}
@@ -92,7 +97,7 @@ export default function NotePage() {
 			{/* Note Manage */}
 			<div className="col-span-2 md:col-span-1">
 				<NoteCreateForm
-					loading={groupLoading}
+					loading={groupLoading || Boolean(groupError)}
 					selDates={selDates}
 					setSelDates={setSelDates}
 				/>

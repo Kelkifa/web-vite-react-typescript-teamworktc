@@ -25,9 +25,7 @@ export default function BaseButton({
 			type={type}
 			className={clsx(
 				className,
-				disabled || loading
-					? "opacity-70 brightness-75 cursor-default"
-					: "hover:brightness-125"
+				(disabled || loading) && "opacity-70 brightness-75 cursor-default"
 			)}
 			disabled={disabled}
 			onClick={onClick}

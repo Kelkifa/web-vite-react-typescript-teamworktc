@@ -13,6 +13,7 @@ import history from "../../app/history";
 import {toast} from "react-toastify";
 
 export const LOCALSTORAGE_TOKEN_NAME = "token";
+export const LOCALSTORAGE_REFRESH_TOKEN_NAME = "refresh_token";
 
 export interface AuthState {
 	loading: boolean;
@@ -55,7 +56,7 @@ const authSlice = createSlice({
 			state.isAuth = true;
 			return state;
 		},
-		firstAccessFailed(state, action: PayloadAction<string>) {
+		firstAccessFailed(state, action: PayloadAction<{message: string}>) {
 			state.loading = false;
 			state.user = undefined;
 			state.isAuth = false;
@@ -82,12 +83,12 @@ const authSlice = createSlice({
 			toast.success("Đăng nhập thành công");
 			return state;
 		},
-		loginFailed(state, action: PayloadAction<string>) {
+		loginFailed(state, action: PayloadAction<{message: string}>) {
 			state.loading = false;
 			state.isAuth = false;
 			state.status.login = {
 				error: true,
-				message: action.payload,
+				message: action.payload.message,
 				loading: false,
 			};
 			state.user = undefined;

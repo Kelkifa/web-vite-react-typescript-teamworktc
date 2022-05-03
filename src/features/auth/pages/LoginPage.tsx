@@ -33,15 +33,6 @@ export default function LoginPage() {
 		password: "",
 	};
 
-	// useEffect(() => {
-	// 	if (loginStatus?.error === false) {
-	// 		navigate(navigateURL);
-	// 	}
-	// 	return () => {
-	// 		dispatch(authActions.clearLoginStatus());
-	// 	};
-	// }, [loginStatus]);
-
 	const handleSubmit = (values: {username: string; password: string}) => {
 		dispatch(authActions.login({...values}));
 	};
@@ -72,7 +63,7 @@ export default function LoginPage() {
 								<div className="text-baseRed">{loginStatus.message}</div>
 							)}
 							<BaseButton
-								className="bg-fuchsia-800/60 h-[36px] rounded-2xl mt-2"
+								className="border-[0.2rem] border-fuchsia-800/60 hover:bg-fuchsia-800/60 transition-all duration-500 h-[36px] rounded-2xl mt-2"
 								type="submit"
 								loading={loginStatus?.loading}
 							>

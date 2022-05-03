@@ -103,17 +103,17 @@ function TodoAdd({noteId}: {noteId: string | undefined}) {
 				{formikProps => {
 					const {handleSubmit} = formikProps;
 					return (
-						<form onSubmit={handleSubmit} className="flex">
+						<form onSubmit={handleSubmit} className="flex h-[2rem]">
 							<FastField
 								name="name"
 								placeHolder="Nhập Tên Công Việc"
-								className="flex-grow"
+								className="flex-grow h-full"
 								component={BaseInputField}
 							/>
 
 							<BaseButton
 								type="submit"
-								className="bg-rose-700/80 rounded-r-xl px-2 w-16"
+								className="border-4 border-rose-700/60 hover:bg-rose-700/60 hover:border-0 rounded-r-xl px-2 w-20 duration-500"
 								loading={loading}
 							>
 								Thêm

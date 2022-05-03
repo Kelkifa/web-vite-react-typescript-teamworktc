@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 
+import ReactTooltip from "react-tooltip";
 import {SelDates} from "../NoteCalendar";
 import clsx from "clsx";
 
@@ -76,8 +77,14 @@ export default function NoteInputField({
 							"text-[0.7rem] bg-[#ff36003f] px-[0.3rem] rounded cursor-pointer",
 							lighterChooseBtn && "text-yellow-200"
 						)}
+						data-tip="Nhấn vào đây và chọn một ngày trên lịch"
 						onClick={handleChooseClick}
 					>
+						<ReactTooltip
+							type="light"
+							place="bottom"
+							backgroundColor="rgba(241, 238, 179, 0.836)"
+						/>
 						Chọn
 					</div>
 				</div>

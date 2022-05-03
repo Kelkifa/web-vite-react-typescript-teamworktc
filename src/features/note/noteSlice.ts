@@ -46,9 +46,11 @@ const noteSlice = createSlice({
 			state.error = undefined;
 			state.data = action.payload;
 		},
-		getNoteFailed(state, action: PayloadAction<string>) {
+		getNoteFailed(state, action: PayloadAction<{message: string}>) {
 			state.loading = false;
-			state.error = action.payload;
+			state.error = action.payload.message;
+
+			toast.error(`Gặp lỗi khi tải sự kiện (${action.payload.message})`);
 		},
 
 		// CREATE

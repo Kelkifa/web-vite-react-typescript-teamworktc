@@ -39,7 +39,7 @@ export default function BaseInputField({
 			)}
 
 			<input
-				className="block bg-tim/60 text-slate-300 text-sm w-full rounded py-1"
+				className="block bg-tim/60 text-slate-300 text-sm w-full rounded py-1 h-full"
 				type={type}
 				name={field.name}
 				value={field.value}

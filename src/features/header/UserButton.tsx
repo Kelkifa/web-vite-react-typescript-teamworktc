@@ -37,6 +37,7 @@ export default function UserButton({
 
 	const handleLogout = () => {
 		dispatch(authActions.logout());
+		navigate("/");
 	};
 
 	if (!isAuth && !loading) return null;

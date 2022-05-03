@@ -9,7 +9,8 @@ import {Todo} from "../../../../models/Todo";
 import clsx from "clsx";
 import socket from "../../../../app/socketIO";
 import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+
+// import {useNavigate} from "react-router-dom";
 
 const styles = {
 	checkBtn: "w-8 h-8",

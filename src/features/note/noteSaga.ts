@@ -6,14 +6,16 @@ import {call, fork, put, takeLatest, throttle} from "redux-saga/effects";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {SERVER_ERR_STR} from "../../app/variablies";
 import {getSelectedGroupId} from "../../app/store";
+import {handleErrorSaga} from "../../app/rootSaga";
 import noteApi from "../../api/noteApi";
 
 // import todoApi from "../../api/todoApi";
 
-function* handleGetNote(action: PayloadAction<GetNotePayload>) {
+function* getNote(action: PayloadAction<GetNotePayload>) {
 	const {year, month} = action.payload;
 	const groupId = getSelectedGroupId();
 	if (!groupId) return;
+	// console.log(1);
 	try {
 		const data: DataResponse<Note[]> = yield call(
 			noteApi.get,
@@ -24,11 +26,15 @@ function* handleGetNote(action: PayloadAction<GetNotePayload>) {
 
 		if (data.success) {
 			yield put(noteActions.getNoteSuccess(data.response));
-		} else {
-			yield put(noteActions.getNoteFailed(data.message));
 		}
 	} catch (error) {
-		yield put(noteActions.getNoteFailed("Server gặp sự cố"));
+		yield call(
+			handleErrorSaga,
+			error,
+			noteActions.getNoteFailed({message: SERVER_ERR_STR})
+		);
+
+		// yield put(noteActions.getNoteFailed({id: "324", message: "sf"}));
 	}
 }
 
@@ -99,7 +105,7 @@ function* handleDeleteNote(action: PayloadAction<string[]>) {
 }
 
 function* noteWatcher() {
-	yield throttle(2000, noteActions.getNote.toString(), handleGetNote);
+	yield throttle(2000, noteActions.getNote.toString(), getNote);
 	yield throttle(2000, noteActions.createNote.toString(), handleCreateNote);
 	yield throttle(2000, noteActions.update.toString(), handleUpdate);
 

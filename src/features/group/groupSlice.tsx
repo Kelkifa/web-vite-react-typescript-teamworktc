@@ -39,8 +39,7 @@ const groupSlice = createSlice({
 	reducers: {
 		// GET
 		getGroup(state) {
-			state = initialState;
-			return state;
+			return initialState;
 		},
 		getGroupSuccess(state, action: PayloadAction<Group[]>) {
 			state.loading = false;
@@ -51,6 +50,7 @@ const groupSlice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 			state.data = [];
+			toast.error(action.payload);
 		},
 
 		// GET MEMBERS
@@ -320,6 +320,9 @@ const groupSlice = createSlice({
 		clearMember(state) {
 			state.member = {loading: true, data: []};
 			return state;
+		},
+		clearState(state) {
+			return initialState;
 		},
 	},
 });

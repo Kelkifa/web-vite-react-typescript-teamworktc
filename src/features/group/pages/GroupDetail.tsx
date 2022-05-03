@@ -5,17 +5,19 @@ import {
 	groupActions,
 } from "../groupSlice";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {useNavigate, useParams} from "react-router-dom";
 
 import AddMemberForm from "../components/AddMemberForm";
+import {FiChevronLeft} from "react-icons/fi";
 import LoadIcon from "../../../components/LoadIcon";
 import {TiDelete} from "react-icons/ti";
 import {callConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import clsx from "clsx";
 import {getAuthUserId} from "../../auth/authSlice";
 import {useEffect} from "react";
-import {useParams} from "react-router-dom";
 
 export default function GroupDetail() {
+	const navigate = useNavigate();
 	const {id} = useParams();
 
 	const dispatch = useAppDispatch();
@@ -69,21 +71,31 @@ export default function GroupDetail() {
 
 	return (
 		<div className="container bg-bgColor px-3 pb-10 text-baseText">
-			{userId === group.adminId ? (
-				<div
-					className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
-					onClick={handleDeleteGroup}
-				>
-					Xóa Nhóm
+			<div className="flex justify-between items-center">
+				<div>
+					<FiChevronLeft
+						className="cursor-pointer text-lg"
+						onClick={() => {
+							navigate("/group");
+						}}
+					/>
 				</div>
-			) : (
-				<div
-					className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
-					onClick={handleOutGroup}
-				>
-					Rời nhóm
-				</div>
-			)}
+				{userId === group.adminId ? (
+					<div
+						className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
+						onClick={handleDeleteGroup}
+					>
+						Xóa Nhóm
+					</div>
+				) : (
+					<div
+						className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
+						onClick={handleOutGroup}
+					>
+						Rời nhóm
+					</div>
+				)}
+			</div>
 			<h1 className="text-bold text-xl text-center py-3 font-bold text-baseRed">
 				{group.name}
 			</h1>

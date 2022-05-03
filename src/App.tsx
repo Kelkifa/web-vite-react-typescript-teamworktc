@@ -5,8 +5,8 @@ import "./styles/index.scss";
 import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 
 import Auth from "./features/auth";
+import Dev from "./features/dev/Dev";
 import Doc from "./features/doc";
-import Game from "./features/game";
 import Group from "./features/group";
 import {unstable_HistoryRouter as HistoryRouter} from "react-router-dom";
 import HomePage from "./features/home/pages/HomePage";
@@ -67,7 +67,7 @@ function App() {
 					/>
 					<Route path="home" element={<HomePage />} />
 					<Route path="auth/*" element={<Auth />} />
-					<Route path="game" element={<Game />} />
+					<Route path="dev" element={<Dev />} />
 					<Route path="" element={<HomePage />} />
 				</Route>
 				<Route path="*" element={<div>Not found</div>} />
