@@ -11,7 +11,7 @@ The app helps you better manage your events and easily find them again
 <img width="800" alt="project2" src="https://user-images.githubusercontent.com/73534639/164042786-9288062d-b313-45b0-9d4f-39a75cec598d.png">
 
 ## Language
-Typescript
+Typescript, html, scss
 
 ## Libraries
 - <a href="https://reactjs.org/" target="_blank">React</a>
@@ -35,6 +35,15 @@ Clone this project to your local and:
 ```npm install```
 - run project
 ```npm run dev```
+
+## Contact
+
+Email: plhuan455@gmail.com
+
+Facebook: <a href="https://www.facebook.com/kelkfia/">
+  <img width="20px" alt="fb" src="https://user-images.githubusercontent.com/73534639/164469882-63d62e38-d3e0-49df-9673-d5319f479f49.svg">
+</a> 
+
 
 
 
