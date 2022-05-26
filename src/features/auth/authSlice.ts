@@ -23,6 +23,7 @@ export interface AuthState {
 		acceptInvite?: ErrorStatus;
 		disagreeInvite?: ErrorStatus;
 	};
+	isFirstAccess: boolean;
 	isAuth: boolean;
 	user?: User;
 	invite: {
@@ -36,6 +37,7 @@ export interface AuthState {
 const initialState: AuthState = {
 	loading: Boolean(localStorage.getItem(LOCALSTORAGE_TOKEN_NAME)),
 	isAuth: Boolean(localStorage.getItem(LOCALSTORAGE_TOKEN_NAME)),
+	isFirstAccess: true,
 	navigateURL: "/",
 	invite: {loading: true, data: []},
 	status: {},
@@ -101,6 +103,8 @@ const authSlice = createSlice({
 			// state.isAuth = true;
 			state.status.register = {error: false, loading: false};
 			state.user = action.payload;
+
+			toast.success("Đăng ký thành công");
 		},
 		registerFailed(state, action: PayloadAction<string>) {
 			state.loading = false;
@@ -111,6 +115,10 @@ const authSlice = createSlice({
 				loading: false,
 			};
 			state.user = undefined;
+
+			toast.error(`Đăng ký thất bại ${action.payload}`);
+
+			return state;
 		},
 		// GET INVITES (using in authSaga login and firstAccess)
 		getInvites(state) {
@@ -229,6 +237,10 @@ const authSlice = createSlice({
 
 			state.invite.data.push(invite);
 
+			return state;
+		},
+		setFirstAccess(state, action: PayloadAction<{isFirstAccess: boolean}>) {
+			state.isFirstAccess = action.payload.isFirstAccess;
 			return state;
 		},
 		// LOGOUT

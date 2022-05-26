@@ -33,6 +33,15 @@ const authApi = {
 		const url = "/auth/firstAccess";
 		return axiosClient.get(url);
 	},
+
+	checkExistUsernameOrEmail(
+		email?: string,
+		username?: string
+	): Promise<DataResponse<{username: boolean; email: boolean}>> {
+		const url = "/auth/check-email-and-username";
+
+		return axiosClient.post(url, {username, email});
+	},
 };
 
 export default authApi;

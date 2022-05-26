@@ -1,4 +1,21 @@
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {useEffect, useRef} from "react";
+
+import {authActions} from "../../auth/authSlice";
+import {useNavigate} from "react-router";
+
 function HomePage() {
+	// const navigation = useNavigate();
+
+	// const dispatch = useAppDispatch();
+	// const isFirstAccess = useAppSelector(state => state.auth.isFirstAccess);
+
+	// useEffect(() => {
+	// 	if (isFirstAccess) {
+	// 		dispatch(authActions.setFirstAccess({isFirstAccess: false}));
+	// 		navigation("/note");
+	// 	}
+	// }, []);
 	return (
 		<div className="container bg-bgColor p-5">
 			<h1 className="text-center font-bold text-2xl mb-3">Tổng Quan</h1>

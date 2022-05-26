@@ -11,7 +11,6 @@ import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import AuthInputField from "../components/AuthInputField";
 import BaseButton from "../../../components/form/BaseButton";
-import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 export const styles = {
@@ -20,10 +19,7 @@ export const styles = {
 	form: "flex flex-col gap-y-6 px-4",
 };
 export default function LoginPage() {
-	const navigate = useNavigate();
-
 	const loginStatus = useAppSelector(getAuthLoginStatus);
-	const navigateURL = useAppSelector(getAuthNavigateURL);
 
 	const user = useAppSelector(getAuthUser);
 
@@ -56,7 +52,7 @@ export default function LoginPage() {
 								name="password"
 								label="Mật Khẩu"
 								placeHolder="Nhập mật khẩu"
-								isPassword
+								type="password"
 								component={AuthInputField}
 							/>
 							{loginStatus?.error === true && (

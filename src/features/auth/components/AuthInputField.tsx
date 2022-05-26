@@ -3,8 +3,10 @@ import {FieldInputProps, FormikProps} from "formik";
 interface AuthInputFieldProp {
 	form: any;
 	field: any;
+	onBlur?: (fieldName: string, value: string) => void;
+	isAutoComplete?: boolean;
 
-	isPassword?: boolean;
+	type: string;
 	label?: string;
 	placeHolder?: string;
 }
@@ -12,8 +14,10 @@ interface AuthInputFieldProp {
 export default function AuthInputField({
 	form,
 	field,
+	onBlur,
+	isAutoComplete = true,
 	label,
-	isPassword,
+	type = "text",
 	placeHolder,
 }: AuthInputFieldProp) {
 	return (
@@ -22,10 +26,14 @@ export default function AuthInputField({
 			<input
 				className="px-2 text-white outline-none w-full rounded-2xl h-9 bg-bgColor/50"
 				name={field.name}
-				type={isPassword ? "password" : "text"}
+				type={type}
 				value={field.value}
 				onChange={field.onChange}
-				onBlur={field.onBlur}
+				autoComplete={isAutoComplete ? "on" : "off"}
+				onBlur={e => {
+					field.onBlur(e);
+					onBlur && onBlur(field.name, field.value);
+				}}
 				placeholder={placeHolder}
 			/>
 			{form.errors[field.name] && form.touched[field.name] && (

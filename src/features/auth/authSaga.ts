@@ -17,9 +17,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {SERVER_ERR_STR} from "../../app/variablies";
 import {User} from "../../models/user";
 import authApi from "../../api/authApi";
-import {noteActions} from "../note/noteSlice";
 import {store} from "../../app/store";
-import {todoActions} from "../todo/todoSlice";
 
 function* handleFirstAccess() {
 	try {
@@ -32,9 +30,6 @@ function* handleFirstAccess() {
 			yield put(authActions.firstAccessSuccess(data.response));
 			yield put(authActions.getInvites());
 		}
-		// else {
-		// 	yield put(authActions.firstAccessFailed(data.message));
-		// }
 	} catch (error) {
 		yield call(
 			handleErrorSaga,

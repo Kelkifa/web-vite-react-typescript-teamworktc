@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 
+import BaseButton from "./BaseButton";
+
 interface SearchbarProp {
 	onSearchClick: (data: string) => void;
 	placeholder?: string;
@@ -23,9 +25,12 @@ export default function Searchbar({
 					setSearch(e.target.value);
 				}}
 			/>
-			<button className="bg-tim px-4 rounded-r-xl" onClick={handleSearchClick}>
+			<BaseButton
+				className="border-2 border-tim bg-tim/20 hover:bg-tim hover:border-1 px-4 rounded-r-xl duration-500"
+				onClick={handleSearchClick}
+			>
 				Tìm
-			</button>
+			</BaseButton>
 		</div>
 	);
 }

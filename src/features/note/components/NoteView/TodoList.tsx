@@ -1,9 +1,9 @@
 import "react-toastify/dist/ReactToastify.css";
 
+import {AiOutlineCheckCircle, AiTwotoneCheckCircle} from "react-icons/ai";
 import {getTodoData, getTodoError, todoActions} from "../../../todo/todoSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
-import {AiOutlineCheckCircle} from "react-icons/ai";
 import {TiDelete} from "react-icons/ti";
 import {Todo} from "../../../../models/Todo";
 import clsx from "clsx";
@@ -13,7 +13,7 @@ import {useEffect} from "react";
 // import {useNavigate} from "react-router-dom";
 
 const styles = {
-	checkBtn: "w-8 h-8",
+	checkBtn: "cursor-pointer text-[2.2rem]",
 };
 
 interface TodoListProp {
@@ -94,43 +94,41 @@ export default function TodoList({noteId}: TodoListProp) {
 				todoList.map((todo, index) => (
 					<li
 						className={clsx(
-							"py-2 flex justify-between items-center",
+							"flex gap-x-4 py-2",
 							todo.loading ? "opacity-50" : "hover:bg-bgColor/30"
 						)}
 						key={todo._id ? todo._id : index}
 					>
-						<div className="flex items-center gap-2">
+						<div>
 							{todo.state === true ? (
+								// <div className="w-[2rem] h-[2rem]">
 								<AiOutlineCheckCircle
-									className={clsx(
-										styles.checkBtn,
-										"text-green-500 flex justify-start cursor-pointer"
-									)}
+									className={clsx(styles.checkBtn, "text-green-500")}
 									onClick={() => {
 										handleStateBtnClick(todo._id, todo.state, todo.loading);
 									}}
 								/>
 							) : (
-								<div className={clsx(styles.checkBtn, "p-[0.125rem]")}>
-									<button
-										className="w-full h-full bg-bgColor/40 border-[1px] border-baseOrange/50 rounded-full"
-										onClick={() => {
-											handleStateBtnClick(todo._id, todo.state, todo.loading);
-										}}
-									></button>
-								</div>
+								<AiTwotoneCheckCircle
+									className={clsx(styles.checkBtn, "text-black/80")}
+									onClick={() => {
+										handleStateBtnClick(todo._id, todo.state, todo.loading);
+									}}
+								/>
 							)}
-							<div>{todo.name}</div>
 						</div>
-						<TiDelete
-							className={clsx(
-								"text-white/50",
-								!todo.loading && "cursor-pointer"
-							)}
-							onClick={() => {
-								handleDelete(todo._id);
-							}}
-						/>
+						<div className="flex-grow flex items-center">{todo.name}</div>
+						<div className="flex items-center">
+							<TiDelete
+								className={clsx(
+									"text-white/50 w-4",
+									!todo.loading && "cursor-pointer"
+								)}
+								onClick={() => {
+									handleDelete(todo._id);
+								}}
+							/>
+						</div>
 					</li>
 				))}
 		</ul>

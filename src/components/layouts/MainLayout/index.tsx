@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import ConfirmAlert from "../../notifices/ConfirmAlert";
 import Footer from "../../footer";
 import {MainHeader} from "../../../features/header";
@@ -39,7 +37,7 @@ export default function MainLayout() {
 			<div className="min-h-screen">
 				<MainHeader
 					navList={[
-						{path: "home", text: "Trang Chủ"},
+						{path: "/", text: "Trang Chủ"},
 						{path: "/group", text: "Nhóm"},
 						{path: "/note", text: "Sự kiện của bạn"},
 					]}

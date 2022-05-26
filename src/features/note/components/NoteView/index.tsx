@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 import {FastField, Formik} from "formik";
 import {getTodoStatusCreateLoading, todoActions} from "../../../todo/todoSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
@@ -82,6 +84,11 @@ function Controlbar({
 	);
 }
 
+const schema = yup.object().shape({
+	name: yup.string().required("Vui lòng nhập tên công việc"),
+	state: yup.boolean(),
+});
+
 function TodoAdd({noteId}: {noteId: string | undefined}) {
 	const dispatch = useAppDispatch();
 
@@ -93,13 +100,17 @@ function TodoAdd({noteId}: {noteId: string | undefined}) {
 	};
 
 	const handleSubmit = (values: Todo, {resetForm}: {resetForm: () => void}) => {
-		if (noteId === undefined) return;
+		if (noteId === undefined || values.name === "") return;
 		dispatch(todoActions.create({noteId, todoName: values.name}));
 		resetForm();
 	};
 	return (
 		<div>
-			<Formik initialValues={initialValues} onSubmit={handleSubmit}>
+			<Formik
+				initialValues={initialValues}
+				onSubmit={handleSubmit}
+				validationSchema={schema}
+			>
 				{formikProps => {
 					const {handleSubmit} = formikProps;
 					return (
