@@ -1,21 +1,22 @@
 import * as React from "react";
 
-import {FastField, Formik} from "formik";
-import {
-	authActions,
-	getAuthLoginStatus,
-	getAuthNavigateURL,
-	getAuthUser,
-} from "../authSlice";
+import {FastField, Field, Formik} from "formik";
+import {authActions, getAuthLoginStatus, getAuthUser} from "../authSlice";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import AuthInputField from "../components/AuthInputField";
 import BaseButton from "../../../components/form/BaseButton";
-import {useNavigate} from "react-router-dom";
+import {startSectionBackgroundStyle} from "../../../components/StartSection";
+
+// import {useNavigate} from "react-router-dom";
 
 export const styles = {
-	container: "mx-auto w-full md:w-[600px] bg-bgColor py-12",
-	title: "text-2xl font-bold text-center pb-8",
+	container:
+		"mx-auto w-full md:w-[600px] bg-mygreendark2 py-12 text-black rounded-sm",
+	title: "text-[2rem] font-bold text-center pb-8 font-icon",
+	input: "w-full rounded-lg bg-black text-white p-[0.5rem]",
+	button:
+		"bg-black text-white hover:text-mygreendark2 font-bold hover:border-none transition-all duration-500 h-[36px] rounded-2xl mt-2",
 	form: "flex flex-col gap-y-6 px-4",
 };
 export default function LoginPage() {
@@ -34,41 +35,45 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className={styles.container}>
-			<h1 className={styles.title}>Đăng Nhập</h1>
-			<Formik initialValues={initialValues} onSubmit={handleSubmit}>
-				{formikProps => {
-					const {handleSubmit} = formikProps;
+		<div className={startSectionBackgroundStyle}>
+			<div className={styles.container}>
+				<h1 className={styles.title}>Đăng Nhập</h1>
+				<Formik initialValues={initialValues} onSubmit={handleSubmit}>
+					{formikProps => {
+						const {handleSubmit} = formikProps;
 
-					return (
-						<form onSubmit={handleSubmit} className={styles.form}>
-							<FastField
-								name="username"
-								label="Tài khoản"
-								placeHolder="Nhập tài khoản"
-								component={AuthInputField}
-							/>
-							<FastField
-								name="password"
-								label="Mật Khẩu"
-								placeHolder="Nhập mật khẩu"
-								type="password"
-								component={AuthInputField}
-							/>
-							{loginStatus?.error === true && (
-								<div className="text-baseRed">{loginStatus.message}</div>
-							)}
-							<BaseButton
-								className="border-[0.2rem] border-fuchsia-800/60 hover:bg-fuchsia-800/60 transition-all duration-500 h-[36px] rounded-2xl mt-2"
-								type="submit"
-								loading={loginStatus?.loading}
-							>
-								Đăng Nhập
-							</BaseButton>
-						</form>
-					);
-				}}
-			</Formik>
+						return (
+							<form onSubmit={handleSubmit} className={styles.form}>
+								<FastField
+									inputClass={styles.input}
+									name="username"
+									label="Tài khoản"
+									placeHolder="Nhập tài khoản"
+									component={AuthInputField}
+								/>
+								<FastField
+									name="password"
+									inputClass={styles.input}
+									label="Mật Khẩu"
+									placeHolder="Nhập mật khẩu"
+									type="password"
+									component={AuthInputField}
+								/>
+								{loginStatus?.error === true && (
+									<div className="text-baseRed">{loginStatus.message}</div>
+								)}
+								<BaseButton
+									className={styles.button}
+									type="submit"
+									loading={loginStatus?.loading}
+								>
+									Đăng Nhập
+								</BaseButton>
+							</form>
+						);
+					}}
+				</Formik>
+			</div>
 		</div>
 	);
 }

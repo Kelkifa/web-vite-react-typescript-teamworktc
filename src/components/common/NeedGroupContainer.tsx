@@ -1,3 +1,4 @@
+import {startSectionBackgroundStyle} from "../StartSection";
 import {useAppSelector} from "../../app/hooks";
 
 export default function NeedGroupContainer({
@@ -12,6 +13,11 @@ export default function NeedGroupContainer({
 
 	// RENDER
 	if (error) return <div>{error}</div>;
-	if (loading) return <div>Loading ...</div>;
+	if (loading)
+		return (
+			<div className={startSectionBackgroundStyle}>
+				<div className="container mx-auto">Loading ...</div>
+			</div>
+		);
 	return children;
 }

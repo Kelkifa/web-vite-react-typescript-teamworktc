@@ -14,6 +14,7 @@ import {TiDelete} from "react-icons/ti";
 import {callConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import clsx from "clsx";
 import {getAuthUserId} from "../../auth/authSlice";
+import {startSectionBackgroundStyle} from "../../../components/StartSection";
 import {useEffect} from "react";
 
 export default function GroupDetail() {
@@ -43,7 +44,7 @@ export default function GroupDetail() {
 
 	const handleDeleteMember = (memberId?: string) => {
 		if (memberId && group?._id !== undefined) {
-			callConfirmAlert("Bạn chắc muốn xóa người thành viên này không ?", () => {
+			callConfirmAlert("Bạn chắc muốn xóa thành viên này không ?", () => {
 				if (!group._id) return;
 				dispatch(groupActions.deleteMember({groupId: group._id, memberId}));
 			});
@@ -70,78 +71,85 @@ export default function GroupDetail() {
 	if (group.loading) return <div>Loading ...</div>;
 
 	return (
-		<div className="container bg-bgColor px-3 pb-10 text-baseText">
-			<div className="flex justify-between items-center">
-				<div>
-					<FiChevronLeft
-						className="cursor-pointer text-lg"
-						onClick={() => {
-							navigate("/group");
-						}}
-					/>
-				</div>
-				{userId === group.adminId ? (
-					<div
-						className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
-						onClick={handleDeleteGroup}
-					>
-						Xóa Nhóm
+		<div className={startSectionBackgroundStyle}>
+			<div className="container mx-auto bg-mygreendark2 px-3 pb-10 text-black">
+				<div className="flex justify-between items-center">
+					<div>
+						<FiChevronLeft
+							className="cursor-pointer text-lg"
+							onClick={() => {
+								navigate("/group");
+							}}
+						/>
 					</div>
-				) : (
-					<div
-						className="text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
-						onClick={handleOutGroup}
-					>
-						Rời nhóm
+					{userId === group.adminId ? (
+						<div
+							className="text-black text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
+							onClick={handleDeleteGroup}
+						>
+							Xóa Nhóm
+						</div>
+					) : (
+						<div
+							className="text-black text-right text-sm hover:underline cursor-pointer py-1 whitespace-nowrap"
+							onClick={handleOutGroup}
+						>
+							Rời nhóm
+						</div>
+					)}
+				</div>
+				<h1 className="text-bold text-xl text-center py-3 font-bold text-black">
+					{group.name}
+				</h1>
+				<div>
+					<h2 className="font-bold">Thành viên</h2>
+					<ul className="list-disc pl-4 max-h-[300px] custom-scroll">
+						{memberLoading && "loading..."}
+						{!memberLoading &&
+							!memberError &&
+							members.map((member, index) => (
+								<li
+									key={index}
+									className={clsx(
+										"py-1 m-full flex items-center gap-x-2",
+										member.loading === true && "opacity-75"
+									)}
+								>
+									<div>
+										<span>{member.username}</span>{" "}
+										{userId === member._id && (
+											<span className="text-sm text-myorange font-bold">
+												(you)
+											</span>
+										)}
+										{group.adminId === member._id && (
+											<span className="text-sm text-red-500 font-bold">
+												(admin)
+											</span>
+										)}
+									</div>
+									{member.loading === true ? (
+										<LoadIcon />
+									) : group.adminId === userId &&
+									  group.adminId !== member._id ? (
+										<TiDelete
+											className="text-[0.8rem] cursor-pointer text-orange-500"
+											onClick={() => {
+												handleDeleteMember(member._id);
+											}}
+										/>
+									) : null}
+								</li>
+							))}
+					</ul>
+				</div>
+				{userId === group.adminId && (
+					<div className="mt-3">
+						<div className="font-bold">Thêm thành viên</div>
+						<AddMemberForm />
 					</div>
 				)}
 			</div>
-			<h1 className="text-bold text-xl text-center py-3 font-bold text-baseRed">
-				{group.name}
-			</h1>
-			<div>
-				<h2 className="font-bold">Thành viên</h2>
-				<ul className="list-disc pl-4 max-h-[300px] custom-scroll">
-					{memberLoading && "loading..."}
-					{!memberLoading &&
-						!memberError &&
-						members.map((member, index) => (
-							<li
-								key={index}
-								className={clsx(
-									"py-1 m-full flex items-center gap-x-2",
-									member.loading === true && "opacity-75"
-								)}
-							>
-								<div>
-									<span>{member.username}</span>{" "}
-									{userId === member._id && (
-										<span className="text-sm text-baseText/60">(you)</span>
-									)}
-									{group.adminId === member._id && (
-										<span className="text-sm text-baseRed">(admin)</span>
-									)}
-								</div>
-								{member.loading === true ? (
-									<LoadIcon />
-								) : group.adminId === userId && group.adminId !== member._id ? (
-									<TiDelete
-										className="text-[0.8rem] cursor-pointer text-baseText/80"
-										onClick={() => {
-											handleDeleteMember(member._id);
-										}}
-									/>
-								) : null}
-							</li>
-						))}
-				</ul>
-			</div>
-			{userId === group.adminId && (
-				<div className="mt-3">
-					<div>Thêm thành viên</div>
-					<AddMemberForm />
-				</div>
-			)}
 		</div>
 	);
 }

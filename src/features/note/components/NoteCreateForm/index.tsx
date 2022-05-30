@@ -1,18 +1,20 @@
 import {FiChevronLeft} from "react-icons/fi";
-import {Note} from "../../../../models/Note";
 import NoteForm from "./NoteForm";
 import {NoteFormValue} from "../../../../models/Note";
 import NoteUpdateForm from "./NoteUpdateForm";
 import {SelDates} from "../NoteCalendar";
+import clsx from "clsx";
 import {useAppSelector} from "../../../../app/hooks";
 import {useState} from "react";
 
 interface NoteCreateFormProp {
+	className?: string;
 	loading: boolean;
 	selDates: SelDates;
 	setSelDates: React.Dispatch<React.SetStateAction<SelDates>>;
 }
 export default function NoteCreateForm({
+	className = "",
 	loading,
 	selDates,
 	setSelDates,
@@ -39,7 +41,7 @@ export default function NoteCreateForm({
 	});
 
 	return (
-		<div className="bg-bgColor p-2 pb-3">
+		<div className={clsx(className, "p-2 pb-3")}>
 			<div className="flex justify-between items-center">
 				<span>
 					{isUpdate && (

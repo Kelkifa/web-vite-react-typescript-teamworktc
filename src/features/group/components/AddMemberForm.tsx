@@ -35,10 +35,13 @@ export default function AddMemberForm() {
 								name="data"
 								placeHolder="username"
 								component={BaseInputField}
-								className="flex-grow"
+								className="flex-grow bg-black text-white"
 							/>
 
-							<BaseButton className="bg-tim rounded-r-xl px-8" type="submit">
+							<BaseButton
+								className="bg-black text-white rounded-r-xl px-8 hover:bg-[#2B2B2B]"
+								type="submit"
+							>
 								Mời
 							</BaseButton>
 						</form>

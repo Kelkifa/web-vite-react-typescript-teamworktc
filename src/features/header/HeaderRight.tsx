@@ -18,17 +18,17 @@ import {useEffect, useRef, useState} from "react";
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
 import {Group} from "../../models/group";
 import {InvitesResponse} from "../../models";
+import LinkButton from "../../components/LinkButton";
 import LoadIcon from "../../components/LoadIcon";
 import UserButton from "./UserButton";
 import clsx from "clsx";
 import socket from "../../app/socketIO";
 
 const styles = {
-	signInOutBtn:
-		"hover:underline cursor-pointer text-[0.8rem] whitespace-nowrap",
+	signInOutBtn: "hover:underline cursor-pointer whitespace-nowrap",
 };
 
-export default function HeaderRight() {
+export default function HeaderRight({className = ""}: {className?: string}) {
 	const dispatch = useAppDispatch();
 
 	const loading = useAppSelector(getAuthLoading);
@@ -56,9 +56,9 @@ export default function HeaderRight() {
 	}, [user?._id]);
 
 	return (
-		<div className="flex items-center">
+		<div className={clsx(className, "flex items-center")}>
 			{/* Group Button */}
-			<GroupDropdown />
+			{/* <GroupDropdown /> */}
 
 			{/* Auth Buttons */}
 			{!isAuth && <SignInUpButton />}
@@ -72,141 +72,18 @@ export default function HeaderRight() {
 	);
 }
 
-// GROUP DROP DOWN
-const groupDropDownStyles = {
-	container:
-		"relative h-[35px] w-44 bg-black/70 mr-3 text-orange-400 font-semibold",
-};
-
-function GroupDropdown() {
-	const dispatch = useAppDispatch();
-	const groupLoading = useAppSelector(getGroupLoading);
-	const groupData = useAppSelector(getGroupData);
-	const selectedGroup = useAppSelector(getGroupSelected);
-
-	const dropdownRef = useRef<HTMLUListElement>(null);
-	const [isDropdownOverflow, setIsDropdownOverflow] = useState<boolean>(false);
-
-	const [isShowDropdown, setIsShowDropdown] = useState(false);
-
-	// Handle Functions
-	const handleDropdowOverFolow = (dropdownElement: HTMLUListElement) => {
-		if (
-			dropdownElement.offsetHeight + dropdownElement.scrollTop <
-			dropdownElement.scrollHeight
-		)
-			return setIsDropdownOverflow(true);
-		return setIsDropdownOverflow(false);
-	};
-
-	const handleItemClick = (group: Group) => {
-		setIsShowDropdown(false);
-		dispatch(groupActions.setSeletedGroup(group));
-	};
-
-	const handleScroll = (e: any) => {
-		const dropdownElement = e.target;
-		handleDropdowOverFolow(dropdownElement);
-	};
-
-	useEffect(() => {
-		if (dropdownRef.current === null) return;
-		const dropdownElement = dropdownRef.current;
-		handleDropdowOverFolow(dropdownElement);
-	}, [dropdownRef.current, isShowDropdown]);
-
-	if (groupLoading) {
-		return (
-			<div className={groupDropDownStyles.container}>
-				<div className="w-full h-full flex justify-center items-center">
-					<LoadIcon className="text-lg" />
-				</div>
-			</div>
-		);
-	}
-	return (
-		<div className={groupDropDownStyles.container}>
-			<div
-				className="h-full flex items-center w-full px-2 truncate cursor-pointer"
-				onClick={() => {
-					setIsShowDropdown(!isShowDropdown);
-				}}
-			>
-				{selectedGroup?.name}
-			</div>
-
-			<ul
-				className={clsx(
-					"absolute top-full w-full bg-bgColor max-h-[128px] overflow-auto scrollbar-hide rounded-b-md",
-					{
-						hidden: !isShowDropdown,
-					}
-				)}
-				ref={dropdownRef}
-				onScroll={handleScroll}
-			>
-				{groupData.map((group, index) => {
-					if (group._id === selectedGroup?._id) return null;
-					return (
-						<li
-							key={group._id ? group._id : index}
-							className={clsx(
-								"h-7 px-2 w-full bg-red  truncate",
-								group.loading === true
-									? "opacity-60"
-									: "hover:bg-black/30 cursor-pointer"
-							)}
-							onClick={() => {
-								if (group.loading === true) return;
-								handleItemClick(group);
-							}}
-						>
-							<span>{group.name}</span>
-							{group.loading && (
-								<span>
-									<LoadIcon />
-								</span>
-							)}
-						</li>
-					);
-				})}
-			</ul>
-
-			{/* EFFECT SCROLL */}
-			{isShowDropdown && (
-				<div
-					className={clsx(
-						"absolute top-[138px] h-[22px] w-full bg-gradient-to-t from-[#05171fdc]",
-						{hidden: !isDropdownOverflow}
-					)}
-				></div>
-			)}
-		</div>
-	);
-}
-
 // SIGN BUTTONS
 function SignInUpButton() {
 	const location = useLocation();
 	return (
 		<div>
-			<Link
-				to="/auth/login"
-				className={clsx(styles.signInOutBtn, {
-					underline: location.pathname.includes("auth/login"),
-				})}
+			<LinkButton path="/auth/login">Đăng Nhập</LinkButton>
+			<LinkButton
+				className="bg-white text-black rounded-[40px] py-[0.6rem] px-[1.7rem] ml-4"
+				path="/auth/register"
 			>
-				Đăng nhập
-			</Link>
-			<span> | </span>
-			<Link
-				to="/auth/register"
-				className={clsx(styles.signInOutBtn, {
-					underline: location.pathname.includes("auth/register"),
-				})}
-			>
-				Đăng ký
-			</Link>
+				Đăng Ký
+			</LinkButton>
 		</div>
 	);
 }

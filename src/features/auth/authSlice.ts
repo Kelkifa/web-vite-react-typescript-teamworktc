@@ -81,8 +81,8 @@ const authSlice = createSlice({
 			state.isAuth = true;
 			state.status.login = {error: false};
 			state.user = action.payload;
-			history.push("/");
 			toast.success("Đăng nhập thành công");
+			// history.push("");
 			return state;
 		},
 		loginFailed(state, action: PayloadAction<{message: string}>) {
