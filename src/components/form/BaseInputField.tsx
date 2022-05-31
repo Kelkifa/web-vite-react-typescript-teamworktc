@@ -1,7 +1,8 @@
 interface BaseInputFieldProp {
+	className?: string;
+	inputClassName?: string;
 	label?: string;
 	placeHolder?: string;
-	className?: string;
 	isShowError?: boolean;
 
 	type?: string;
@@ -12,11 +13,12 @@ interface BaseInputFieldProp {
 }
 
 export default function BaseInputField({
+	className = "",
+	inputClassName = "",
 	form,
 	field,
 	label,
 	isShowError = true,
-	className,
 	placeHolder,
 	type = "text",
 	onChange,
@@ -33,13 +35,13 @@ export default function BaseInputField({
 	return (
 		<div className={className}>
 			{label && (
-				<label className="text-sm text-slate-200/90" htmlFor={field.name}>
+				<label className="block" htmlFor={field.name}>
 					{label}
 				</label>
 			)}
 
 			<input
-				className="block bg-tim/60 text-slate-300 text-sm w-full rounded py-1 h-full"
+				className={inputClassName}
 				type={type}
 				name={field.name}
 				value={field.value}

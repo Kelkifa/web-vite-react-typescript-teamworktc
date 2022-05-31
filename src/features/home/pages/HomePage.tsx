@@ -8,7 +8,11 @@ function HomePage() {
 	const calendarSectionId = "calendarSection";
 	return (
 		<div>
-			<StartSection gotoId={selectGroupSectionId} />
+			<StartSection
+				gotoId={selectGroupSectionId}
+				title="Hãy cùng bạn bè, người thân tạo ra các sự kiện."
+				description="Đừng để việc lập lịch, lên kế hoạch với những người khác trở thành ác mộng. Hãy mời họ vào nhóm và bắt đầu xây dựng lên các sự kiện trên lịch và tạo ra danh sách công việc của sự kiện đó"
+			/>
 
 			<SelectGroupSection
 				gotoId={calendarSectionId}

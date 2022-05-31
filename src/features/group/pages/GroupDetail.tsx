@@ -67,8 +67,20 @@ export default function GroupDetail() {
 		});
 	};
 
-	if (group === undefined) return <div>Không tìm thấy nhóm này</div>;
-	if (group.loading) return <div>Loading ...</div>;
+	if (group === undefined)
+		return (
+			<div className={startSectionBackgroundStyle}>
+				<div className="container mx-auto">Không tìm thấy nhóm này</div>
+			</div>
+		);
+	if (group.loading)
+		return (
+			<div className={startSectionBackgroundStyle}>
+				<div className="container mx-auto flex items-center">
+					Loading <LoadIcon />
+				</div>
+			</div>
+		);
 
 	return (
 		<div className={startSectionBackgroundStyle}>
@@ -76,7 +88,7 @@ export default function GroupDetail() {
 				<div className="flex justify-between items-center">
 					<div>
 						<FiChevronLeft
-							className="cursor-pointer text-lg"
+							className="cursor-pointer text-2xl"
 							onClick={() => {
 								navigate("/group");
 							}}

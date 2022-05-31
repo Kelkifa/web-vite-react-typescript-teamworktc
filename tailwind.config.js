@@ -19,7 +19,7 @@ module.exports = {
         "mygreendark2": "#8CC83A",
         "myorange": "#EB4921",
         "myorangedark": "#9E2B0E",
-        "mygray": "#2B2B2B",
+        "mygray": "#343333",
         "bgColor": "#000000ad",
         "footerBg": "#171717",
         "baseRed": "#EF4444",

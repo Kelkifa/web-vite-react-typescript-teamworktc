@@ -21,19 +21,17 @@ import NoteCreateForm from "../components/NoteCreateForm";
 import NoteView from "../components/NoteView";
 
 export default function NotePage() {
-	// const [selectedNote, setSelectedNote] = useState<string>("");
+	const dispatch = useAppDispatch();
+	// note
 	const selectedNoteId: string | undefined = useAppSelector(
 		getNoteSelectedNoteId
 	);
-
-	const dispatch = useAppDispatch();
-
 	const noteData = useAppSelector(getNoteData);
 	const noteLoading = useAppSelector(getNoteLoading);
+	// group
 	const groupLoading = useAppSelector(getGroupLoading);
 	const groupError = useAppSelector(getGroupError);
 	const groupId = useAppSelector(getSelectedGroupId);
-	console.log(`groupId: ${groupId}`);
 
 	const [selDates, setSelDates] = useState<SelDates>({});
 

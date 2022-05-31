@@ -1,4 +1,4 @@
-import {FastField, Formik} from "formik";
+import {FastField, Field, Formik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import BaseButton from "../../../components/form/BaseButton";
@@ -31,15 +31,16 @@ export default function AddMemberForm() {
 
 					return (
 						<form className="flex gap-2" onSubmit={handleSubmit}>
-							<FastField
+							<Field
 								name="data"
 								placeHolder="username"
+								inputClassName="bg-black text-white block w-full py-[0.3rem] rounded-md"
 								component={BaseInputField}
-								className="flex-grow bg-black text-white"
+								className="flex-grow rounded-[2rem]"
 							/>
 
 							<BaseButton
-								className="bg-black text-white rounded-r-xl px-8 hover:bg-[#2B2B2B]"
+								className="bg-black text-white rounded-xl px-8 hover:bg-[#2B2B2B]"
 								type="submit"
 							>
 								Mời

@@ -24,7 +24,7 @@ export default function Rectagle({
 				className,
 				"pl-[2.7rem] bg-[#181818] rounded-sm whitespace-nowrap text-[1.3rem] font-small"
 			)}
-			style={{boxShadow: "10px 5px 18px 10px black"}}
+			style={{boxShadow: "10px 5px 18px 5px black"}}
 		>
 			<div className="relative">
 				{/* <div className="relative"> */}
@@ -43,7 +43,6 @@ export default function Rectagle({
 							<MdOutlineContentCopy
 								className="cursor-pointer"
 								onClick={() => {
-									console.log(1);
 									if (!copyClipBoard) return;
 									navigator.clipboard.writeText(copyClipBoard);
 									setIsCopped(pre => !pre);

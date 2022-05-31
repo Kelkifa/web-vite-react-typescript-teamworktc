@@ -31,11 +31,13 @@ export default function SelectGroupSection({
 					<strong onClick={handleScroll} className="cursor-pointer">
 						bên dưới
 					</strong>{" "}
-					là những sự kiện của nhóm bạn chọn.
+					là những sự kiện của nhóm bạn đã chọn.
 					<br />
 					Hãy chọn một nhóm mà bạn muốn!
 				</h2>
-				<GroupDropdown />
+				<div>
+					<GroupDropdown />
+				</div>
 			</div>
 		</section>
 	);

@@ -42,7 +42,7 @@ function App() {
 						path="note/*"
 						element={
 							// <NeedGroupContainer>
-							<Note />
+							<HomePage />
 							// </NeedGroupContainer>
 						}
 					/>
