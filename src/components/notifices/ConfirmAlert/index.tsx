@@ -51,16 +51,16 @@ export default function ConfirmAlert() {
 					<div className="p-2">{action.message}</div>
 					<div className="min-w-[14rem]">
 						<button
-							className={clsx(styles.btn, "text-baseRed")}
-							onClick={handleCancerClick}
-						>
-							Hủy
-						</button>
-						<button
 							className={clsx(styles.btn, "text-green-700")}
 							onClick={handleConfirmClick}
 						>
 							Xác nhận
+						</button>
+						<button
+							className={clsx(styles.btn, "text-baseRed")}
+							onClick={handleCancerClick}
+						>
+							Hủy
 						</button>
 					</div>
 				</div>

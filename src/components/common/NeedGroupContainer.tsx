@@ -1,3 +1,5 @@
+import {ErrorComponent, LoadComponent} from "../LoadComponent";
+
 import {useAppSelector} from "../../app/hooks";
 
 export default function NeedGroupContainer({
@@ -11,7 +13,7 @@ export default function NeedGroupContainer({
 	// const {loading, error} = {loading: false, error: false};
 
 	// RENDER
-	if (error) return <div>{error}</div>;
-	if (loading) return <div>Loading ...</div>;
+	if (error) return <ErrorComponent error={error} />;
+	if (loading) return <LoadComponent />;
 	return children;
 }

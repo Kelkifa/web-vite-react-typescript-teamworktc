@@ -42,7 +42,7 @@ function App() {
 						path="note/*"
 						element={
 							// <NeedGroupContainer>
-							<Note />
+							<HomePage />
 							// </NeedGroupContainer>
 						}
 					/>
@@ -73,7 +73,7 @@ function App() {
 					<Route path="home" element={<HomePage />} />
 					<Route path="auth/*" element={<Auth />} />
 					<Route path="dev" element={<Dev />} />
-					<Route path="" element={<HomePage />} />
+					<Route path="/" element={<HomePage />} />
 				</Route>
 				<Route path="*" element={<div>Not found</div>} />
 			</Routes>

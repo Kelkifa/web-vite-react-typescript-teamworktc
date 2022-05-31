@@ -224,6 +224,7 @@ const NoteCreateForm = ({
 							<FastField
 								name="name"
 								component={BaseInputField}
+								inputClassName="bg-tim/60 block w-full block bg-tim/60 text-slate-300 text-sm rounded py-1"
 								label="Tên sự kiện "
 								placeHolder="Nhập tên sự kiện"
 							/>

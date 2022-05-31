@@ -1,6 +1,8 @@
 import {FieldInputProps, FormikProps} from "formik";
 
 interface AuthInputFieldProp {
+	className?: string;
+	inputClass?: string;
 	form: any;
 	field: any;
 	onBlur?: (fieldName: string, value: string) => void;
@@ -12,6 +14,8 @@ interface AuthInputFieldProp {
 }
 
 export default function AuthInputField({
+	className = "",
+	inputClass = "",
 	form,
 	field,
 	onBlur,
@@ -21,10 +25,10 @@ export default function AuthInputField({
 	placeHolder,
 }: AuthInputFieldProp) {
 	return (
-		<div>
-			<label className="block text-gray-300">{label}</label>
+		<div className={className}>
+			<label className="block">{label}</label>
 			<input
-				className="px-2 text-white outline-none w-full rounded-2xl h-9 bg-bgColor/50"
+				className={inputClass}
 				name={field.name}
 				type={type}
 				value={field.value}
@@ -37,7 +41,7 @@ export default function AuthInputField({
 				placeholder={placeHolder}
 			/>
 			{form.errors[field.name] && form.touched[field.name] && (
-				<div className="text-red-500">{form.errors[field.name]}</div>
+				<div className="text-myorange">{form.errors[field.name]}</div>
 			)}
 		</div>
 	);

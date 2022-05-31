@@ -15,12 +15,12 @@ interface UserButtonProp {
 }
 
 const params = {
-	dropdownBg: "#161b22",
+	dropdownBg: "#2B2B2B",
 };
 const styles = {
 	container:
 		"flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 border-red-600 border-2 font-userBtn",
-	dropwdown: `absolute top-full right-0 text-black/90 w-40 rounded-sm text-[#c9d1d9] bg-[#161b22]`,
+	dropwdown: `absolute top-full right-0 text-black/90 w-40 rounded-sm text-[#c9d1d9] bg-[#2B2B2B]`,
 	dropdownItem: "px-2 py-1 cursor-pointer flex items-center",
 };
 

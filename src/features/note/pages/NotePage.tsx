@@ -21,15 +21,14 @@ import NoteCreateForm from "../components/NoteCreateForm";
 import NoteView from "../components/NoteView";
 
 export default function NotePage() {
-	// const [selectedNote, setSelectedNote] = useState<string>("");
+	const dispatch = useAppDispatch();
+	// note
 	const selectedNoteId: string | undefined = useAppSelector(
 		getNoteSelectedNoteId
 	);
-
-	const dispatch = useAppDispatch();
-
 	const noteData = useAppSelector(getNoteData);
 	const noteLoading = useAppSelector(getNoteLoading);
+	// group
 	const groupLoading = useAppSelector(getGroupLoading);
 	const groupError = useAppSelector(getGroupError);
 	const groupId = useAppSelector(getSelectedGroupId);
@@ -71,6 +70,7 @@ export default function NotePage() {
 	};
 
 	useEffect(() => {
+		if (!groupId) return;
 		dispatch(noteActions.getNote(currMonthAndYear));
 	}, [currMonthAndYear, groupId]);
 
@@ -91,19 +91,20 @@ export default function NotePage() {
 					setSelectedNote={handleSetSelectedNote}
 					currMonthAndYear={currMonthAndYear}
 					setCurrMonthAndYear={setCurrMonthAndYear}
-					className="bg-bgColor"
+					className="bg-bgColor rounded-sm"
 				/>
 			</div>
 			{/* Note Manage */}
-			<div className="col-span-2 md:col-span-1">
+			<div className="col-span-2 md:col-span-1 ">
 				<NoteCreateForm
 					loading={groupLoading || Boolean(groupError)}
 					selDates={selDates}
 					setSelDates={setSelDates}
+					className="bg-bgColor rounded-sm"
 				/>
 			</div>
 
-			<div className="col-span-2 bg-bgColor">
+			<div className="col-span-2 bg-bgColor rounded-sm">
 				<NoteView />
 			</div>
 		</div>

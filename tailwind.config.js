@@ -4,17 +4,23 @@ module.exports = {
     extend: {
       backgroundImage: {
         'main': "url('/public/images/todo-bg-2.jpg')",
+        "home": "url('/public/images/Ornament.svg')"
       },
       aspectRatio: {
         "bg": "2880/1619"
       },
       fontFamily: {
-        "userBtn": ["-apple-system,BlinkMacSystemFont", "Segoe UI", "Helvetica", "Arial", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji"],
-        "fontBase": ["Inter var", "ui-sans-serif", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
-        "header": ["Roboto", "sans-serif"],
+        "icon": "Inter, sans-serif",
+        "small": "Nunito Sans, sans-serif",
       },
       colors: {
-        "bgColor": "#00000098",
+        "mygreen": "#A8FF35",
+        "mygreendark1": "#87D322",
+        "mygreendark2": "#8CC83A",
+        "myorange": "#EB4921",
+        "myorangedark": "#9E2B0E",
+        "mygray": "#343333",
+        "bgColor": "#000000ad",
         "footerBg": "#171717",
         "baseRed": "#EF4444",
         "baseText": "#CBD5E1",
@@ -25,7 +31,13 @@ module.exports = {
         '14': 'repeat(14, minmax(0, 1fr))'
       },
       fontSize: {
-        // "body":""
+        myMd: "18px",
+        base: "14px",
+        h: "1.5rem",
+        mobile: "7px"
+      },
+      spacing: {
+        ptheader: "11rem"
       }
     }
   },

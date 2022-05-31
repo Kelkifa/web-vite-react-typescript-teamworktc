@@ -186,7 +186,7 @@ const groupSlice = createSlice({
 			action: PayloadAction<{groupId: string; username: string}>
 		) {
 			const {username, groupId} = action.payload;
-			toast.success(`Mời thành viên ${username} thành công`);
+			toast.success(`Đã gửi lời mời đến nguười dùng ${username}`);
 		},
 		inviteFailed(
 			state,

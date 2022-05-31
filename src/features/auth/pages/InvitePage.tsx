@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import BaseButton from "../../../components/form/BaseButton";
 import {authActions} from "../authSlice";
 import {callConfirmAlert} from "../../../components/notifices/ConfirmAlert";
+import {startSectionBackgroundStyle} from "../../../components/StartSection";
 
 export default function InvitePage() {
 	const dispatch = useAppDispatch();
@@ -19,26 +20,30 @@ export default function InvitePage() {
 	};
 
 	return (
-		<div className="bg-bgColor p-3">
-			<div className="text-right w-full">
-				<BaseButton
-					className="bg-tim px-3 rounded-md whitespace-nowrap"
-					type="button"
-					onClick={handleDisagreeAll}
-					disabled={inviteData.length === 0 ? true : false}
-				>
-					Từ chối tất cả
-				</BaseButton>
+		<div className={startSectionBackgroundStyle}>
+			<div className="container mx-auto bg-mygreendark2 p-3 text-black">
+				<div className="text-right w-full">
+					<BaseButton
+						className="px-3 rounded-md whitespace-nowrap bg-myorange"
+						type="button"
+						onClick={handleDisagreeAll}
+						disabled={inviteData.length === 0 ? true : false}
+					>
+						Từ chối tất cả
+					</BaseButton>
+				</div>
+				<h1 className="mb-5 font-bold">Lời mời của bạn</h1>
+				<ul className="divide-y-2 divide-black/50">
+					{loading && "Loading..."}
+					{!loading && inviteData.length === 0 && (
+						<li>Bạn không có lời mời nào</li>
+					)}
+					{!loading &&
+						inviteData.map(invite => (
+							<InviteItem key={invite._id} {...invite} />
+						))}
+				</ul>
 			</div>
-			<h1 className="text-baseRed mb-5">Lời mời của bạn</h1>
-			<ul className="divide-y-2 divide-black/50">
-				{loading && "Loading..."}
-				{!loading && inviteData.length === 0 && (
-					<li>Bạn không có lời mời nào</li>
-				)}
-				{!loading &&
-					inviteData.map(invite => <InviteItem key={invite._id} {...invite} />)}
-			</ul>
 		</div>
 	);
 }
@@ -67,10 +72,10 @@ function InviteItem({
 	return (
 		<li className="flex flex-wrap gap-2 py-2">
 			<b>{userInvite}</b>{" "}
-			<span className="text-baseText"> mời bạn vào nhóm</span>{" "}
+			<span className="text-myorangedark"> mời bạn vào nhóm</span>{" "}
 			<i>{groupName}</i>
 			<BaseButton
-				className="bg-tim ml-5 rounded-lg px-3 text-sm"
+				className="bg-myorange ml-5 rounded-lg px-3 text-sm "
 				onClick={() => {
 					handleAccept(_id);
 				}}
@@ -79,7 +84,7 @@ function InviteItem({
 				Chấp nhận
 			</BaseButton>
 			<BaseButton
-				className="bg-tim rounded-lg px-3 text-sm"
+				className="bg-myorange rounded-lg px-3 text-sm "
 				onClick={() => {
 					handleDisagree(_id);
 				}}

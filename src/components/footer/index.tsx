@@ -3,7 +3,7 @@ import {FaFacebookF} from "react-icons/fa";
 
 export default function Footer() {
 	return (
-		<div className="flex flex-col items-center bg-footerBg text-slate-300 gap-4 pt-6 pb-5">
+		<footer className="flex flex-col items-center bg-footerBg text-slate-300 gap-4 pt-6 pb-5">
 			<div className="flex gap-x-1 text-4xl text-white">
 				<a
 					href="https://www.facebook.com/kelkfia/"
@@ -30,6 +30,6 @@ export default function Footer() {
 			<div className="text-[0.6rem] text-slate-300/50">
 				Background Photo by Polina Kovaleva from Pexels
 			</div>
-		</div>
+		</footer>
 	);
 }

@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import BaseButton from "../../../components/form/BaseButton";
 import BaseInputField from "../../../components/form/BaseInputField";
+import {startSectionBackgroundStyle} from "../../../components/StartSection";
 
 const schema = yup.object().shape({
 	name: yup.string().required("Bạn chưa nhập tên nhóm"),
@@ -29,35 +30,40 @@ export default function GroupCreatePage() {
 		dispatch(groupActions.create(values));
 	};
 	return (
-		<div className="container bg-bgColor p-3 pb-10">
-			<h1 className="text-baseRed text-center font-bold">Tạo nhóm</h1>
+		<div className={startSectionBackgroundStyle}>
+			<div className="container mx-auto p-3 pb-10 bg-mygreendark2 text-black">
+				<h1 className="text-[2rem] font-bold text-center">Tạo nhóm</h1>
 
-			<Formik
-				initialValues={initialValues}
-				onSubmit={handleSubmit}
-				validationSchema={schema}
-			>
-				{formikProp => {
-					const {handleSubmit} = formikProp;
-					return (
-						<form onSubmit={handleSubmit}>
-							<FastField
-								name="name"
-								placeHolder="Nhập tên nhóm..."
-								label="Tên nhóm"
-								component={BaseInputField}
-							/>
-							<BaseButton
-								className="bg-tim rounded-xl w-full px-2 whitespace-nowrap mt-3"
-								loading={status?.loading}
-								type="submit"
-							>
-								Tạo nhóm
-							</BaseButton>
-						</form>
-					);
-				}}
-			</Formik>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+					validationSchema={schema}
+				>
+					{formikProp => {
+						const {handleSubmit} = formikProp;
+						return (
+							<form onSubmit={handleSubmit}>
+								<FastField
+									name="name"
+									inputClassName="w-full rounded-lg bg-black text-white p-[0.5rem]"
+									placeHolder="Nhập tên nhóm..."
+									label="Tên nhóm"
+									component={BaseInputField}
+								/>
+								<div className="text-center">
+									<BaseButton
+										className="px-6 bg-black text-white hover:text-mygreendark2 font-bold hover:border-none transition-all duration-500 h-[36px] rounded-3xl mt-2"
+										loading={status?.loading}
+										type="submit"
+									>
+										Tạo nhóm
+									</BaseButton>
+								</div>
+							</form>
+						);
+					}}
+				</Formik>
+			</div>
 		</div>
 	);
 }

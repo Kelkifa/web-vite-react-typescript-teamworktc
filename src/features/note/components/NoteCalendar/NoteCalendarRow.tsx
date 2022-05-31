@@ -138,7 +138,7 @@ export default function NoteCalendarRow({
 						<div
 							key={index}
 							className={clsx(
-								"relative px-1 text-[14px] text-slate-200 cursor-pointer hover:brightness-125 min-h-[1.3125rem]",
+								"relative px-1 text-slate-200 cursor-pointer hover:brightness-125 min-h-[1.3125rem] text-[0.9rem]",
 								note._id === selectedNote
 									? "brightness-125"
 									: "truncate h-[1.3125rem] opacity-90",
