@@ -1,4 +1,7 @@
 import {Route, Routes} from "react-router-dom";
+import StartSection, {
+	startSectionBackgroundStyle,
+} from "../../components/StartSection";
 
 import GroupCreatePage from "./pages/GroupCreatePage";
 import GroupDetail from "./pages/GroupDetail";

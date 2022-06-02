@@ -4,8 +4,8 @@ import {AiOutlineGithub} from "react-icons/ai";
 import Rectagle from "../Rectangle";
 
 export interface StartSectionProp {
-	title?: string;
-	description?: string;
+	title?: string | HTMLElement;
+	description?: string | HTMLElement;
 	gotoId?: string;
 }
 
@@ -36,7 +36,7 @@ export default function StartSection({
 
 					<div className="mt-[2.2rem] py-[0.6rem]">
 						<button
-							className="bg-mygreen text-black py-[0.6rem] px-[2rem] rounded-[40px] font-bold leading-[1.4rem] font-icon"
+							className="btn px-[2rem] bg-mygreen text-black"
 							onClick={handleStartClick}
 						>
 							Bắt Đầu🔥

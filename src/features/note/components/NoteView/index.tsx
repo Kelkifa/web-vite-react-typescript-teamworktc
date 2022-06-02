@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-import {FastField, Formik} from "formik";
+import {FastField, Field, Formik} from "formik";
 import {getTodoStatusCreateLoading, todoActions} from "../../../todo/todoSlice";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
@@ -115,9 +115,10 @@ function TodoAdd({noteId}: {noteId: string | undefined}) {
 					const {handleSubmit} = formikProps;
 					return (
 						<form onSubmit={handleSubmit} className="flex h-[2rem]">
-							<FastField
+							<Field
 								name="name"
 								placeHolder="Nhập Tên Công Việc"
+								inputClassName="bg-black/50 black w-full h-full rounded-sm"
 								className="flex-grow h-full"
 								component={BaseInputField}
 							/>

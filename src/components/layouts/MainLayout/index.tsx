@@ -23,7 +23,7 @@ export default function MainLayout() {
 				// className="z-10 relative"
 				navList={[
 					{path: "/group", text: "Nhóm"},
-					{path: "/", text: "Sự kiện"},
+					{path: "/note", text: "Sự kiện"},
 					{path: "/invite", text: "Lời Mời", isAuth: true},
 				]}
 			/>

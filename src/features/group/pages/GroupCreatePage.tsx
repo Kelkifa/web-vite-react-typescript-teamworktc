@@ -31,7 +31,7 @@ export default function GroupCreatePage() {
 	};
 	return (
 		<div className={startSectionBackgroundStyle}>
-			<div className="container mx-auto p-3 pb-10 bg-mygreendark2 text-black">
+			<div className="container mx-auto p-3 pb-10 bg-mygreen text-black">
 				<h1 className="text-[2rem] font-bold text-center">Tạo nhóm</h1>
 
 				<Formik
@@ -50,9 +50,9 @@ export default function GroupCreatePage() {
 									label="Tên nhóm"
 									component={BaseInputField}
 								/>
-								<div className="text-center">
+								<div className="text-center mt-3">
 									<BaseButton
-										className="px-6 bg-black text-white hover:text-mygreendark2 font-bold hover:border-none transition-all duration-500 h-[36px] rounded-3xl mt-2"
+										className="btn hover:text-mygreen"
 										loading={status?.loading}
 										type="submit"
 									>

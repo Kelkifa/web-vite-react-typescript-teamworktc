@@ -10,6 +10,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import AddMemberForm from "../components/AddMemberForm";
 import {FiChevronLeft} from "react-icons/fi";
 import LoadIcon from "../../../components/LoadIcon";
+import ReactTooltip from "react-tooltip";
 import {TiDelete} from "react-icons/ti";
 import {callConfirmAlert} from "../../../components/notifices/ConfirmAlert";
 import clsx from "clsx";
@@ -115,7 +116,7 @@ export default function GroupDetail() {
 				</h1>
 				<div>
 					<h2 className="font-bold">Thành viên</h2>
-					<ul className="list-disc pl-4 max-h-[300px] custom-scroll">
+					<ul className="list-disc pl-4 max-h-[18.75rem] custom-scroll">
 						{memberLoading && "loading..."}
 						{!memberLoading &&
 							!memberError &&
@@ -149,8 +150,14 @@ export default function GroupDetail() {
 											onClick={() => {
 												handleDeleteMember(member._id);
 											}}
+											data-tip="Xóa thành viên"
 										/>
 									) : null}
+									<ReactTooltip
+										type="light"
+										place="bottom"
+										backgroundColor="rgba(241, 238, 179, 0.836)"
+									/>
 								</li>
 							))}
 					</ul>

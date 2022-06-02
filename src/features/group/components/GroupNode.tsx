@@ -36,8 +36,8 @@ export default function GroupNode({
 		<div
 			className={clsx(
 				className,
-				"px-8 py-3 rounded-xl min-w-[7rem] max-w-[12rem] truncate flex items-center justify-center text-baseText",
-				disabled ? "opacity-60" : "cursor-pointer hover:bg-[#2B2B2B]"
+				"px-8 py-3 rounded-xl min-w-[7rem] max-w-[12rem] truncate flex items-center justify-center",
+				disabled ? "opacity-60" : "cursor-pointer"
 			)}
 			onClick={handleClick}
 			// style={{color: "white"}}

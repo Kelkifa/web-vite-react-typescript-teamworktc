@@ -16,7 +16,9 @@ function* handleGetGroupList() {
 			yield put(groupActions.getGroupSuccess(data.response));
 
 			const groupId = localStorage.getItem(LOCALSTORAGE_GROUP_NAME);
+
 			let demoGroupIndex = -1;
+
 			if (Boolean(groupId)) {
 				demoGroupIndex = data.response.findIndex(group => {
 					return group._id === groupId;
